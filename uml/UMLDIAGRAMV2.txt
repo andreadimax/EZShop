@@ -1,0 +1,119 @@
+@startuml
+class Shop{
+        +address
+        +nameShop
+}
+class RestockOrder{
+        +date
+        +moneyCost
+}
+class Supplier{
+        +supplierID
+}
+class Transaction{
+        +date
+        +amountMoney
+}
+
+class CreditCard{
+        +cardID
+}
+
+class Product{
+}
+
+note right: "single product, it is unique"
+class Inventory{
+        
+}
+class CustomerCard{
+        +cardID
+        +points
+}
+class ProductDescriptor{
+       +name
+       +id
+       +quantity
+       +quantityTreshold
+}
+note right: "equivalent of barcode\nidentifies all copies of the same product"
+
+class ExpiredProduct{
+        
+}
+
+class Person{
+        +ssn
+        +name
+        +surname
+        +address
+}
+class Personnel{
+        +personnelID
+}
+
+class Session{
+        +loginTime
+        +logoutTime
+        +listActions
+}
+
+class CheckoutSession{
+        +checkoutNumber
+        +totalCheckout: cash accumulated
+}
+note right : every cashier transaction is tracked,\nat the end of the session he must\nreturn the totalCheckout to end it
+class MonthlyAccounting{
+        +month
+        +costExpired
+        +costStolen
+        +costRestockOrders
+        +sumTotalCheckouts
+}
+class DiscardExpiredSession{
+}
+
+class MonthlyStolenReport{
+        
+}
+note right : must be done manually\nchecking for missing goods
+class RestockCheckingSession{
+       
+}
+note right: "checks the ordered goods\nreceived from 1 supplier"
+RestockCheckingSession "*" -- RestockOrder : checks
+RestockCheckingSession --|> Session
+CheckoutSession --|> Session
+CheckoutSession o-- "*" Transaction
+
+Shop "1..*" -- ShopDirector :administers
+ShopDirector -- "*" RestockOrder :issues
+ExpiredProduct --|> Product
+Inventory -- "*" ProductDescriptor :lists
+ProductDescriptor -- "*" Product :describes
+RestockCheckingSession "*" -- Inventory :updates
+RestockOrder -- "*" ProductDescriptor : of
+RestockOrder -- "*" Supplier :involves
+Transaction -- "*" Product :of
+Transaction -- "0..1" CustomerCard
+Transaction -- "0..1" CreditCard: has
+CustomerCard "0..1" -- Person :belongs
+Personnel --|> Person
+Personnel -- CheckoutSession : Cashier
+Personnel -- RestockCheckingSession : Restock Checker
+ShopDirector --|> Personnel
+ShopDirector -- DiscardExpiredSession : compiles
+ShopDirector -- "*" Person :hires
+DiscardExpiredSession -- Inventory: updates
+Personnel -- "*" ExpiredProduct :throwsAway
+ShopDirector -- "*" MonthlyAccounting : isResponsibleFor
+MonthlyAccounting -- "*" RestockCheckingSession :tracks
+MonthlyAccounting -- "*" CheckoutSession :tracks
+MonthlyAccounting -- "*" ExpiredProduct :tracks
+MonthlyAccounting -- "*" RestockOrder :tracks
+MonthlyStolenReport -- MonthlyAccounting :requires
+MonthlyStolenReport -- "*" Product :lists
+MonthlyStolenReport -- Inventory :updates
+MonthlyStolenReport -- ShopDirector: compiles
+
+@enduml
