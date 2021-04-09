@@ -1,6 +1,7 @@
 @startuml
 class Shop{
-        +address
+        +location
+        +telephoneNumber
         +nameShop
 }
 class RestockOrder{
@@ -9,6 +10,8 @@ class RestockOrder{
 }
 class Supplier{
         +supplierID
+        +mail
+        +telephoneNumber
 }
 class Transaction{
         +date
@@ -33,14 +36,11 @@ class CustomerCard{
 class ProductDescriptor{
        +name
        +id
-       +quantity
+       +price
        +quantityTreshold
+       +pointValue
 }
 note right: "equivalent of barcode\nidentifies all copies of the same product"
-
-class ExpiredProduct{
-        
-}
 
 class Person{
         +ssn
@@ -50,6 +50,7 @@ class Person{
 }
 class Personnel{
         +personnelID
+        +salary
 }
 
 class Session{
@@ -60,17 +61,24 @@ class Session{
 
 class CheckoutSession{
         +checkoutNumber
-        +totalCheckout: cash accumulated
+        +totalCheckout
+        +startCashAmount
+        +currentCashAmount
 }
-note right : every cashier transaction is tracked,\nat the end of the session he must\nreturn the totalCheckout to end it
+note right : every cashier transaction is tracked,\nat the end of the session he must\nreturn the currentCashAmount to end it
 class MonthlyAccounting{
         +month
         +costExpired
         +costStolen
         +costRestockOrders
         +sumTotalCheckouts
+        +totSalaryCost
 }
 class DiscardExpiredSession{
+        +totalDiscardedCost
+}
+
+class ManageCustomerSession{
 }
 
 class MonthlyStolenReport{
@@ -78,17 +86,28 @@ class MonthlyStolenReport{
 }
 note right : must be done manually\nchecking for missing goods
 class RestockCheckingSession{
-       
 }
 note right: "checks the ordered goods\nreceived from 1 supplier"
+class RestockIssue{
+        +note
+        +status: solved or not 
+        +quantity
+}
 RestockCheckingSession "*" -- RestockOrder : checks
 RestockCheckingSession --|> Session
+RestockCheckingSession -- "*" RestockIssue
+RestockIssue -- "0..1" ProductDescriptor
+
+
 CheckoutSession --|> Session
 CheckoutSession o-- "*" Transaction
 
+ManageCustomerSession --|> Session
+ManageCustomerSession -- CustomerCard
+ManageCustomerSession -- Personnel: starts
+
 Shop "1..*" -- ShopDirector :administers
 ShopDirector -- "*" RestockOrder :issues
-ExpiredProduct --|> Product
 Inventory -- "*" ProductDescriptor :lists
 ProductDescriptor -- "*" Product :describes
 RestockCheckingSession "*" -- Inventory :updates
@@ -99,17 +118,19 @@ Transaction -- "0..1" CustomerCard
 Transaction -- "0..1" CreditCard: has
 CustomerCard "0..1" -- Person :belongs
 Personnel --|> Person
-Personnel -- CheckoutSession : Cashier
-Personnel -- RestockCheckingSession : Restock Checker
+Personnel -- "*" CheckoutSession : start as Cashier
+Personnel -- "*" RestockCheckingSession : start as Restock Checker
 ShopDirector --|> Personnel
-ShopDirector -- DiscardExpiredSession : compiles
+ShopDirector -- "*" Personnel : updates salary
+ShopDirector -- "*" Personnel : Fires
 ShopDirector -- "*" Person :hires
-DiscardExpiredSession -- Inventory: updates
-Personnel -- "*" ExpiredProduct :throwsAway
+ShopDirector -- Inventory: manages
+DiscardExpiredSession -- Inventory: remove products from
+DiscardExpiredSession --|> Session
+Personnel -- "*" DiscardExpiredSession : start
 ShopDirector -- "*" MonthlyAccounting : isResponsibleFor
-MonthlyAccounting -- "*" RestockCheckingSession :tracks
 MonthlyAccounting -- "*" CheckoutSession :tracks
-MonthlyAccounting -- "*" ExpiredProduct :tracks
+MonthlyAccounting -- "*" DiscardExpiredSession: updates
 MonthlyAccounting -- "*" RestockOrder :tracks
 MonthlyStolenReport -- MonthlyAccounting :requires
 MonthlyStolenReport -- "*" Product :lists
