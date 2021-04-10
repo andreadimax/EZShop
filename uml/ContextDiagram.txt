@@ -1,0 +1,18 @@
+/'
+we want to know what are the entities which interact directly with our product during use
+
+- we don't add:
+- because the the text doesn't specify anything about it, and the system design do not include such sensors needed
+- Repairer not included because we don't want to specify a specific interface for him, he needs to be qualified
+- IMPORTANT: system design and context diagram must be consistent:
+  - we have inserted the charging station inside the robot, this means that the charging station cannot be an actor, only the plug can
+  - if the charging station was an actor, then we would not have the actor "Power socket"
+'/
+@startuml ContextDiagram
+(ShopManagementSystem)
+:ShopDirector: --> ShopManagementSystem
+:Cashier: --> ShopManagementSystem
+:ExpiredDiscarder: --> ShopManagementSystem
+:RestockChecker: --> ShopManagementSystem
+:CustomerCard: --> ShopManagementSystem
+@enduml

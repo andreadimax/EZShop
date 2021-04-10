@@ -14,7 +14,7 @@
 
 ## Context Diagram
 
-<img src="ContextDiagram.png"></img>
+<img src="../uml/ContextDiagram.png"></img>
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
@@ -134,7 +134,7 @@
 ### Use case 5, Start DiscardExpiredSession
 | Actors Involved  | Personnel                                                                       |
 | -------------    | -------------                                                                   |
-| Precondition     |                                                                                 |
+| Precondition     |    Personnel must be logged as Discarder                                                                             |
 | Post condition   | Expired products are discarded                                                  |
 | Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader |
 
