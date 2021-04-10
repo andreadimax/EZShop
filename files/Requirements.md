@@ -113,9 +113,9 @@
 ### Use case 2, Delete User Profile
 | Actors Involved  | Personnel, Shop Director                                        |
 | -------------    | -------------                                                   |
-| Precondition     | Personnel Account does not exist                                |
-| Post condition   | Personnel Account created                                       |
-| Nominal Scenario | Only ShopDirector can create a new user account. Id is assigned |
+| Precondition     | Personnel Account exist                                |
+| Post condition   | Personnel Account does not exist anymore                                       |
+| Nominal Scenario | Only ShopDirector can delete a user account. Id is discarded |
 
 ### Use case 3, Start RestockCheckingSession
 | Actors Involved  | Personnel                                  |
