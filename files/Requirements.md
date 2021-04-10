@@ -1,13 +1,14 @@
 # Stakeholders
-| Stakeholder name | Description |
-| ---------------- | ----------- |
-| User | Any user who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Product Discarder<br> - Restock Checker<br> - Customer at POS <br>|
-| Small shops | Any type of small-medium sized business (from 50 to 200 square meters) with an inventory ranging from 500 to 2000 different types of products. |
-| POS System | The system interacts with a POS type application for managing transactions |
-| Developer | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)|
-| IT Administrator | Administrator of the IT System |
-| Supplier | A shop's supplier can have te access to the inventory (?) <br> -Replies to issued orders shipping goods to the shop |
-| Revenue agency | gets shop's monthly accounting update notification ||
+| Stakeholder name | Description                                                                                                                                                      |   |
+| ---------------- | -----------                                                                                                                                                      |   |
+| User             | Any user who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Product Discarder<br> - Restock Checker<br> - Customer at POS <br> |   |
+| Small shops      | Any type of small-medium sized business (from 50 to 200 square meters) with an inventory ranging from 500 to 2000 different types of products.                   |   |
+| POS System       | The system interacts with a POS type application for managing transactions                                                                                       |   |
+| Developer        | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)                                                                |   |
+| IT Administrator | Administrator of the IT System                                                                                                                                   |   |
+| Supplier         | A shop's supplier can have te access to the inventory (?) <br> -Replies to issued orders shipping goods to the shop                                              |   |
+| Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |   |
+| Product          | Sold goods                                                                                                                                                       |   |
 
 # Context Diagram and interfaces
 
