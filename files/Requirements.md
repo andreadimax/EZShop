@@ -28,7 +28,7 @@
 # Functional and non functional requirements
 ## Functional Requirements
 |            ID | Description                                                                    |     |
-| ------------- | -------------                                                                  |     |
+| ------------- | -------------                                                                  |-----|
 |           FR1 | Manage sales                                                                   |     |
 |             1 | Start new Transaction                                                          |     |
 |             2 | Scan products                                                                  |     |
