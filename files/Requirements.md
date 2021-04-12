@@ -1,4 +1,4 @@
--# Stakeholders
+# Stakeholders
 | Stakeholder name | Description                                                                                                                                                      |
 | ---------------- | -----------                                                                                                                                                      |
 | User             | Any user who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Product Discarder<br> - Restock Checker<br> - Customer at POS <br> |
