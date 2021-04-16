@@ -42,7 +42,7 @@ John also wants to know actual statistics about his shop earnings and losses, to
 Everytime he wants to order new goods, he accesses the RestockOrder page, in which he inserts The date and the cost of the order, which will be automatically used by EZSHOP to calculate the monthly accounting.
 (?) if we keep it this way, we need to remove the association restockOrder--ProductDescriptor
 
-John can easily manage all his personnel from EZSHOP, he can change their salary, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
+John can easily manage all his personnel from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
 In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as price the price at which they are sold or the reorder threshold.
 
@@ -155,13 +155,16 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | NFR3          | Efficiency                                      | GUI response time less than 0.5s                                                                           | FR1.2        |
 | NFR4          | Efficiency                                      | Support up to 10 Checkouts                                                                                 |              |
 | NFR5          | Efficiency                                      | Support up to 2000 different ProductDescriptors                                                            | FR2          |
+| NFR11         | Efficiency                                      | Support for up to 20 employees(personnel)                                                                  |              |
+| NFR13         | Efficiency                                      | Support for up to 15 active Sessions at a time                                                             |              |
 | NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
 | NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
 | NFR8          | Security                                        | For credit card payments only last 4 digits are stored                                                     |              |
 | NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later)                 |              |
 | NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
-| NFR11         | Efficiency                                      | Support up to 20 employees(personnel)                                                                      |              |
 | NFR12         | localization                                    | decimal numbers use .(dot) as decimal separator                                                            |              |
+| NFR13         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state                        |              |
+
 # Use case diagram and use cases
 ## Use case diagram
 <img src="../uml/UsecaseDiagram.png">
