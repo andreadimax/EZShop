@@ -48,7 +48,7 @@ John is automatically warned by the system when has to order a new stock of a pr
 
 (?) i think we should remove the "list actions" from Session, it becomes too complicated
 ______________________________________________________________________________________________
-Sara and Tom and Tia are three of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
+Sara,Tom, Tia and Mike are four of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
 
 When its Sara's turn to work at the checkout, she borrows a cash container containing cash from the shop, which she uses to give the rest to clients and  logs in using the credentials provided to her by John. 
 In order to correctly initiate the checkout session, she has to insert the borrowed amount into her terminal to let the system know her debt.
@@ -60,7 +60,7 @@ When the goods ordered by the shop director arrive to she shop, Tom can login as
 
 With the term customers, we mean the people which buy in the shop using a CustomerCard. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
 
-
+When Mike is reordering the shelves, and finds that a product has expired, he is able start a DiscardExpiredSession, which lets him scan the expired products. Thanks to this procedure, Mike is able to discard the expired products while still keeping the inventory synchronized with the actual number of items present in the shop.
 
 
 
