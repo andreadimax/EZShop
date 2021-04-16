@@ -31,7 +31,7 @@ John is the shop owner and director of a small shop of 50-200 square meters and 
 John's shop has 4 different checkouts, and 12 employees.
 John uses the application EZSHOP in order to manage his shop.
 
-John is able to keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
+John is able to easily keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
 In order to do so, John asks his employees to count all the goods present in the shop, which he then compares with the inventory tracked by the application.
 After inserting the Monthly stolen report in the application, John can be sure that his inventory will always be coherent with the actual number of items in stock.
 
@@ -41,7 +41,9 @@ Everytime he wants to order new goods, he accesses the RestockOrder page, in whi
 
 John can easily manage all his personnel from EZSHOP, he can change their salary, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
-John is also automatically warned by the system when has to order a new stock of a product. He is notified if some of the goods in the inventory are below a specific threshold, which he can change according to his preference on a product-basis. 
+In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as price the price at which they are sold or the reorder threshold.
+
+John is automatically warned by the system when has to order a new stock of a product. The system notifies him if a type of item in the inventory is below a specific threshold associated to it.
 
 (?) i think we should remove the "list actions" from Session, it becomes too complicated
 ______________________________________________________________________________________________
