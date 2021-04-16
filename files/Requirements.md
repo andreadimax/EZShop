@@ -161,7 +161,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later)                 |              |
 | NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
 | NFR11         | Efficiency                                      | Support up to 20 employees(personnel)                                                                      |              |
-
+| NFR12         | localization                                    | decimal numbers use .(dot) as decimal separator                                                            |              |
 # Use case diagram and use cases
 ## Use case diagram
 <img src="../uml/UsecaseDiagram.png">

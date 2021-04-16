@@ -46,7 +46,6 @@ class Person{
         +ssn
         +name
         +surname
-        +address
 }
 class Personnel{
         +personnelID
