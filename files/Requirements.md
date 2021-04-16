@@ -143,7 +143,8 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 |             1 | Get PersonnelId and Password                                                   |                                      |
 |             2 | Verify Password is correct                                                     |                                      |
 |               |                                                                                |                                      |
-|           FR7 | Issue new Order                                                                |                                      |
+|           FR7 | Issue RestockOrder                                                             |                                      |
+|               |                                                                                |                                      |
 
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
