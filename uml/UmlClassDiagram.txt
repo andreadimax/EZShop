@@ -121,7 +121,7 @@ Personnel --|> Person
 Personnel -- "*" CheckoutSession : start as Cashier
 Personnel -- "*" RestockCheckingSession : start as Restock Checker
 ShopDirector --|> Personnel
-ShopDirector -- "*" Personnel : updates salary
+ShopDirector -- "*" Personnel : updates
 ShopDirector -- "*" Personnel : Fires
 ShopDirector -- "*" Person :hires
 ShopDirector -- Inventory: manages
