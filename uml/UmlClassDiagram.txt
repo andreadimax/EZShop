@@ -50,6 +50,7 @@ class Person{
 class Personnel{
         +personnelID
         +salary
+        +password
 }
 
 class Session{
