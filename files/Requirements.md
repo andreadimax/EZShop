@@ -14,7 +14,7 @@
 
 ## Context Diagram
 
-<img src="../uml/ContextDiagram.png"></img>
+<img src="../uml/ContextDiagram.png">
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
@@ -24,80 +24,130 @@
 | Revenue agency | Web service       | Internet                                        |
 | Barcode system | Driver            | Barcode reader                                  |
 
+# Stories and personas
+
+
+John is the shop owner and director of a small shop of 50-200 square meters and sells about 500-2000 different item types.
+John's shop has 4 different checkouts, and 12 employees.
+John uses the application EZSHOP in order to manage his shop.
+
+John is able to keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
+In order to do so, John asks his employees to count all the goods present in the shop, which he then compares with the inventory tracked by the application.
+After inserting the Monthly stolen report in the application, John can be sure that his inventory will always be coherent with the actual number of items in stock.
+
+John also wants to know actual statistics about his shop earnings and losses, to do so, he accesses the monthly accounting page, in which he has a detailed list of the earnings and expenses he got in previous months.
+
+Everytime he wants to order new goods, he accesses the RestockOrder page, in which he inserts The date and the cost of the order, which will be automatically used by EZSHOP to calculate the monthly accounting.
+
+John can easily manage all his personnel from EZSHOP, he can change their salary, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
+
+John is also automatically warned by the system when has to order a new stock of a product. He is notified if some of the goods in the inventory are below a specific threshold, which he can change according to his preference on a product-basis. 
+
+(?) i think we should remove the "list actions" from Session, it becomes too complicated
+______________________________________________________________________________________________
+Sara and Tom and Tia are three of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
+
+When its Sara's turn to work at the checkout, she borrows a cash container containing cash from the shop, which she uses to give the rest to clients and  logs in using the credentials provided to her by John. 
+In order to correctly initiate the checkout session, she has to insert the borrowed amount into her terminal to let the system know her debt.
+Once the Checkout session is initiated, Sara is able to start a new transaction for each or her customers, and the system keeps track of the amount of money she has earned during the checkout session.
+When sara has to end her checkout session, before she returns the cash container, the system asks her to count the amount of money in it and to log it. 
+If the system automatically warns the shopdirector if the money she gathered are too low  compared to what she should have had.
+
+When the goods ordered by the shop director arrive to she shop, Tom can login as a RestockChecker and start counting the incoming goods by scanning the barcodes and inserting the relative quantity. The system automatically updates the inventory without him having to do it manually. Morover, Tom has also the possibility of raise issues to the shopdirector, regarding some of the goods he has received by stating the affected products and quantity.
+
+With the term customers, we mean the people which buy in the shop using a CustomerCard. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
+
+
+
+
+
+
+
+
+
+
 
 # Functional and non functional requirements
 ## Functional Requirements
-|            ID | Description                                                                    |     |
-| ------------- | -------------                                                                  |-----|
-|           FR1 | Manage sales                                                                   |     |
-|             1 | Start new Transaction                                                          |     |
-|             2 | Scan products                                                                  |     |
-|             3 | Calculate total Amount                                                         |     |
-|             4 | Check Credit Card use                                                          |     |
-|             5 | Update quantity in ProductDescriptor for each sold product                     |     |
-|             6 | Rollback ongoing transaction                                                   |     |
-|             7 | Update fidelity points                                                         |     |
-|             8 | End Transaction                                                                |     |
-|           FR2 | Manage inventory                                                               |     |
-|             1 | Add new ProductDescriptor                                                      |     |
-|             2 | Remove Product Descriptor                                                      |     |
-|             3 | Update Product Descriptor Properties                                           |     |
-|             4 | Show inventory                                                                 |     |
-|           FR3 | Manage customers                                                               |     |
-|             1 | Add loyalty card code                                                          |     |
-|             2 | Store customer data                                                            |     |
-|             3 | Remove customer                                                                |     |
-|             4 | Update fidelity points                                                         |     |
-|           FR4 | Support accounting                                                             |     |
-|             1 | Perform MonthlyStolenReport                                                    |     |
-|           1.1 | Get stolen product list                                                        |     |
-|           1.2 | Calculate total cost of stolen products                                        |     |
-|           1.3 | Update inventory                                                               |     |
-|             2 | Perform DiscardExpiredSession                                                  |     |
-|           2.1 | Compute totalDiscardedCost                                                     |     |
-|           2.2 | Get discardedProductList                                                       |     |
-|           2.3 | Update Inventory                                                               |     |
-|             3 | Tracks RestockOrders                                                           | (?) |
-|           3.1 | Compute moneyCost of the order                                                 |     |
-|             4 | Perform RestockCheckingSession                                                 | (?) |
-|             5 | Perform CheckoutSession                                                        |     |
-|           5.1 | Get Starting cash amount                                                       |     |
-|           5.2 | Accumulate Transaction value                                                   |     |
-|           5.3 | Update CurrentCashAmount                                                       |     |
-|           5.4 | End CheckoutSession                                                            |     |
-|         5.4.1 | Get human-counted final cash amount                                            |     |
-|         5.4.2 | Notify ShopDirector if (CurrentCashAmount - human-counted) > checkoutThreshold |     |
-|             6 | Account Salaries                                                               |     |
-|           FR5 | Manage Personnel                                                               |     |
-|             1 | Hire Personnel                                                                 |     |
-|           1.1 | Set PersonnelId                                                                |     |
-|           1.2 | Set Salary                                                                     |     |
-|           1.3 | Set Password                                                                   |     |
-|             2 | Update Salary                                                                  |     |
-|           2.1 | Get new salary                                                                 |     |
-|           2.2 | Remove old salary from MonthlyAccounting                                       |     |
-|           2.3 | Overwrite old salary                                                           |     |
-|           2.4 | Add new salary to MonthlyAccounting                                            |     |
-|             3 | Update Password                                                                |     |
-|           3.1 | Get new password                                                               |     |
-|           3.2 | Overwrite old password                                                         |     |
-|             4 | Fire Personnel                                                                 |     |
-|           FR6 | Permits System Login and Logout                                                |     |
-|             1 | Get PersonnelId and Password                                                   |     |
-|             2 | Verify Password is correct                                                     |     |
+|            ID | Description                                                                    |       |
+| ------------- | -------------                                                                  | ----- |
+|           FR1 | Manage sales                                                                   |       |
+|             1 | Start new Transaction                                                          |       |
+|             2 | Scan products                                                                  |       |
+|             3 | Calculate total Amount                                                         |       |
+|             4 | Check Credit Card use                                                          |       |
+|             5 | Update quantity in ProductDescriptor for each sold product                     |       |
+|             6 | Rollback ongoing transaction                                                   |       |
+|             7 | Update fidelity points                                                         |       |
+|             8 | End Transaction                                                                |       |
+|               |                                                                                |       |
+|           FR2 | Manage inventory                                                               |       |
+|             1 | Add new ProductDescriptor                                                      |       |
+|             2 | Remove Product Descriptor                                                      |       |
+|             3 | Update Product Descriptor Properties                                           |       |
+|             4 | Show inventory                                                                 |       |
+|               |                                                                                |       |
+|           FR3 | Manage customers                                                               |       |
+|             1 | Add loyalty card code                                                          |       |
+|             2 | Store customer data                                                            |       |
+|             3 | Remove customer                                                                |       |
+|             4 | Update fidelity points                                                         |       |
+|               |                                                                                |       |
+|           FR4 | Support accounting                                                             |       |
+|             1 | Perform MonthlyStolenReport                                                    |       |
+|           1.1 | Get stolen product list                                                        |       |
+|           1.2 | Calculate total cost of stolen products                                        |       |
+|           1.3 | Update inventory                                                               |       |
+|             2 | Perform DiscardExpiredSession                                                  |       |
+|           2.1 | Compute totalDiscardedCost                                                     |       |
+|           2.2 | Get discardedProductList                                                       |       |
+|           2.3 | Update Inventory                                                               |       |
+|             3 | Track RestockOrders                                                            | (?)   |
+|           3.1 | Compute moneyCost of the order                                                 |       |
+|               |                                                                                |       |
+|             4 | Perform RestockCheckingSession                                                 | (?)   |
+|             5 | Perform CheckoutSession                                                        |       |
+|           5.1 | Get Starting cash amount                                                       |       |
+|           5.2 | Accumulate Transaction value                                                   |       |
+|           5.3 | Update CurrentCashAmount                                                       |       |
+|           5.4 | End CheckoutSession                                                            |       |
+|         5.4.1 | Get human-counted final cash amount                                            |       |
+|         5.4.2 | Notify ShopDirector if (CurrentCashAmount - human-counted) > checkoutThreshold |       |
+|             6 | Account Salaries                                                               |       |
+|               |                                                                                |       |
+|           FR5 | Manage Personnel                                                               |       |
+|             1 | Hire Personnel                                                                 |       |
+|           1.1 | Set PersonnelId                                                                |       |
+|           1.2 | Set Salary                                                                     |       |
+|           1.3 | Set Password                                                                   |       |
+|             2 | Update Salary                                                                  |       |
+|           2.1 | Get new salary                                                                 |       |
+|           2.2 | Remove old salary from MonthlyAccounting                                       |       |
+|           2.3 | Overwrite old salary                                                           |       |
+|           2.4 | Add new salary to MonthlyAccounting                                            |       |
+|             3 | Update Password                                                                |       |
+|           3.1 | Get new password                                                               |       |
+|           3.2 | Overwrite old password                                                         |       |
+|             4 | Fire Personnel                                                                 |       |
+|               |                                                                                |       |
+|           FR6 | Permits System Login and Logout                                                |       |
+|             1 | Get PersonnelId and Password                                                   |       |
+|             2 | Verify Password is correct                                                     |       |
 
 ## Non Functional Requirements
-| ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                | Refers to FR |
-| ------------- | :-------------:                                 | :-----:                                                                                    | -----:       |
-| NFR1          | Usability                                       | Time to learn how to use  < 1 hour of training + 7 hour of practice                        |              |
-| NFR2          | Functionality                                   | Data stored must be available 24 hrs/ 24 7 days/ 7                                         | FR2          |
-| NFR3          | Efficiency                                      | GUI response time less than 0.5s                                                           | FR1.2        |
-| NFR4          | Efficiency                                      | Support up to 10 Checkouts                                                                 |              |
-| NFR5          | Efficiency                                      | Support up to 2000 different ProductDescriptors                                            |              |
-| NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                              |              |
-| NFR7          | Reliability                                     | number of data backup per day >= 1                                                         |              |
-| NFR8          | Security                                        | For credit card payments only last 4 digits are stored                                     |              |
-| NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later) |              |
+| ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
+| ------------- | :-------------:                                 | :-----:                                                                                                    | -----:       |
+| NFR1          | Usability                                       | Time to learn how to use  < 1 hour of training + 7 hour of practice                                        |              |
+| NFR2          | Functionality                                   | Data stored must be available 24 hrs/ 24 7 days/ 7                                                         | FR2          |
+| NFR3          | Efficiency                                      | GUI response time less than 0.5s                                                                           | FR1.2        |
+| NFR4          | Efficiency                                      | Support up to 10 Checkouts                                                                                 |              |
+| NFR5          | Efficiency                                      | Support up to 2000 different ProductDescriptors                                                            | FR2          |
+| NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
+| NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
+| NFR8          | Security                                        | For credit card payments only last 4 digits are stored                                                     |              |
+| NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later)                 |              |
+| NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
+| NFR11         | Efficiency                                      | Support up to 20 employees(personnel)                                                                      |              |
 
 # Use case diagram and use cases
 ## Use case diagram
@@ -161,6 +211,6 @@
 
 # Glossary
 # System design
-<img src='./uml.png'>
+<img src='./../uml/ContextDiagram.png'></img>
 # Deployment diagram
 <img src='./deployment_diagram.png'>
