@@ -15,6 +15,7 @@
 ## Context Diagram
 
 <img src="../uml/ContextDiagram.png">
+
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
@@ -164,6 +165,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 # Use case diagram and use cases
 ## Use case diagram
 <img src="../uml/UsecaseDiagram.png">
+
 ## Use Cases
 ### Use case 1, Create User Profile
 | Actors Involved  | Personnel, Shop Director                                        |
@@ -197,7 +199,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 ### Use case 5, Start DiscardExpiredSession
 | Actors Involved  | Personnel                                                                       |
 | -------------    | -------------                                                                   |
-| Precondition     |    Personnel must be logged as Discarder                                                                             |
+| Precondition     | Personnel must be logged as Discarder                                           |
 | Post condition   | Expired products are discarded                                                  |
 | Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader |
 
