@@ -29,6 +29,7 @@
 
 John is the shop owner and director of a small shop of 50-200 square meters and sells about 500-2000 different item types.
 John's shop has 4 different checkouts, and 12 employees.
+
 John uses the application EZSHOP in order to manage his shop.
 
 John is able to easily keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
@@ -138,9 +139,11 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 |           3.2 | Overwrite old password                                                         |                                      |
 |             4 | Fire Personnel                                                                 |                                      |
 |               |                                                                                |                                      |
-|           FR6 | Permits System Login and Logout                                                |                                      |
+|           FR6 | Authenticate User(Login and Logout)                                            |                                      |
 |             1 | Get PersonnelId and Password                                                   |                                      |
 |             2 | Verify Password is correct                                                     |                                      |
+|               |                                                                                |                                      |
+|           FR7 | Issue new Order                                                                |                                      |
 
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
