@@ -163,52 +163,108 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later)                 |              |
 | NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
 | NFR12         | localization                                    | decimal numbers use .(dot) as decimal separator                                                            |              |
-| NFR13         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state                        |              |
+| NFR14         | Reliability                                     | Save to disk every transaction performed                                                                   |              |
+| NFR13         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state of the system          |              |
+| NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
+| NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
 
 # Use case diagram and use cases
 ## Use case diagram
 <img src="../uml/UsecaseDiagram.png">
 
 ## Use Cases
-### Use case 1, Create User Profile
-| Actors Involved  | Personnel, Shop Director                                        |
-| -------------    | -------------                                                   |
-| Precondition     | Personnel Account does not exist                                |
-| Post condition   | Personnel Account created                                       |
-| Nominal Scenario | Only ShopDirector can create a new user account. Id is assigned |
-| Variant          | Role (RestockChecker, Cashier...) can be assigned               |
+### Use case 1, Create Personnel
+| Actors Involved  | Personnel, Shop Director                                                                                                                 |
+| -------------    | -------------                                                                                                                            |
+| Precondition     | User is logged in as ShopDirector                                                                                                        |
+| Post condition   | Personnel Account created(salary, password and personnelID have been assigned to it)                                                     |
+|                  | totalSalaryCost has been updated                                                                                                         |
+| Nominal Scenario | ShopDirector creates new user specifying some specific attributes(salary, personellID and password**                                      |
+|                  | Personnel User is created with the inserted info as attributes, the attribute totalSalaryCost in MonthlyAccounting is updated            |
+|                  |                                                                                                                                          |
+| Variant          | PersonnelID is already taken by another member of the Personnel or has not been inserted, issue warning, ask for alternative PersonnelId |
+|                  | Salary inserted is negative, issue warning, ask for alternative                                                                          |
+|                  | Password inserted is shorter than 8 characters or empty, issue warning                                                                   |
 
-### Use case 2, Delete User Profile
-| Actors Involved  | Personnel, Shop Director                                        |
-| -------------    | -------------                                                   |
-| Precondition     | Personnel Account exist                                |
-| Post condition   | Personnel Account does not exist anymore                                       |
-| Nominal Scenario | Only ShopDirector can delete a user account. Id is discarded |
 
-### Use case 3, Start RestockCheckingSession
-| Actors Involved  | Personnel                                  |
-| -------------    | -------------                              |
-| Precondition     | Personnel must be logged as RestockChecker |
-| Post condition   | Restock Order performed                    |
-| Nominal Scenario | Supplier is selected, order is performed   |
 
-### Use case 4, Start Checkout Session
-| Actors Involved  | Personnel                                                                      |
-| -------------    | -------------                                                                  |
-| Precondition     | Personnel must be logged as Cashier                                            |
-| Post condition   | A transaction is completed                                                     |
-| Nominal Scenario | Cashier opens a new checkout session. Products are scanned with barcode reader |
+
+### Use case 2, Delete Personnel
+| Actors Involved  | Personnel, Shop Director                                                            |
+| -------------    | -------------                                                                       |
+| Precondition     | User is logged in as ShopDirector, Personnel Account to delete exist                |
+| Post condition   | Personnel Account does not exist anymore, totalSalaryCost has been updated          |
+| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and clicks delete |
+| Variant          |                                                                                     |
+
+### Use case 3, Update Personnel salary
+| Actors Involved  | Personnel, Shop Director                                                                          |
+| -------------    | -------------                                                                                     |
+| Precondition     | User is logged in as ShopDirector, Personnel Account to which update the salary exists            |
+| Post condition   | Personnel's salary has been updated, totalSalaryCost has been updated                             |
+| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of salary |
+| Variant          | The value entered as salary is negative, stop the operation and issue a warning                   |
+### Use case 3, Update Personnel password
+| Actors Involved  | Personnel, Shop Director                                                                              |
+| -------------    | -------------                                                                                         |
+| Precondition     | User is logged in as ShopDirector, Personnel Account to which to change password exists               |
+| Post condition   | Personnel's password has been updated                                                                 |
+| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of password   |
+|                  |                                                                                                       |
+
+
+### Use case 3, Perform RestockCheckingSession
+| Actors Involved  | Personnel                                                                                                                                       |
+| -------------    | -------------                                                                                                                                   |
+| Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session                                                                 |
+| Post condition   | Inventory is updated according to the scanned goods                                                                                             |
+| Nominal Scenario | User selects the supplier, scans the Restocked items, then ends the Session                                                                     |
+| Variant 1        | During The session a power loss occurs, The system restores itself as before the start of the RestockCheckingSession                            |
+| Variant 2        | During the scans, one or more goods are damaged or the barcode doesn't read their barcode  =>  The user can raise an issue to the ShopDirector  |
+
+### Use case 4, Perform Checkout Session
+| Actors Involved  | Personnel                                                                                                                                                        |
+| -------------    | -------------                                                                                                                                                    |
+| Precondition     | Personnel must be logged in, and he must have started a CheckoutSession                                                                                          |
+| Post condition   | Cashier Ends the session by logging the cash accumulated, totalCheckout in MonthlyAccounting is updated                                                          |
+| Nominal Scenario | Cashier executes many transactions, then he ends the session by logging the amount of cash he accumulated                                                        |
+| Variant 1        | The difference between the amount logged by the cashier and the correct amount is higher than the toleranceThreshold                                             |
+|                  | The system sends a warning to the shopDirector                                                                                                                   |
+| Variant 2        | Power outage occurs during checkout session, the system aborts all ongoing transactions and returns to the state corresponding to the last completed transaction |
+|                  | the system rolls back to the state it was in,  when the last transaction has been completed                                                                      |
+|                  |                                                                                                                                                                  |
 
 ### Use case 5, Start DiscardExpiredSession
-| Actors Involved  | Personnel                                                                       |
-| -------------    | -------------                                                                   |
-| Precondition     | Personnel must be logged as Discarder                                           |
-| Post condition   | Expired products are discarded                                                  |
-| Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader |
+| Actors Involved  | Personnel                                                                                                   |
+| -------------    | -------------                                                                                               |
+| Precondition     | Personnel must be logged in, and he must have started a Discard expired Session                             |
+| Post condition   | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated                |
+| Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader, Personnel ends the Session |
+| Variant          | Power outage occurs during the session, rolls back to the state it was in before starting the Session       |
+| Variant 2        | Products can also be inserted by typing the barcode manually with a keyboard                                |
+
+### Use case 6, Perform MonthlyStolenReport
+| Actors Involved  | Personnel                                                                                                                      |
+| -------------    | -------------                                                                                                                  |
+| Precondition     | ShopDirector must be logged in, and he must have clicked MonthlyStolenReport                                                   |
+| Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated                                  |
+| Nominal Scenario | ShopDirector inserts the list of missing items, either by keyboard or by barcodeScanner, then he ends the Session              |
+| Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
+
+### Use case 7, Manage sales(Perform Transactions)
+| Actors Involved  | Personnel                                                                                                                                  |
+| -------------    | -------------                                                                                                                              |
+| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                      |
+| Post condition   | Transaction has ended, scanned products are removed from the inventory, TotalCheckout and currentCashAmount in CheckoutSession are updated |
+| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                               |
+| Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                        |
+| Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                           |
+| Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction    |
+| Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                      |
 
 # Relevant scenarios
 ## Scenario 1
-| Scenario ID:  | Corresponds to UC 4                                                     |
+| Scenario ID:  | Corresponds to UC 7  Variant 3                                          |
 | ------------- | -------------                                                           |
 | Description   | Transaction failed                                                      |
 | Precondition  | Payment is done with credit card                                        |

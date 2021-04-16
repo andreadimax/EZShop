@@ -64,6 +64,7 @@ class CheckoutSession{
         +totalCheckout
         +startCashAmount
         +currentCashAmount
+        +toleranceThreshold
 }
 note right : every cashier transaction is tracked,\nat the end of the session he must\nreturn the currentCashAmount to end it
 class MonthlyAccounting{
