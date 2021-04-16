@@ -38,6 +38,7 @@ After inserting the Monthly stolen report in the application, John can be sure t
 John also wants to know actual statistics about his shop earnings and losses, to do so, he accesses the monthly accounting page, in which he has a detailed list of the earnings and expenses he got in previous months.
 
 Everytime he wants to order new goods, he accesses the RestockOrder page, in which he inserts The date and the cost of the order, which will be automatically used by EZSHOP to calculate the monthly accounting.
+(?) if we keep it this way, we need to remove the association restockOrder--ProductDescriptor
 
 John can easily manage all his personnel from EZSHOP, he can change their salary, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
@@ -71,70 +72,75 @@ With the term customers, we mean the people which buy in the shop using a Custom
 
 # Functional and non functional requirements
 ## Functional Requirements
-|            ID | Description                                                                    |       |
-| ------------- | -------------                                                                  | ----- |
-|           FR1 | Manage sales                                                                   |       |
-|             1 | Start new Transaction                                                          |       |
-|             2 | Scan products                                                                  |       |
-|             3 | Calculate total Amount                                                         |       |
-|             4 | Check Credit Card use                                                          |       |
-|             5 | Update quantity in ProductDescriptor for each sold product                     |       |
-|             6 | Rollback ongoing transaction                                                   |       |
-|             7 | Update fidelity points                                                         |       |
-|             8 | End Transaction                                                                |       |
-|               |                                                                                |       |
-|           FR2 | Manage inventory                                                               |       |
-|             1 | Add new ProductDescriptor                                                      |       |
-|             2 | Remove Product Descriptor                                                      |       |
-|             3 | Update Product Descriptor Properties                                           |       |
-|             4 | Show inventory                                                                 |       |
-|               |                                                                                |       |
-|           FR3 | Manage customers                                                               |       |
-|             1 | Add loyalty card code                                                          |       |
-|             2 | Store customer data                                                            |       |
-|             3 | Remove customer                                                                |       |
-|             4 | Update fidelity points                                                         |       |
-|               |                                                                                |       |
-|           FR4 | Support accounting                                                             |       |
-|             1 | Perform MonthlyStolenReport                                                    |       |
-|           1.1 | Get stolen product list                                                        |       |
-|           1.2 | Calculate total cost of stolen products                                        |       |
-|           1.3 | Update inventory                                                               |       |
-|             2 | Perform DiscardExpiredSession                                                  |       |
-|           2.1 | Compute totalDiscardedCost                                                     |       |
-|           2.2 | Get discardedProductList                                                       |       |
-|           2.3 | Update Inventory                                                               |       |
-|             3 | Track RestockOrders                                                            | (?)   |
-|           3.1 | Compute moneyCost of the order                                                 |       |
-|               |                                                                                |       |
-|             4 | Perform RestockCheckingSession                                                 | (?)   |
-|             5 | Perform CheckoutSession                                                        |       |
-|           5.1 | Get Starting cash amount                                                       |       |
-|           5.2 | Accumulate Transaction value                                                   |       |
-|           5.3 | Update CurrentCashAmount                                                       |       |
-|           5.4 | End CheckoutSession                                                            |       |
-|         5.4.1 | Get human-counted final cash amount                                            |       |
-|         5.4.2 | Notify ShopDirector if (CurrentCashAmount - human-counted) > checkoutThreshold |       |
-|             6 | Account Salaries                                                               |       |
-|               |                                                                                |       |
-|           FR5 | Manage Personnel                                                               |       |
-|             1 | Hire Personnel                                                                 |       |
-|           1.1 | Set PersonnelId                                                                |       |
-|           1.2 | Set Salary                                                                     |       |
-|           1.3 | Set Password                                                                   |       |
-|             2 | Update Salary                                                                  |       |
-|           2.1 | Get new salary                                                                 |       |
-|           2.2 | Remove old salary from MonthlyAccounting                                       |       |
-|           2.3 | Overwrite old salary                                                           |       |
-|           2.4 | Add new salary to MonthlyAccounting                                            |       |
-|             3 | Update Password                                                                |       |
-|           3.1 | Get new password                                                               |       |
-|           3.2 | Overwrite old password                                                         |       |
-|             4 | Fire Personnel                                                                 |       |
-|               |                                                                                |       |
-|           FR6 | Permits System Login and Logout                                                |       |
-|             1 | Get PersonnelId and Password                                                   |       |
-|             2 | Verify Password is correct                                                     |       |
+|            ID | Description                                                                    |                                      |
+| ------------- | -------------                                                                  | -----                                |
+|           FR1 | Manage sales                                                                   |                                      |
+|             1 | Start new Transaction                                                          |                                      |
+|             2 | Scan products                                                                  |                                      |
+|             3 | Calculate total Amount                                                         |                                      |
+|             4 | Check Credit Card use                                                          |                                      |
+|             5 | Update quantity in ProductDescriptor for each sold product                     |                                      |
+|             6 | Rollback ongoing transaction                                                   |                                      |
+|             7 | Update fidelity points                                                         |                                      |
+|             8 | End Transaction                                                                |                                      |
+|               |                                                                                |                                      |
+|           FR2 | Manage inventory                                                               |                                      |
+|             1 | Add new ProductDescriptor                                                      |                                      |
+|             2 | Remove Product Descriptor                                                      |                                      |
+|             3 | Update Product Descriptor Properties                                           |                                      |
+|             4 | Show inventory                                                                 |                                      |
+|               |                                                                                |                                      |
+|           FR3 | Manage customers                                                               |                                      |
+|             1 | Add loyalty card code                                                          |                                      |
+|             2 | Store customer data                                                            |                                      |
+|             3 | Remove customer                                                                |                                      |
+|             4 | Update fidelity points                                                         |                                      |
+|               |                                                                                |                                      |
+|           FR4 | Support accounting                                                             |                                      |
+|             1 | Perform MonthlyStolenReport                                                    |                                      |
+|           1.1 | Get stolen product list                                                        |                                      |
+|           1.2 | Calculate total cost of stolen products                                        |                                      |
+|           1.3 | Update inventory                                                               |                                      |
+|               |                                                                                |                                      |
+|             2 | Perform DiscardExpiredSession                                                  |                                      |
+|           2.1 | Compute totalDiscardedCost                                                     |                                      |
+|           2.2 | Get discardedProductList                                                       |                                      |
+|           2.3 | Update Inventory                                                               |                                      |
+|               |                                                                                |                                      |
+|             3 | Track RestockOrders(date, moneyCost, Suppliers)                                | should it track also products??? (?) |
+|               |                                                                                |                                      |
+|             4 | Perform RestockCheckingSession                                                 | (?)                                  |
+|           4.1 | Scan restock items                                                             |                                      |
+|           4.2 | Update inventory                                                               |                                      |
+|           4.3 | send RestockIssue to Director                                                  |                                      |
+|               |                                                                                |                                      |
+|             5 | Perform CheckoutSession                                                        |                                      |
+|           5.1 | Get Starting cash amount                                                       |                                      |
+|           5.2 | Accumulate Transaction value                                                   |                                      |
+|           5.3 | Update CurrentCashAmount                                                       |                                      |
+|           5.4 | End CheckoutSession                                                            |                                      |
+|         5.4.1 | Get human-counted final cash amount                                            |                                      |
+|         5.4.2 | Notify ShopDirector if (CurrentCashAmount - human-counted) > checkoutThreshold |                                      |
+|               |                                                                                |                                      |
+|               |                                                                                |                                      |
+|           FR5 | Manage Personnel                                                               |                                      |
+|             1 | Hire Personnel                                                                 |                                      |
+|           1.1 | Set PersonnelId                                                                |                                      |
+|           1.2 | Set Salary                                                                     |                                      |
+|           1.3 | Set Password                                                                   |                                      |
+|             2 | Update Salary                                                                  |                                      |
+|           2.1 | Get new salary                                                                 |                                      |
+|           2.2 | Remove old salary from MonthlyAccounting                                       |                                      |
+|           2.3 | Overwrite old salary                                                           |                                      |
+|           2.4 | Add new salary to MonthlyAccounting                                            |                                      |
+|             3 | Update Password                                                                |                                      |
+|           3.1 | Get new password                                                               |                                      |
+|           3.2 | Overwrite old password                                                         |                                      |
+|             4 | Fire Personnel                                                                 |                                      |
+|               |                                                                                |                                      |
+|           FR6 | Permits System Login and Logout                                                |                                      |
+|             1 | Get PersonnelId and Password                                                   |                                      |
+|             2 | Verify Password is correct                                                     |                                      |
 
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
