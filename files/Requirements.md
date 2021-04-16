@@ -163,6 +163,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 
 # Use case diagram and use cases
 ## Use case diagram
+<img src="../uml/UsecaseDiagram.png">
 ## Use Cases
 ### Use case 1, Create User Profile
 | Actors Involved  | Personnel, Shop Director                                        |
