@@ -296,7 +296,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Nominal Scenario | the Button "remove" is clicked                                            |
 
 ### Use Case 10, Show Inventory
-| Actors Involved  | ShopDirector, Product                                                                   |
+| Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
 | Precondition     | ShopDirector must be logged in                                                          |
 | Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
