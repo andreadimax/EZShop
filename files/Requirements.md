@@ -180,7 +180,6 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
 | NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
-|               |                                                 |                                                                                                            |              |
 
 
 # Use case diagram and use cases
@@ -226,7 +225,7 @@ Michael's customer card increases its point value at each transaction, depending
 
 
 ### Use case 3, Perform RestockCheckingSession
-| Actors Involved  | Personnel, Barcode System                                                                                                                       |
+| Actors Involved  | Personnel                                                                                                                                       |
 | -------------    | -------------                                                                                                                                   |
 | Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session                                                                 |
 | Post condition   | Inventory is updated according to the scanned goods                                                                                             |
@@ -247,7 +246,7 @@ Michael's customer card increases its point value at each transaction, depending
 |                  |                                                                                                                                                                  |
 
 ### Use case 5, Start DiscardExpiredSession
-| Actors Involved  | Personnel, BarcodeSystem                                                                                    |
+| Actors Involved  | Personnel                                                                                                   |
 | -------------    | -------------                                                                                               |
 | Precondition     | Personnel must be logged in, and he must have started a Discard expired Session                             |
 | Post condition   | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated                |
@@ -256,7 +255,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 2        | Products can also be inserted by typing the barcode manually with a keyboard                                |
 
 ### Use case 6, Perform MonthlyStolenReport
-| Actors Involved  | Personnel, BarcodeSystem                                                                                                          |
+| Actors Involved  | Personnel                                                                                                                      |
 | -------------    | -------------                                                                                                                  |
 | Precondition     | ShopDirector must be logged in, and he must have clicked MonthlyStolenReport                                                   |
 | Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated                                  |
@@ -264,7 +263,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 7, Manage sales(Perform Transactions)
-| Actors Involved  | Personnel, BarcodeSystem, POS System                                                                                                               |
+| Actors Involved  | Personnel                                                                                                                                    |
 | -------------    | -------------                                                                                                                                |
 | Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                        |
 | Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                      |
@@ -301,7 +300,9 @@ Michael's customer card increases its point value at each transaction, depending
 | Precondition     | ShopDirector must be logged in                                                          |
 | Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
 | Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
-
+|                  |                                                                                         |
+|                  |                                                                                         |
+### Use Case 10, Update ProductDescriptor(?)
 # Relevant scenarios
 ## Scenario 1
 | Scenario ID:  | Corresponds to UC 7  Variant 3                                          |
