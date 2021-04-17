@@ -16,7 +16,7 @@ class Supplier{
         +telephoneNumber
 }
 class Transaction{
-        +date
+        +time
         +amountMoney
 }
 
@@ -84,7 +84,7 @@ class ManageCustomerSession{
 }
 
 class MonthlyStolenReport{
-        
+        +value
 }
 note right : must be done manually\nchecking for missing goods
 class RestockCheckingSession{
