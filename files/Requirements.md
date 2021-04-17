@@ -184,6 +184,7 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
 | NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
 | NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
+| NFR20         | Localization                                   | Money amounts are expressed in $ |
 
 
 # Use case diagram and use cases
