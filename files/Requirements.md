@@ -48,6 +48,10 @@ In case the inventory needed to be updated, the shop director is able to manage 
 
 John is automatically warned by the system when has to order a new stock of a product. The system notifies him if a type of item in the inventory is below a specific threshold associated to it.
 
+When John wants, he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
+
+If the shop is crowded, and all of his personnel is busy, john can still help the shop remain efficient by behaving as an additional member of the personnel, since EZSHOP gives him the option of starting all the types of Sessions.
+
 (?) i think we should remove the "list actions" from Session, it becomes too complicated
 ______________________________________________________________________________________________
 Sara,Tom, Tia and Mike are four of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
@@ -63,6 +67,13 @@ When the goods ordered by the shop director arrive to she shop, Tom can login as
 With the term customers, we mean the people which buy in the shop using a CustomerCard. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
 
 When Mike is reordering the shelves, and finds that a product has expired, he is able start a DiscardExpiredSession, which lets him scan the expired products. Thanks to this procedure, Mike is able to discard the expired products while still keeping the inventory synchronized with the actual number of items present in the shop.
+
+_____________________________
+
+Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a customer card with him, unless those products are specific promotional products which have a cost in Loyalty Card points !=0. 
+Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
+Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
+Michael's customer card increases its point value at each transaction, depending on the amount of money spent, in the same way, points are subtracted from the card when a product costing points is bought
 
 
 
@@ -167,6 +178,9 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | NFR13         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state of the system          |              |
 | NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
+| NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
+|               |                                                 |                                                                                                            |              |
+
 
 # Use case diagram and use cases
 ## Use case diagram
@@ -252,15 +266,25 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 7, Manage sales(Perform Transactions)
-| Actors Involved  | Personnel                                                                                                                                  |
-| -------------    | -------------                                                                                                                              |
-| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                      |
-| Post condition   | Transaction has ended, scanned products are removed from the inventory, TotalCheckout and currentCashAmount in CheckoutSession are updated |
-| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                               |
-| Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                        |
-| Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                           |
-| Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction    |
-| Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                      |
+| Actors Involved  | Personnel                                                                                                                                        |
+| -------------    | -------------                                                                                                                                    |
+| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                            |
+| Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                          |
+|                  | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated                                            |
+| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                                     |
+| Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                              |
+| Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                                 |
+| Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction          |
+| Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                            |
+| Variant 5        | LoyaltyCard is not used, LoyaltyCard points are not updated                                                                                      |
+| Variant 6        | scanned list contains a product with pointValue!=0, but either the LoyaltyCard scanned has not enough points or no Loyalty Card has been scanned |
+|                  | ===> Issue Warning, transaction cannot be completed                                                                                              |
+
+### Use Case 8, Add new ProductDescriptor
+### Use Case 8, Remove Product Descriptor
+### Use Case 8, Update Product Descriptor Properties
+### Use Case 9, Show Inventory
+
 
 # Relevant scenarios
 ## Scenario 1
@@ -282,6 +306,8 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 | Precondition  |                         |
 | Postcondition |                         |
 | Step#         |                         |
+
+
 
 # Glossary
 # System design
