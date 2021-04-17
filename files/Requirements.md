@@ -6,7 +6,6 @@
 | POS System       | The system interacts with a POS type application for managing transactions                                                                                       |
 | Developer        | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)                                                                |
 | IT Administrator | Administrator of the IT System                                                                                                                                   |
-| Supplier         | A shop's supplier can have te access to the inventory (?) <br> -Replies to issued orders shipping goods to the shop                                              |
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Product          | Sold goods                                                                                                                                                       |
 
@@ -21,7 +20,7 @@
 | -------------  | :-------------:   | -----:                                          |
 | User           | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
-| Supplier       | GUI               | Internet                                        |
+| Supplier       | GUI               | Local storage                                   |
 | Revenue agency | Web service       | Internet                                        |
 | Barcode system | Driver            | Barcode reader                                  |
 
@@ -175,7 +174,7 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
 | NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
 | NFR8          | Security                                        | For credit card payments only last 4 digits are stored                                                     |              |
-| NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later)                 |              |
+| NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later) for x86 systems and Windows Embedded Compact for embedded terminals                |              |
 | NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
 | NFR12         | localization                                    | decimal numbers use .(dot) as decimal separator                                                            |              |
 | NFR14         | Reliability                                     | Save to disk every transaction performed                                                                   |              |
@@ -184,6 +183,8 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
 | NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
+| NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
+| NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
 
 
 # Use case diagram and use cases
@@ -350,6 +351,15 @@ Michael's customer card increases its point value at each transaction, depending
 
 
 # Glossary
+| Class name | Meaning |
+| ---------- | ------- |
+| CheckoutSession | Session opened by a cashier to manage one or more sales |
+| RestockCheckingSession | Session opened by an employee when goods are arrived.<br> # of products arrived canbe compared with # of products ordered.<br>Any issues can be reported. |
+| DiscardExpiredSession | Session opened by an employee to scan expired products |
+| MonthlyAccounting | Monthly accounting of the shop, calculated by the system. It takes into account all possible income and expenses. Only ShopDirector can access to it |
+| Transaction | Represents the total purchase of a customer |
+| MonthlyStolenReport | Total value of stolen products. Necessary for the calculation of monthly accounting |
+
 # System design
 <img src='./../uml/ContextDiagram.png'></img>
 # Deployment diagram
