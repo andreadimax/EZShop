@@ -7,6 +7,7 @@
 | Developer        | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)                                                                |
 | IT Administrator | Administrator of the IT System                                                                                                                                   |
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
+| Barcode reader   | Barcode used to scan products |
 | Product          | Sold goods                                                                                                                                                       |
 
 # Context Diagram and interfaces
@@ -20,7 +21,6 @@
 | -------------  | :-------------:   | -----:                                          |
 | User           | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
-| Supplier       | GUI               | Local storage                                   |
 | Barcode system | Driver            | Barcode reader                                  |
 
 # Stories and personas
