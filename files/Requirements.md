@@ -70,10 +70,10 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 
 _____________________________
 
-Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a customer card with him, unless those products are specific promotional products which have a cost in Loyalty Card points !=0. 
+Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a customer card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
 Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
-Michael's customer card increases its point value at each transaction, depending on the amount of money spent, in the same way, points are subtracted from the card when a product costing points is bought
+Michael's customer card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product costing points is lower than 0.
 
 
 
@@ -157,6 +157,8 @@ Michael's customer card increases its point value at each transaction, depending
 |               |                                                                                |                                      |
 |           FR7 | Issue RestockOrder                                                             |                                      |
 |               |                                                                                |                                      |
+|           FR8 | Store Suppliers Data                                                           |                                      |
+|               |                                                                                |                                      |
 
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
@@ -229,7 +231,7 @@ Michael's customer card increases its point value at each transaction, depending
 | -------------    | -------------                                                                                                                                   |
 | Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session                                                                 |
 | Post condition   | Inventory is updated according to the scanned goods                                                                                             |
-| Nominal Scenario | User selects the supplier, scans the Restocked items, then ends the Session                                                                     |
+| Nominal Scenario | Scans the Restocked items, then ends the Session                                                                     |
 | Variant 1        | During The session a power loss occurs, The system restores itself as before the start of the RestockCheckingSession                            |
 | Variant 2        | During the scans, one or more goods are damaged or the barcode doesn't read their barcode  =>  The user can raise an issue to the ShopDirector  |
 
@@ -274,8 +276,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction      |
 | Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                        |
 | Variant 5        | LoyaltyCard is not used, LoyaltyCard points are not updated                                                                                  |
-| Variant 6        | a product with pointValue!=0 has been scanned, but either the LoyaltyCard has not enough points or no Loyalty Card is present, issue warning |
-
+| Variant 6        | a product with pointValue<0 has been scanned, but either the LoyaltyCard has not enough points or no Loyalty Card is present, issue warning |
 
 ### Use Case 8, Add new ProductDescriptor
 | Actors Involved  | ShopDirector                                                                                                           |
@@ -302,6 +303,26 @@ Michael's customer card increases its point value at each transaction, depending
 | Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
 |                  |                                                                                         |
 |                  |                                                                                         |
+
+### Use Case 11, Show Restock Issues
+| Actors Involved  | ShopDirector                                                                            |
+| -------------    | -------------                                                                           |
+| Precondition     | ShopDirector must be logged in                                                          |
+| Post condition   | ShopDirector is able to scroll through the list of Restock Issues                       |
+| Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
+|                  |                                                                                         |
+|                  |                                                                                         |
+
+### Use Case 12, Delete Restock Issue
+| Actors Involved  | ShopDirector                                                                            |
+| -------------    | -------------                                                                           |
+| Precondition     | ShopDirector must be logged in and on the Restock Issue view                                                           |
+| Post condition   | Restock Issue Is removed from the list |
+| Nominal Scenario | ShopDirector clicks "remove"                                                  |
+|                  |                                                                                         |
+|                  |                                                                                         |
+
+
 ### Use Case 10, Update ProductDescriptor(?)
 # Relevant scenarios
 ## Scenario 1
