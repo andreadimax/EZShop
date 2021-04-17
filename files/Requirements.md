@@ -179,7 +179,7 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
 | NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
-|               |                                                 |                                                                                                            |              |
+| NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
 
 
 # Use case diagram and use cases
@@ -199,9 +199,6 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant          | PersonnelID is already taken by another member of the Personnel or has not been inserted, issue warning, ask for alternative PersonnelId |
 |                  | Salary inserted is negative, issue warning, ask for alternative                                                                          |
 |                  | Password inserted is shorter than 8 characters or empty, issue warning                                                                   |
-
-
-
 
 ### Use case 2, Delete Personnel
 | Actors Involved  | Personnel, Shop Director                                                            |
@@ -266,25 +263,70 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 7, Manage sales(Perform Transactions)
-| Actors Involved  | Personnel                                                                                                                                        |
-| -------------    | -------------                                                                                                                                    |
-| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                            |
-| Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                          |
-|                  | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated                                            |
-| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                                     |
-| Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                              |
-| Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                                 |
-| Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction          |
-| Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                            |
-| Variant 5        | LoyaltyCard is not used, LoyaltyCard points are not updated                                                                                      |
-| Variant 6        | scanned list contains a product with pointValue!=0, but either the LoyaltyCard scanned has not enough points or no Loyalty Card has been scanned |
-|                  | ===> Issue Warning, transaction cannot be completed                                                                                              |
+| Actors Involved  | Personnel                                                                                                                                    |
+| -------------    | -------------                                                                                                                                |
+| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                        |
+| Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                      |
+|                  | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated                                        |
+| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                                 |
+| Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                          |
+| Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                             |
+| Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction      |
+| Variant 4        | The buyer pays with a credit card instead of cash => currentCashAmount is not updated                                                        |
+| Variant 5        | LoyaltyCard is not used, LoyaltyCard points are not updated                                                                                  |
+| Variant 6        | a product with pointValue!=0 has been scanned, but either the LoyaltyCard has not enough points or no Loyalty Card is present, issue warning |
+
 
 ### Use Case 8, Add new ProductDescriptor
-### Use Case 8, Remove Product Descriptor
-### Use Case 8, Update Product Descriptor Properties
-### Use Case 9, Show Inventory
-
+| Actors Involved  | Personnel                                                                    |
+| -------------    | -------------                                                                |
+| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen    |
+| Post condition   | New Product Descriptor with valid attributes has been added to the inventory |
+| Nominal Scenario |                                                                              |
+| Variant          |                                                                              |
+| Variant 2        |                                                                              |
+| Variant 3        |                                                                              |
+| Variant 4        |                                                                              |
+| Variant 5        |                                                                              |
+| Variant 6        |                                                                              |
+### Use Case 9, Remove Product Descriptor
+| Actors Involved  | Personnel                                                                                                                                    |
+| -------------    | -------------                                                                                                                                |
+| Precondition     | |
+| Post condition   | |
+| Nominal Scenario | |
+| Variant          | |
+| Variant 2        | |
+| Variant 3        | |
+| Variant 4        | |
+| Variant 5        | |
+| Variant 6        | |
+### Use Case 9, Update Product Descriptor Properties
+| Actors Involved  | Personnel                                                                                                                                    |
+| -------------    | -------------                                                                                                                                |
+| Precondition     | |
+| Post condition   | |
+|                  | |
+| Nominal Scenario | |
+| Variant          | |
+| Variant 2        | |
+| Variant 3        | |
+| Variant 4        | |
+| Variant 5        | |
+| Variant 6        | |
+### Use Case 10, Show Inventory
+| Actors Involved  | Personnel                                                                                                                                    |
+| -------------    | -------------                                                                                                                                |
+| Precondition     | |
+| Post condition   | |
+|                  | |
+| Nominal Scenario | |
+| Variant          | |
+| Variant 2        | |
+| Variant 3        | |
+| Variant 4        | |
+| Variant 5        | |
+| Variant 6        | |
 
 # Relevant scenarios
 ## Scenario 1
