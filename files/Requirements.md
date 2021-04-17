@@ -180,6 +180,7 @@ Michael's customer card increases its point value at each transaction, depending
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
 | NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
+|               |                                                 |                                                                                                            |              |
 
 
 # Use case diagram and use cases
@@ -225,7 +226,7 @@ Michael's customer card increases its point value at each transaction, depending
 
 
 ### Use case 3, Perform RestockCheckingSession
-| Actors Involved  | Personnel                                                                                                                                       |
+| Actors Involved  | Personnel, Barcode System                                                                                                                       |
 | -------------    | -------------                                                                                                                                   |
 | Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session                                                                 |
 | Post condition   | Inventory is updated according to the scanned goods                                                                                             |
@@ -246,7 +247,7 @@ Michael's customer card increases its point value at each transaction, depending
 |                  |                                                                                                                                                                  |
 
 ### Use case 5, Start DiscardExpiredSession
-| Actors Involved  | Personnel                                                                                                   |
+| Actors Involved  | Personnel, BarcodeSystem                                                                                    |
 | -------------    | -------------                                                                                               |
 | Precondition     | Personnel must be logged in, and he must have started a Discard expired Session                             |
 | Post condition   | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated                |
@@ -255,7 +256,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 2        | Products can also be inserted by typing the barcode manually with a keyboard                                |
 
 ### Use case 6, Perform MonthlyStolenReport
-| Actors Involved  | Personnel                                                                                                                      |
+| Actors Involved  | Personnel, BarcodeSystem                                                                                                          |
 | -------------    | -------------                                                                                                                  |
 | Precondition     | ShopDirector must be logged in, and he must have clicked MonthlyStolenReport                                                   |
 | Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated                                  |
@@ -263,7 +264,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 7, Manage sales(Perform Transactions)
-| Actors Involved  | Personnel                                                                                                                                    |
+| Actors Involved  | Personnel, BarcodeSystem, POS System                                                                                                               |
 | -------------    | -------------                                                                                                                                |
 | Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                        |
 | Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                      |
@@ -278,55 +279,28 @@ Michael's customer card increases its point value at each transaction, depending
 
 
 ### Use Case 8, Add new ProductDescriptor
-| Actors Involved  | Personnel                                                                    |
-| -------------    | -------------                                                                |
-| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen    |
-| Post condition   | New Product Descriptor with valid attributes has been added to the inventory |
-| Nominal Scenario |                                                                              |
-| Variant          |                                                                              |
-| Variant 2        |                                                                              |
-| Variant 3        |                                                                              |
-| Variant 4        |                                                                              |
-| Variant 5        |                                                                              |
-| Variant 6        |                                                                              |
+| Actors Involved  | ShopDirector                                                                                                           |
+| -------------    | -------------                                                                                                          |
+| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen                                              |
+| Post condition   | New Product Descriptor with valid attributes has been added to the inventory                                           |
+| Nominal Scenario | the "+" button is clicked, the properties for the file descriptor are inserted and confirmed clicking "Add"            |
+| Variant          | The Product Descriptor was already present in the inventory =>  issue a warning                                        |
+| Variant 2        | one of the properties inserted is outside the range of specification => issue a warning                                |
+|                  | Range of Specification means: Qty>=0, pointvalue >=0, price >=0, 7<length(name)<15, productID can contain only numbers |
+
 ### Use Case 9, Remove Product Descriptor
-| Actors Involved  | Personnel                                                                                                                                    |
-| -------------    | -------------                                                                                                                                |
-| Precondition     | |
-| Post condition   | |
-| Nominal Scenario | |
-| Variant          | |
-| Variant 2        | |
-| Variant 3        | |
-| Variant 4        | |
-| Variant 5        | |
-| Variant 6        | |
-### Use Case 9, Update Product Descriptor Properties
-| Actors Involved  | Personnel                                                                                                                                    |
-| -------------    | -------------                                                                                                                                |
-| Precondition     | |
-| Post condition   | |
-|                  | |
-| Nominal Scenario | |
-| Variant          | |
-| Variant 2        | |
-| Variant 3        | |
-| Variant 4        | |
-| Variant 5        | |
-| Variant 6        | |
+| Actors Involved  | ShopDirector                                                              |
+| -------------    | -------------                                                             |
+| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen |
+| Post condition   | Product Descriptor been removed from the inventory                        |
+| Nominal Scenario | the Button "remove" is clicked                                            |
+
 ### Use Case 10, Show Inventory
-| Actors Involved  | Personnel                                                                                                                                    |
-| -------------    | -------------                                                                                                                                |
-| Precondition     | |
-| Post condition   | |
-|                  | |
-| Nominal Scenario | |
-| Variant          | |
-| Variant 2        | |
-| Variant 3        | |
-| Variant 4        | |
-| Variant 5        | |
-| Variant 6        | |
+| Actors Involved  | ShopDirector, Product                                                                   |
+| -------------    | -------------                                                                           |
+| Precondition     | ShopDirector must be logged in                                                          |
+| Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
+| Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
 
 # Relevant scenarios
 ## Scenario 1
