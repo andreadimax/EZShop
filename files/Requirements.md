@@ -21,7 +21,6 @@
 | User           | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Supplier       | GUI               | Local storage                                   |
-| Revenue agency | Web service       | Internet                                        |
 | Barcode system | Driver            | Barcode reader                                  |
 
 # Stories and personas
@@ -353,12 +352,12 @@ Michael's customer card increases its point value at each transaction, depending
 # Glossary
 | Class name | Meaning |
 | ---------- | ------- |
-| CheckoutSession | Session opened by a cashier to manage one or more sales |
-| RestockCheckingSession | Session opened by an employee when goods are arrived.<br> # of products arrived canbe compared with # of products ordered.<br>Any issues can be reported. |
+| CheckoutSession | Session opened by a cashier to manage one or more transactions |
+| RestockCheckingSession | Session opened by an employee when goods are arrived.<br> # of products arrived can be compared with # of products ordered.<br>Any issues can be reported to the ShopDirector. |
 | DiscardExpiredSession | Session opened by an employee to scan expired products |
 | MonthlyAccounting | Monthly accounting of the shop, calculated by the system. It takes into account all possible income and expenses. Only ShopDirector can access to it |
-| Transaction | Represents the total purchase of a customer |
-| MonthlyStolenReport | Total value of stolen products. Necessary for the calculation of monthly accounting |
+| Transaction | Represents the purchase of items from a buyer |
+| MonthlyStolenReport | Class that stores a list of items found to be missing in the shop, it also calculates the total money loss due to missing items. It is necessary in order to perform the calculation of the monthly accounting |
 
 # System design
 <img src='./../uml/ContextDiagram.png'></img>
