@@ -21,7 +21,6 @@
 | User           | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Supplier       | GUI               | Local storage                                   |
-| Revenue agency | Web service       | Internet                                        |
 | Barcode system | Driver            | Barcode reader                                  |
 
 # Stories and personas
