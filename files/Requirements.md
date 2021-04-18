@@ -335,7 +335,7 @@ Michael's customer card increases its point value at each transaction, depending
 | Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                                                |
 | Variant          | The Product Descriptor was already present in the inventory =>  issue a warning                                                        |
 | Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                                           |
-|                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, age>=18, CustomerCard's id must not be empty |
+|                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, Date of birth must not be empty, CustomerCard's id must not be empty |
 | Variant 3        | the inserted Customer Card's Id already identifies another Customer, issue warning                                                     |
 
 ### Use Case 16, Remove Customer
