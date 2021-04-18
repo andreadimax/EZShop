@@ -100,6 +100,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |             2 | Remove Product Descriptor                                                      |                                      |
 |             3 | Update Product Descriptor Properties                                           |                                      |
 |             4 | Show inventory                                                                 |                                      |
+|             5 | Show products under quantity threshold                                         |                                      |
 |               |                                                                                |                                      |
 |           FR3 | Manage customers                                                               |                                      |
 |             1 | Add loyalty card code                                                          |                                      |
