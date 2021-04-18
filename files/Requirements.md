@@ -56,13 +56,13 @@ Sara,Tom, Tia and Mike are four of John's employees. As Personnel, they can carr
 
 When its Sara's turn to work at the checkout, she borrows a cash container containing cash from the shop, which she uses to give the rest to clients and  logs in using the credentials provided to her by John. 
 In order to correctly initiate the checkout session, she has to insert the borrowed amount into her terminal to let the system know her debt.
-Once the Checkout session is initiated, Sara is able to start a new transaction for each or her customers, and the system keeps track of the amount of money she has earned during the checkout session.
+Once the Checkout session is initiated, Sara is able to start a new transaction for each of her customers, and the system keeps track of the amount of money she has earned during the checkout session.
 When sara has to end her checkout session, before she returns the cash container, the system asks her to count the amount of money in it and to log it. 
 If the system automatically warns the shopdirector if the money she gathered are too low  compared to what she should have had.
 
-When the goods ordered by the shop director arrive to she shop, Tom can login as a RestockChecker and start counting the incoming goods by scanning the barcodes and inserting the relative quantity. The system automatically updates the inventory without him having to do it manually. Morover, Tom has also the possibility of raise issues to the shopdirector, regarding some of the goods he has received by stating the affected products and quantity.
+When the goods ordered by the shop director arrive to she shop, Tom can login as a RestockChecker, select the received order from the list of Restock Orders to retrieve the list of ordered items and check them. The system automatically updates the inventory without him having to do it manually. Morover, Tom has also the possibility of raise issues to the shopdirector, regarding some of the goods he has received by stating the affected products and quantity.
 
-With the term customers, we mean the people which buy in the shop using a Loyalty Card. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
+With the term customers, we mean the people which buy in the shop using a Loyalty Card. When Tia logs in in a ManageCustomerSession, she is able to create new Loyalty cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
 
 When Mike is reordering the shelves, and finds that a product has expired, he is able start a DiscardExpiredSession, which lets him scan the expired products. Thanks to this procedure, Mike is able to discard the expired products while still keeping the inventory synchronized with the actual number of items present in the shop.
 
