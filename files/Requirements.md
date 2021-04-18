@@ -42,7 +42,7 @@ Everytime he wants to order new goods, he accesses the RestockOrder page, in whi
 
 John can easily manage all his personnel from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
-In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as price the price at which they are sold or the reorder threshold.
+In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
 John is automatically warned by the system when has to order a new stock of a product. The system notifies him if a type of item in the inventory is below a specific threshold associated to it.
 
