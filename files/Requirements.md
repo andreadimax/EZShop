@@ -71,7 +71,7 @@ _____________________________
 Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a Loyalty card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
 Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
-Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product costing points is lower than 0.
+Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product point value is lower than 0.
 
 
 
