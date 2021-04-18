@@ -44,7 +44,7 @@ John can easily manage all his personnel from EZSHOP, he can change their salary
 
 In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
-John is automatically warned by the system when has to order a new stock of a product. The system notifies him if a type of item in the inventory is below a specific threshold associated to it.
+John can easily see when it has to order a new stock of a product. The Inventory view has the option to only display those item whose quantity is below a specific quantity threshold associated to them.
 
 When John wants, he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
 
