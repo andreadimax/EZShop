@@ -19,7 +19,7 @@
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
-| User           | GUI               | Screen, monitor, keyboard, mouse, cash register |
+| Personnel, ShopDirector   | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
 
