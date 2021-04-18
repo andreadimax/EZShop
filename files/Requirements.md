@@ -62,16 +62,16 @@ If the system automatically warns the shopdirector if the money she gathered are
 
 When the goods ordered by the shop director arrive to she shop, Tom can login as a RestockChecker and start counting the incoming goods by scanning the barcodes and inserting the relative quantity. The system automatically updates the inventory without him having to do it manually. Morover, Tom has also the possibility of raise issues to the shopdirector, regarding some of the goods he has received by stating the affected products and quantity.
 
-With the term customers, we mean the people which buy in the shop using a CustomerCard. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
+With the term customers, we mean the people which buy in the shop using a Loyalty Card. When Tia logs in in a ManageCustomerSession, she is able to create new customer cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname, and SSN of the customer which has a specific cardID.
 
 When Mike is reordering the shelves, and finds that a product has expired, he is able start a DiscardExpiredSession, which lets him scan the expired products. Thanks to this procedure, Mike is able to discard the expired products while still keeping the inventory synchronized with the actual number of items present in the shop.
 
 _____________________________
 
-Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a customer card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
+Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a Loyalty card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
 Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
-Michael's customer card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product costing points is lower than 0.
+Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product costing points is lower than 0.
 
 
 
@@ -335,8 +335,8 @@ Michael's customer card increases its point value at each transaction, depending
 | Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                                                |
 | Variant          | The Product Descriptor was already present in the inventory =>  issue a warning                                                        |
 | Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                                           |
-|                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, Date of birth must not be empty, CustomerCard's id must not be empty |
-| Variant 3        | the inserted Customer Card's Id already identifies another Customer, issue warning                                                     |
+|                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, Date of birth must not be empty, Loyalty Card's id must not be empty |
+| Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                                     |
 
 ### Use Case 16, Remove Customer
 | Actors Involved  | Personnel                                                                               |
