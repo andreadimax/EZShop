@@ -292,7 +292,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Nominal Scenario | the "+" button is clicked, the properties for the file descriptor are inserted and confirmed clicking "Add"            |
 | Variant          | The Product Descriptor was already present in the inventory =>  issue a warning                                        |
 | Variant 2        | one of the properties inserted is outside the range of specification => issue a warning                                |
-|                  | Range of Specification means: Qty>=0, pointvalue >=0, price >=0, 7<length(name)<15, productID can contain only numbers |
+|                  | Range of Specification means: Qty>=0, price >=0, 7<length(name)<15, productID can contain only numbers |
 
 ### Use Case 11, Remove Product Descriptor
 | Actors Involved  | ShopDirector                                                              |
