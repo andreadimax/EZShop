@@ -453,7 +453,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Transaction | Represents the purchase of items from a buyer |
 | MonthlyStolenReport | Class that stores a list of items found to be missing in the shop, it also calculates the total money loss due to missing items. It is necessary in order to perform the calculation of the monthly accounting |
 
+<img src='../uml/starUml_class_diagram.png'></img>
 # System design
-<img src='./../uml/ContextDiagram.png'></img>
+
 # Deployment diagram
 <img src='../uml/deployment_diagram.png'>
