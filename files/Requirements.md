@@ -46,11 +46,10 @@ In case the inventory needed to be updated, the shop director is able to manage 
 
 John can easily see when it has to order a new stock of a product. The Inventory view has the option to only display those item whose quantity is below a specific quantity threshold associated to them.
 
-When John wants, he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
+When John wants, through the "session activities view" he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
 
 If the shop is crowded, and all of his personnel is busy, john can still help the shop remain efficient by behaving as an additional member of the personnel, since EZSHOP gives him the option of starting all the types of Sessions.
 
-(?) i think we should remove the "list actions" from Session, it becomes too complicated
 ______________________________________________________________________________________________
 Sara,Tom, Tia and Mike are four of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
 
