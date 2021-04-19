@@ -190,7 +190,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 
 # Use case diagram and use cases
 ## Use case diagram
-<img src="../uml/UsecaseDiagram.png">
+<img src="../uml/use_cases_diagram.png">
 
 ## Use Cases
 ### Use case 1, Create Personnel
