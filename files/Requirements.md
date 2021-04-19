@@ -119,9 +119,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |           2.2 | Get discardedProductList                                                       |                                      |
 |           2.3 | Update Inventory                                                               |                                      |
 |               |                                                                                |                                      |
-|             3 | Track RestockOrders(date, moneyCost, Suppliers)                                |                                      |
+|             3 | Track RestockOrders(order number, date, moneyCost, Suppliers)                  |                                      |
 |           3.1 | Get List of ordered products                                                   |                                      |
-|           3.2 | Get List of ordered products                                                   |                                      |
+|           3.2 |Show list of restock orders with state "checked" yes/no                         |                                      |
 |               |                                                                                |                                      |
 |             4 | Perform RestockCheckingSession                                                 | (?)                                  |
 |           4.1 | Scan restock items                                                             |                                      |
