@@ -336,7 +336,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                           |
 | Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                      |
 |                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, Date of birth must not be empty, Loyalty Card's id must not be empty |
-| Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                                     |
+| Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                 |
 
 ### Use Case 16, Remove Customer
 | Actors Involved  | Personnel                                                                               |
@@ -348,13 +348,21 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |                  |                                                                                         |
 
 
-### Use Case 17, Update ProductDescriptor(?)
+### Use Case 17, Update ProductDescriptor
+| Actors Involved  | Personnel                                                                               |
+| -------------    | -------------                                                                           |
+| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen               |
+| Post condition   | One product descriptor field value has been updated                                     |
+| Nominal Scenario | ShopDirector doubleclicks the targeted field and inserts the new value                  |
+| Variant          | ShopDirector tries to dubleclick ProductId (immutable field) => nothing happens            |
+|                  |                                                                                         |
+
 # Relevant scenarios
 ## Scenario 1
-| Scenario ID:   | Corresponds to UC 1 Create Personnel                                                                                                   |
+| Scenario ID:   | Corresponds to UC 1 Create Personnel                                                                                |
 | -------------  | -------------                                                                                                                          |
-| Description    | Shopdirector wants to hire a new member of the personnel                                                                               |
-| Precondition   | User is logged in as ShopDirector, in the manage personnel Screen                                                                      |
+| Description    | Shopdirector wants to hire a new member of the personnel                                                            |
+| Precondition   | User is logged in as ShopDirector, in the manage personnel Screen                                                   |
 | Post condition | Personnel Account created(salary, password and personnelID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated |
 | Step#          |                                                                                                                                        |
 | 1              | ShopDirector enters the attributes for the personnel member(salary, personellID and password)                                          |
