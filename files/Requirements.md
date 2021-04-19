@@ -160,8 +160,10 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |           FR8 | Store Suppliers Data                                                           |                                      |
 |               |                                                                                |                                      |
 |           FR9 | keep track of Session Activities                                               |                                      |
-|               |                                                                                |                                      |
-
+|           9.1 | logs date, time and personnelId for any account login and logouts              |                                      |
+|           9.2 | logs date, time and personnelId for started/ended session                      |                                      |
+|           9.3 | logs warns occurred during end checkout session procedure                      |                                      |
+|
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
 | ------------- | :-------------:                                 | :-----:                                                                                                    | -----:       |
