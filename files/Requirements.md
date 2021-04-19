@@ -313,9 +313,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 13, Show Restock Issues
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | ShopDirector must be logged in                                                          |
+| Precondition     | ShopDirector must be logged in, he must be in manae restock issue view                  |
 | Post condition   | ShopDirector is able to scroll through the list of Restock Issues                       |
-| Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
+| Nominal Scenario | ShopDirector clicks Manage Restock Order, then clicks Manage Restock Issues             |
 |                  |                                                                                         |
 |                  |                                                                                         |
 
