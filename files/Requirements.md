@@ -233,11 +233,11 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use case 5, Perform RestockCheckingSession
 | Actors Involved  | Personnel                                                                                                                                       |
 | -------------    | -------------                                                                                                                                   |
-| Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session                                                                 |
-| Post condition   | Inventory is updated according to the scanned goods                                                                                             |
-| Nominal Scenario | Scans the Restocked items, then ends the Session                                                                     |
+| Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session and selected a previously registered restock order                                                                 |
+| Post condition   | Inventory is updated according to the checked goods                                                                                             |
+| Nominal Scenario | Checks the Restocked items from the list of the order, then ends the Session                                                                     |
 | Variant 1        | During The session a power loss occurs, The system restores itself as before the start of the RestockCheckingSession                            |
-| Variant 2        | During the scans, one or more goods are damaged or the barcode doesn't read their barcode  =>  The user can raise an issue to the ShopDirector  |
+| Variant 2        | During the checking, one or more goods are damaged or any other problem occurs  =>  The user can raise an issue to the ShopDirector  |
 
 ### Use case 6, Perform Checkout Session
 | Actors Involved  | Personnel                                                                                                                                                        |
