@@ -159,6 +159,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |               |                                                                                |                                      |
 |           FR8 | Store Suppliers Data                                                           |                                      |
 |               |                                                                                |                                      |
+|           FR9 | keep track of Session Activities                                               |                                      |
+|               |                                                                                |                                      |
 
 ## Non Functional Requirements
 | ID            | Type (efficiency, reliability, .. see iso 9126) | Description                                                                                                | Refers to FR |
