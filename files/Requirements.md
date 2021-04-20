@@ -187,7 +187,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
 | NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
 | NFR20         | Localization                                   | Money amounts are expressed in $ |
-
+| NFR21 | Portability | The backend executable must be compatible with MySQL 8.0.24 | 
 
 # Use case diagram and use cases
 ## Use case diagram
