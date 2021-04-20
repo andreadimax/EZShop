@@ -409,7 +409,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              5 | press on raise issue button                                                     |
 |              6 | press on "end restock checking session" button                                  |
 
-## Scenario 7
+## Scenario 6
 | Scenario ID:   | Corresponds to UC 6 PerformCheckoutSession                                                                                                        |
 | -------------  | -------------                                                                                                                                     |
 | Description    | Employee ends his work shift as cashier                                                                                                          |
@@ -423,7 +423,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | 5              | End checkoutSession and update session activity view accordingly                                                                                  |
 
 
-## Scenario 8
+## Scenario 7
 |   Scenario ID: | Corresponds to UC 7 Start DiscardExpiredSession                                                  |
 |  ------------- | -------------                                                                                    |
 |    Description | Employee wants to remove expired he has found from the inventory                                |
@@ -437,7 +437,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              3 | The total cost of the products in the list is subtracted from costExpired in "MonthlyAccounting" |
 |              4 | all the products in the list are removed from the inventory                                      |
 
-## Scenario 9
+## Scenario 8
 |   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                               |
 |  ------------- | -------------                                                                                                                                 |
 |    Description | A list of missing items has been compiled by the employee, the shopdirector wants to update the information on the system                     |
@@ -452,7 +452,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 
 
 
-## Scenario 11
+## Scenario 9
 |   Scenario ID: | Corresponds to UC 9, Manage Sales(Perform Transaction)                                                        |
 |  ------------- | -------------                                                                                                 |
 |    Description | The cashier wants to perform a transaction with a client                                                      |
@@ -468,7 +468,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              6 | for any product scanned, update point prevision after sale, if lower than 0, do not add to list                  |
 |              7 | press POS Paument or Cash Payment button and then wait for system confirmation, if transaction fails, do nothing |
 |              8 | after transaction status is confirmed, Abort operation button is substituted with Start scanning button          |
-## Scenario 12
+## Scenario 10
 |   Scenario ID: | Corresponds to UC 10, Add ProductDescriptor                                                                     |
 |  ------------- | -------------                                                                                                   |
 |    Description | the "+" button is clicked, the properties for the file descriptor are inserted and confirmed clicking "Add"     |
@@ -481,7 +481,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              5 | if (qty < 0  OR price <0 OR length(name)>15 OR length(name)<7 OR id contains letters) issue warning             |
 |              4 | add the file descriptor with the related attributes to the inventory                                            |
 
-## Scenario 13
+## Scenario 11
 | Scenario ID:   | Corresponds to UC 11 Remove Product descriptor                                                             |
 | -------------  | -------------                                                                                              |
 | Description    | Shopdirector wants to completely remove 1 type of product from the inventory                               |
@@ -491,7 +491,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | 1              | ShopDirector finds the relative product descriptor in the list and clicks the remove button adjacent to it |
 | 2              | the entry corresponding to the product descriptor is removed from the inventory                            |
 
-## Scenario 15
+## Scenario 13
 |   Scenario ID: | Corresponds to UC  13 Show Restock Issues                                              |
 |  ------------- | -------------                                                                          |
 |    Description | Shopdirector wants to see if there where any issues during the RestockCheckingSessions |
@@ -500,19 +500,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |          Step# | ShopDirector clicks Manage Restock Order, then clicks Manage Restock Issues                                                                                       |
 
 
-## Scenario 16
-|   Scenario ID: | Corresponds to UC                                                                         |
-|  ------------- | -------------                                                                             |
-|    Description | The ShopDirector removes one Restock issue from the list                                  |
-|   Precondition | User must be logged in as ShopDirector                                                    |
-| Post condition | Restock Issue Is removed from the list                                                    |
-|          Step# |                                                                                           |
-|              1 | ShopDirector enters teh Manage Restock issues screen                                      |
-|              2 | ShopDirector scrolls through the list of issues until he finds the one he wants to remove |
-|              3 | shopDirector Clicks remove                                                                |
-|              5 | Issue is removed from the list                                                            |
-
-## Scenario 17
+## Scenario 15
 |   Scenario ID: | Corresponds to UC 15                                                                                                      |
 |  ------------- | -------------                                                                                                             |
 |    Description | A new Customer needs to be registered, and a LoyaltyCard must be linked to him                                            |
@@ -521,9 +509,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Post condition | New Customer with valid attributes has been added to the inventory                                                        |
 |          Step# |                                                                                                                           |
 |              1 | the data associated to the customer is inserted                                                                           |
-|              2 | if waring is issued if (no attributes are left empty OR  either SSN or LoyaltyCardID is already used for another customer |
+|              2 | warning is issued if no attributes are left empty OR either SSN or LoyaltyCardID is already used for another customer |
 
-## Scenario 18
+## Scenario 16
 |   Scenario ID: | Corresponds to UC 16 Remove Customer                                                             |
 |  ------------- | -------------                                                                                    |
 |    Description | one of the employees  wants to remove a customer from the database                               |
@@ -534,7 +522,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              2 | The data associated to that loyaltyCardId is removed                                             |
 
 
-## Scenario 19
+## Scenario 17
 | Scenario ID:   | Corresponds to UC 17 Update Product Descriptor                                                 |
 | -------------  | -------------                                                                                  |
 | Description    | one or more of the attributes of a product already present in the inventory need to be updated |
@@ -542,11 +530,11 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Post condition | One or more product descriptor fields have been updated                                        |
 | Step#          |                                                                                                |
 | 1              | ShopDirector finds and doubleclicks the targeted Field and inserts the new value               |
-| 2              | If the new value is invalid a warning is issued and no change is made                          |
+| 2              | If the new value is invalid or if the targeted field is the ProductId, a warning is issued and no change is made        |
 | 3              | The field is updated                                                                           |
 
 
-## Scenario 20
+## Scenario 18
 |   Scenario ID: | Corresponds to UC 18 Register Restock Order                                                                                   |
 |  ------------- | -------------                                                                                                                 |
 |    Description | ShopDirector wants to register an order                                                                                       |
