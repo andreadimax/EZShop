@@ -9,7 +9,6 @@
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
-| MySQL | DBMS used to store the application data in the server|
 
 # Context Diagram and interfaces
 
@@ -23,7 +22,7 @@
 | User( as Personnel or ShopDirector)   | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
-| MySQL          | MySQL Connector/J | Ethernet cable|
+
 # Stories and personas
 
 
