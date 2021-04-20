@@ -1,15 +1,13 @@
 # Stakeholders
 | Stakeholder name | Description                                                                                                                                                      |
 | ---------------- | -----------                                                                                                                                                      |
-| User             | Any user who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Product Discarder<br> - Restock Checker<br>                        |
+| User             | Any user who can interact with the system:<br>- Employee<br> - Shop Director<br>                    |
 | Small shops      | Any type of small-medium sized business (from 50 to 200 square meters) with an inventory ranging from 500 to 2000 different types of products.                   |
 | POS System       | The system interacts with a POS type application for managing transactions                                                                                       |
 | Developer        | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)                                                                |
 | IT Administrator | Administrator of the IT System                                                                                                                                   |
-| Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
-| DBMS             | Used to store, acces and share data between different terminals using EZShop at the same time within the same shop                                             |
 
 # Context Diagram and interfaces
 
