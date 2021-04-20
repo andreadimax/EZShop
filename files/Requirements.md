@@ -560,15 +560,18 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 
 
 ## Scenario 20
-| Scenario ID:   | Corresponds to UC 18 Register Restock Order                                             |
-| -------------  | -------------                                                                           |
-| Description    | ShopDirector wants to register an order                                                 |
-| Precondition   | User must be logged in as Shopdirector, he must be in the Register Restock Order Screen |
-| Post condition | A list of products ordered has been compiled, Monthly accounting is updated             |
-| Step#          |                                                                                         |
-| 1              | Shopdirector inserts  the productID and quantity of the bought items through the Gui    |
-| 2              |                                                                                         |
-| 3              |                                                                                         |
+|   Scenario ID: | Corresponds to UC 18 Register Restock Order                                                                                   |
+|  ------------- | -------------                                                                                                                 |
+|    Description | ShopDirector wants to register an order                                                                                       |
+|   Precondition | User Must be logged in as ShopDirector, he must be in the Register RestockOrder screen                                        |
+| Post condition | A list of products ordered has been compiled, Monthly accounting is updated                                                   |
+|          Step# |                                                                                                                               |
+|              1 | Get a list of products with relative quantity from the shopDirector                                                           |
+|              2 | Verify that Qty > 0 otherwise issue warning                                                                                   |
+|              3 | Get (date, cost of the order, OrderNumber, SupplierID) from  the shopdirector                                                 |
+|              4 | verify that (Qty > 0 AND OrderNumber is not already taken  AND cost order is not negative) , if any of these, issue a warning |
+|              5 | Update costRestockOrder in  Monthly Accounting                                                                                |
+|              6 | Save The order data                                                                                                           |
 
 # Glossary
 | Class name | Meaning |
