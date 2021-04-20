@@ -557,6 +557,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 # Glossary
 | Class name | Meaning |
 | ---------- | ------- |
+| Session | Class used to track the time interval an employee has spent on a specific task |
 | CheckoutSession | Session opened by a cashier to manage one or more transactions |
 | RestockCheckingSession | Session opened by an employee when goods are arrived.<br> # of products arrived can be compared with # of products ordered.<br>Any issues can be reported to the ShopDirector. |
 | DiscardExpiredSession | Session opened by an employee to scan expired products |
