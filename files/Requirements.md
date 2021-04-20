@@ -435,7 +435,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |  ------------- | -------------                                |
 |    Description | Personnel performs his work shift as cashier |
 |   Precondition |User is logged in and he must have started a RestockCheckingSession by inputting it's starting cash amount|
-| Post condition | Monthly accounting is updated with the money earned by that checkout |
+| Post condition | One or more sales have been carried out |
 |          Step# |                                              |
 |              1 | press start scanning button, start scanning button is switched to Abort Operation button      |
 |              2 | add each scanned product to the sale list of products, update total cost displayed    |
@@ -447,6 +447,17 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              8 | after transaction status is confirmed, Abort operation button is substituted with Start scanning button |
 
 ## Scenario 7
+|   Scenario ID: | Corresponds to UC 6 PerformCheckoutSession   |
+|  ------------- | -------------                                |
+|    Description | Personnel ends his work shift as cashier |
+|   Precondition |User is logged in and he must have started a RestockCheckingSession by inputting it's starting cash amount|
+| Post condition | Monthly accounting is updated with the money earned by that checkout |
+|          Step# |                                              |
+|              1 | press End Session button     |
+|              2 | count the cash amount present in the checkout and declare it into "counted cash amount" field  |
+|              3 | if difference between expected cash amount and counted cash amount is higher than 10$, issue a warn and update Shop Director session acivity view |
+|              4 | monthly accounting is updated accordingly to the tracked pos payments and the counted cash amount  |
+|              5 | End checkoutSession and update session activity view accordingly|
 
 # Glossary
 | Class name | Meaning |
