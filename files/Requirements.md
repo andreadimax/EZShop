@@ -402,7 +402,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              6 | totalSalaryCost in MonthlyAccounting is increased by the difference between the new and the old salary        |
 
 ## Scenario 4
-|   Scenario ID: | Corresponds to UC 4 Update Salary                                                                            |
+|   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
 |  ------------- | -------------                                                                                                |
 |    Description | Shopdirector wants to update the password of a member of the personnel                                       |
 |   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                             |
@@ -459,6 +459,157 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              4 | monthly accounting is updated accordingly to the tracked pos payments and the counted cash amount  |
 |              5 | End checkoutSession and update session activity view accordingly|
 
+
+## Scenario 8
+|   Scenario ID: | Corresponds to UC 6 Start DiscardExpiredSession                                                  |
+|  ------------- | -------------                                                                                    |
+|    Description | Personnel member wants to remove expired he has found from the inventory                         |
+|   Precondition | Personnel must be logged in, and he must have started a Discard expired Session                  |
+| Post condition | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated     |
+|          Step# |                                                                                                  |
+|              1 | "Start Scanning" button is pressed                                                               |
+|              1 | scanned Products are added to a list                                                             |
+|              2 | to remove products from the list the "remove" button is clicked                                  |
+|              2 | "Discard" button is pressed                                                                      |
+|              3 | The total cost of the products in the list is subtracted from costExpired in "MonthlyAccounting" |
+|              4 | all the products in the list are removed from the inventory                                      |
+
+## Scenario 9
+|   Scenario ID: | Corresponds to UC 6 Start DiscardExpiredSession                                                  |
+|  ------------- | -------------                                                                                    |
+|    Description | Personnel member wants to remove expired he has found from the inventory                         |
+|   Precondition | Personnel must be logged in, and he must have started a Discard expired Session                  |
+| Post condition | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated     |
+|          Step# |                                                                                                  |
+|              1 | "Start Scanning" button is pressed                                                               |
+|              2 | scanned Products are added to a list                                                             |
+|              3 | to remove products from the list the "remove" button is clicked                                  |
+|              5 | During step 2 and 3, The total price of the products in the list is displayed                    |
+|              4 | "Discard" button is pressed                                                                      |
+|              5 | The total cost of the products in the list is subtracted from costExpired in "MonthlyAccounting" |
+|              6 | all the products in the list are removed from the inventory                                      |
+
+## Scenario 10
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+
+## Scenario 11
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+## Scenario 12
+|   Scenario ID: | Corresponds to UC |
+|  ------------- | -------------     |
+|    Description |                   |
+|   Precondition |                   |
+| Post condition |                   |
+|          Step# |                   |
+|              1 |                   |
+|              2 |                   |
+|              3 |                   |
+|              5 |                   |
+|              4 |                   |
+|              5 |                   |
+|              6 |                   |
+|                |                   |
+
+## Scenario 13
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+## Scenario 14
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+## Scenario 15
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+## Scenario 16
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
+
+## Scenario 17
+|   Scenario ID: | Corresponds to UC         |
+|  ------------- | ------------- |
+|    Description |               |
+|   Precondition |               |
+| Post condition |               |
+|          Step# |               |
+|              1 |               |
+|              2 |               |
+|              3 |               |
+|              5 |               |
+|              4 |               |
+|              5 |               |
+|              6 |               |
 # Glossary
 | Class name | Meaning |
 | ---------- | ------- |
