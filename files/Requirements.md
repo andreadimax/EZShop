@@ -343,14 +343,14 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |                  |                                                                                                                      |
 
 ### Use Case 18, Register RestockOrder
-| Actors Involved  | ShopDirector                                                                                                |
-| -------------    | -------------                                                                                                        |
-| Precondition     | User Must be logged in as ShopDirector, he must be in the Manage Inventory screen                                    |
-| Post condition   | One product descriptor field values has been updated                                                            |
-| Nominal Scenario | ShopDirector doubleclicks the targeted field and inserts the new value                                               |
-| Variant          | ShopDirector tries to dubleclick ProductId (immutable field) => nothing happens                                      |
-| Variant 2        | the changed field value is invalid( price<0, qty <0, qtyThreshold<0 or ID already taken)  => Issue warning    |
-|                  |                                                                                                                      |
+| Actors Involved  | ShopDirector                                                                                                  |
+| -------------    | -------------                                                                                                |
+| Precondition     | User Must be logged in as ShopDirector, he must be in the Register RestockOrder screen                       |
+| Post condition   | CostRestockOrders in Monthly Accounting has been updated, the list of ordered items is saved                 |
+| Nominal Scenario | ShopDirector inserts a list of product descriptors with the relative quantity                                |
+|                  | then the Shopdirector inserts the Attributes for the Restock order(date, supplierID, OrderNumber, moneyCost) |
+| Variant          | ShopDirector inserts an Order Number already used or moneyCost is negative => issue warning                  |
+
 
 # Relevant scenarios
 ## Scenario 1
@@ -451,19 +451,18 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              4 | all the products in the list are removed from the inventory                                      |
 
 ## Scenario 9
-|   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                                      |
-|  ------------- | -------------                                                                                                                                        |
-|    Description | A list of missing items has been compiled by the employee, the shopdirector wants to update the information on the system                            |
-|   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
-| Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
-|          Step# |                                                                                                                                                      |
-|              1 | stolen product list is compiled selecting for each product, product id's (by scanning or by keyboard) and actual quantity present in the shop        |
-|              2 | at each addition to product list update total stolen value displayed (quantity in inventory - Actual quantity)*Product price                         |
-|              3 | Confirm button is pressed, monthly stolen report session ends, inventory is updated, Mothly Accounting is updated                                    |
-|              5 |                                                                                                                                                      |
-|              4 |                                                                                                                                                      |
-|              5 |                                                                                                                                                      |
-|              6 |                                                                                                                                                      |
+|   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                               |
+|  ------------- | -------------                                                                                                                                 |
+|    Description | A list of missing items has been compiled by the employee, the shopdirector wants to update the information on the system                     |
+|   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                      |
+| Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                           |
+|          Step# |                                                                                                                                               |
+|              1 | stolen product list is compiled selecting for each product, product id's (by scanning or by keyboard) and actual quantity present in the shop |
+|              2 | at each addition to product list update total stolen value displayed (quantity in inventory - Actual quantity)*Product price                  |
+|              3 | Confirm button is pressed, monthly stolen report session ends                                                                                 |
+|              5 | the attribute stolenCost in MonthlyAccounting is increased by the total value of the stolen goods                                             |
+|              4 | the list of items is subtracted from the inventory                                                                                            |
+
 
 
 ## Scenario 11
@@ -559,6 +558,17 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | 2              | If the new value is invalid a warning is issued and no change is made                          |
 | 3              | The field is updated                                                                           |
 
+
+## Scenario 20
+| Scenario ID:   | Corresponds to UC 18 Register Restock Order                                             |
+| -------------  | -------------                                                                           |
+| Description    | ShopDirector wants to register an order                                                 |
+| Precondition   | User must be logged in as Shopdirector, he must be in the Register Restock Order Screen |
+| Post condition | A list of products ordered has been compiled, Monthly accounting is updated             |
+| Step#          |                                                                                         |
+| 1              | Shopdirector inserts  the productID and quantity of the bought items through the Gui    |
+| 2              |                                                                                         |
+| 3              |                                                                                         |
 
 # Glossary
 | Class name | Meaning |
