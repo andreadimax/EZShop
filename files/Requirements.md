@@ -462,10 +462,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
 | Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
 |          Step# |                                                                                                                                                      |
-|              1 | (?)(problema: sulla gui c'è scritto che qui inseriamo la lista di tutti i prodotti nell'inventario e lui fa la differenza calcolando la stolen list) |
-|                | (Ma non lo avevamo definito che prendeva semplicemente la lista dei prodotti che mancano?)                                                           |
-|              2 |                                                                                                                                                      |
-|              3 |                                                                                                                                                      |
+|              1 | stolen product list is compiled selecting for each product, product id's (by scanning or by keyboard) and actual quantity present in the shop        |
+|              2 | at each addition to product list update total stolen value displayed (quantity in inventory - Actual quantity)*Product price                         |
+|              3 | Confirm button is pressed, monthly stolen report session ends, inventory is updated, Mothly Accounting is updated                                    |
 |              5 |                                                                                                                                                      |
 |              4 |                                                                                                                                                      |
 |              5 |                                                                                                                                                      |
