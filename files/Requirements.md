@@ -303,14 +303,6 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |                  |                                                                                         |
 |                  |                                                                                         |
 
-### Use Case 14, Delete Restock Issue
-| Actors Involved  | ShopDirector                                                                            |
-| -------------    | -------------                                                                           |
-| Precondition     | User Must be logged in as ShopDirector and on the Restock Issue view  |
-| Post condition   | Restock Issue Is removed from the list                                                  |
-| Nominal Scenario | ShopDirector clicks "Delete" button on the correspoding Restock Issue                   |
-|                  |                                                                                         |
-|                  |                                                                                         |
 
 ### Use Case 15, Add new Customer
 | Actors Involved  | Employee                                                                                                                                                                             |
@@ -349,6 +341,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Post condition   | CostRestockOrders in Monthly Accounting has been updated, the list of ordered items is saved                 |
 | Nominal Scenario | ShopDirector inserts a list of product descriptors with the relative quantity                                |
 |                  | then the Shopdirector inserts the Attributes for the Restock order(date, supplierID, OrderNumber, moneyCost) |
+|                  | then the Shopdirector inserts the SupplierId relative to that restock order                                  |
 | Variant          | ShopDirector inserts an Order Number already used or moneyCost is negative => issue warning                  |
 
 
@@ -392,21 +385,6 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              4 | ShopDirector clicks the Update salary button                                                                  |
 |              5 | the inserted salary is checket to be bigger than zero, if not the user is asked to insert another valid value |
 |              6 | totalSalaryCost in MonthlyAccounting is increased by the difference between the new and the old salary        |
-
-## Scenario 4
-|   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
-|  ------------- | -------------                                                                                                |
-|    Description | Shopdirector wants to update the password of an employee                                                     |
-|   Precondition | User is logged in as ShopDirector in the manage employee Screen                                             |
-| Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated      |
-|          Step# |                                                                                                              |
-|              1 | ShopDirector inserts the employeeID of the employee to update the password of                                |
-|              2 | check for the existence of an employee with such employeeID, if not issue a warning and step back to step 1 |
-|              3 | The system displays the info about that employee                                                             |
-|              4 | ShopDirector clicks the Update Password button                                                               |
-|              5 | the inserted Password to be of sufficient length, if not the user is asked to insert another valid value     |
-|              6 | The password of that employee account is changed                                                             |
-
 
 ## Scenario 5
 |   Scenario ID: | Corresponds to UC 5 Perform RestockCheckingSession                              |
