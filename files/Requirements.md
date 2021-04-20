@@ -310,7 +310,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Precondition     | User must be logged in as Employee, he must be in the Manage Customer Session                                                                                                        |
 | Post condition   | New Customer with valid attributes has been added to the inventory                                                                                                                    |
 | Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                                                                                               |
-| Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                                                                                          |
+| Variant 2        | one or more the properties inserted are outside the range of specification => issue a warning                                                                                          |
 |                  | Range of Specification means: Name, Surname and SSN must not be empty, SSN cannot be already be in the database, Date of birth must not be empty, Loyalty Card's id must not be empty |
 | Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                                                                                     |
 
@@ -343,6 +343,15 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |                  | then the Shopdirector inserts the Attributes for the Restock order(date, supplierID, OrderNumber, moneyCost) |
 |                  | then the Shopdirector inserts the SupplierId relative to that restock order                                  |
 | Variant          | ShopDirector inserts an Order Number already used or moneyCost is negative => issue warning                  |
+
+### Use Case 19, Show Session Activities
+| Actors Involved  | ShopDirector                                                                            |
+| -------------    | -------------                                                                           |
+| Precondition     | User must be logged in as ShopDirector, he must be in Session activities View |
+| Post condition   | ShopDirector is able to scroll through the list of session activities and end checkout warnings |
+| Nominal Scenario | ShopDirector clicks Show session activity in his main view                             |
+|                  |                                                                                         |
+|                  |                                                                                         |
 
 
 # Relevant scenarios
