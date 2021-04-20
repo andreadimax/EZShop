@@ -567,6 +567,18 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | MonthlyAccounting | Monthly accounting of the shop, calculated by the system. It takes into account all possible income and expenses. Only ShopDirector can access to it |
 | Transaction | Represents the purchase of items from a buyer |
 | MonthlyStolenReport | Class that stores a list of items found to be missing in the shop, it also calculates the total money loss due to missing items. It is necessary in order to perform the calculation of the monthly accounting |
+| Person | Human entity |
+|Fidelity card| Physical object presenting a barcode encoding a specific Fidelity card id |
+| Customer | A person whose data is stored in the system and linked to a fidelity card number |
+| Employee | A person whose data is stored in the system and associated to a system account with a specific Employee id and Password |
+| Shop Director | An employee with a managing role in the shop and in the system |
+| Product Descriptor | an object in the system describing a set of specific products, is identified by a ProductId |
+| Product | A physical object sold by the shop |
+| Transaction | The exchange between the money of a Person buying one or more products of the shop and those products |
+| Inventory | The collection of all the Product descriptor objects of the system |
+| Restock Order | List of Products (with relative quantity) ordered by Shop director associated to a Specific SupplierId, and with a relative cost in $ |
+| Supplier | Companies or other shops with a certain SupplieId and informations such as telephone number and email addresses registered into the system |
+
 
 <img src='../uml/starUml_class_diagram.png'></img>
 # System design
