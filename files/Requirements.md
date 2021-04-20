@@ -10,7 +10,6 @@
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
 
-
 # Context Diagram and interfaces
 
 ## Context Diagram
@@ -20,21 +19,20 @@
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
-| Personnel, ShopDirector   | GUI               | Screen, monitor, keyboard, mouse, cash register |
+| User( as Personnel or ShopDirector)   | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
 
 # Stories and personas
 
 
-John is the shop owner and director of a small shop of 50-200 square meters and sells about 500-2000 different item types.
-John's shop has 4 different checkouts, and 12 employees.
-
-John uses the application EZSHOP in order to manage his shop.
+John is the shop owner and director of a small shop of 100 square meters that sells about 1500 different item types
+and he uses the application EZSHOP to help him manage it.
+He has 7 computers in his shop, one is the EZSHOP server, running the backend, the others run EZSHOP client, and replace the cash registers.
 
 John is able to easily keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
 In order to do so, John asks his employees to count all the goods present in the shop, which he then compares with the inventory tracked by the application.
-After inserting the Monthly stolen report in the application, John can be sure that his inventory will always be coherent with the actual number of items in stock.
+Then he only needs to insert the list in the the Monthly stolen report to be sure that his inventory will always be coherent with the actual number of items in stock.
 
 John also wants to know actual statistics about his shop earnings and losses, to do so, he accesses the monthly accounting page, in which he has a detailed list of the earnings and expenses he got in previous months.
 
@@ -42,9 +40,9 @@ Everytime he wants to order new goods, he accesses the RestockOrder page, in whi
 
 John can easily manage all his personnel from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
-In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
+In case the inventory needed to be updated, the shop director is able to manage the inventory, not only by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
-John can easily see when it has to order a new stock of a product. The Inventory view has the option to only display those item whose quantity is below a specific quantity threshold associated to them.
+EZSHOP helps John knowing when it is time to order a new stock of a product. The Inventory view has the option to only display those items whose quantity is below a specific quantity threshold associated to them.
 
 When John wants, through the "session activities view" he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
 
@@ -189,7 +187,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
 | NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
 | NFR20         | Localization                                   | Money amounts are expressed in $ |
-
+| NFR21 | Portability | The backend executable must be compatible with MySQL 8.0.24 | 
 
 # Use case diagram and use cases
 ## Use case diagram
@@ -236,7 +234,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use case 5, Perform RestockCheckingSession
 | Actors Involved  | Personnel                                                                                                                                       |
 | -------------    | -------------                                                                                                                                   |
-| Precondition     | Personnel must be logged in, and he must have started a RestockChecking Session and selected a previously registered restock order                                                                 |
+| Precondition     | User must be logged in as Personnel, and he must have started a RestockChecking Session and selected a previously registered restock order                                       |
 | Post condition   | Inventory is updated according to the checked goods                                                                                             |
 | Nominal Scenario | Checks the Restocked items from the list of the order, then ends the Session                                                                     |
 | Variant 1        | During The session a power loss occurs, The system restores itself as before the start of the RestockCheckingSession                            |
@@ -245,7 +243,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use case 6, Perform Checkout Session
 | Actors Involved  | Personnel                                                                                                                                                        |
 | -------------    | -------------                                                                                                                                                    |
-| Precondition     | Personnel must be logged in, and he must have started a CheckoutSession                                                                                          |
+| Precondition     | User must be logged in as Personnel, and he must have started a CheckoutSession                                                                |
 | Post condition   | Cashier Ends the session by logging the cash accumulated, totalCheckout in MonthlyAccounting is updated                                                          |
 | Nominal Scenario | Cashier executes many transactions, then he ends the session by logging the amount of cash he accumulated                                                        |
 | Variant 1        | The difference between the amount logged by the cashier and the correct amount is higher than the toleranceThreshold                                             |
@@ -257,27 +255,27 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use case 7, Start DiscardExpiredSession
 | Actors Involved  | Personnel                                                                                                   |
 | -------------    | -------------                                                                                               |
-| Precondition     | Personnel must be logged in, and he must have started a Discard expired Session                             |
+| Precondition     | User must be logged in as Personnel, and he must have started a Discard expired Session          |
 | Post condition   | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated                |
 | Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader, Personnel ends the Session |
 | Variant          | Power outage occurs during the session, rolls back to the state it was in before starting the Session       |
 | Variant 2        | Products can also be inserted by typing the barcode manually with a keyboard                                |
 
 ### Use case 8, Perform MonthlyStolenReport
-| Actors Involved  | Personnel                                                                                                                      |
+| Actors Involved  | ShopDirector                                                                                                          |
 | -------------    | -------------                                                                                                                  |
-| Precondition     | ShopDirector must be logged in, and he must have clicked MonthlyStolenReport                                                   |
-| Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated                                  |
+| Precondition     | User Must be logged in as ShopDirector, and he must have clicked MonthlyStolenReport                         |
+| Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, inventory is updated            |
 | Nominal Scenario | ShopDirector inserts the list of missing items, either by keyboard or by barcodeScanner, then he ends the Session              |
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 9, Manage sales(Perform Transactions)
 | Actors Involved  | Personnel                                                                                                                                   |
 | -------------    | -------------                                                                                                                               |
-| Precondition     | Personnel must be logged in, he must have an active CheckoutSession, he has started a new transaction                                       |
+| Precondition     | User must be logged in as Personnel, he must have an active CheckoutSession, he has started a new transaction                               |
 | Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                     |
 |                  | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated                                       |
-| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Session                                                |
+| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Transaction                                            |
 | Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                         |
 | Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                            |
 | Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction     |
@@ -307,7 +305,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 12, Show Inventory
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | ShopDirector must be logged in                                                          |
+| Precondition     | User must be logged in as ShopDirector                                                  |
 | Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
 | Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
 |                  |                                                                                         |
@@ -316,7 +314,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 13, Show Restock Issues
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | ShopDirector must be logged in, he must be in manae restock issue view                  |
+| Precondition     | User must be logged in as ShopDirector, he must be in manae restock issue view |
 | Post condition   | ShopDirector is able to scroll through the list of Restock Issues                       |
 | Nominal Scenario | ShopDirector clicks Manage Restock Order, then clicks Manage Restock Issues             |
 |                  |                                                                                         |
@@ -325,26 +323,26 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 14, Delete Restock Issue
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | ShopDirector must be logged in and on the Restock Issue view                            |
+| Precondition     | User Must be logged in as ShopDirector and on the Restock Issue view  |
 | Post condition   | Restock Issue Is removed from the list                                                  |
 | Nominal Scenario | ShopDirector clicks "Delete" button on the correspoding Restock Issue                   |
 |                  |                                                                                         |
 |                  |                                                                                         |
 
 ### Use Case 15, Add new Customer
-| Actors Involved  | Personnel                                                                                                                              |
-| -------------    | -------------                                                                                                                          |
-| Precondition     | Personnel  must be logged in, he must be in the Manage Customer Session                                           |
-| Post condition   | New Customer with valid attributes has been added to the inventory                                                |
-| Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                           |
-| Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                      |
-|                  | Range of Specification means: length(name)>=0, length(surname)>=0, SSN must not be empty, Date of birth must not be empty, Loyalty Card's id must not be empty |
-| Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                 |
+| Actors Involved  | Personnel                                                                                                                                                                             |
+| -------------    | -------------                                                                                                                                                                         |
+| Precondition     | User must be logged in as Personnel, he must be in the Manage Customer Session                                                                                                        |
+| Post condition   | New Customer with valid attributes has been added to the inventory                                                                                                                    |
+| Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                                                                                               |
+| Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                                                                                          |
+|                  | Range of Specification means: Name, Surname and SSN must not be empty, SSN cannot be already be in the database, Date of birth must not be empty, Loyalty Card's id must not be empty |
+| Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                                                                                     |
 
 ### Use Case 16, Remove Customer
 | Actors Involved  | Personnel                                                                               |
 | -------------    | -------------                                                                           |
-| Precondition     | Personnel must be logged in, he must be in the Manage Customer Session                  |
+| Precondition     | User must be logged in as Personnel, he must be in the Manage Customer Session |
 | Post condition   | Customer has been successfully removed from the inventory                               |
 | Nominal Scenario | Personnel inserts the customer's loyalty card number, then clicks Remove Customer Infos |
 | Variant          | Inserted Card Id is not valid(No customer is associated to it)  => issue warning        |
@@ -352,13 +350,14 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 
 
 ### Use Case 17, Update ProductDescriptor
-| Actors Involved  | Personnel                                                                               |
-| -------------    | -------------                                                                           |
-| Precondition     | ShopDirector must be logged in, he must be in the Manage Inventory screen               |
-| Post condition   | One product descriptor field value has been updated                                     |
-| Nominal Scenario | ShopDirector doubleclicks the targeted field and inserts the new value                  |
-| Variant          | ShopDirector tries to dubleclick ProductId (immutable field) => nothing happens            |
-|                  |                                                                                         |
+| Actors Involved  | Personnel                                                                                                            |
+| -------------    | -------------                                                                                                        |
+| Precondition     | User Must be logged in as ShopDirector, he must be in the Manage Inventory screen                                    |
+| Post condition   | One product descriptor field values has been updated                                                            |
+| Nominal Scenario | ShopDirector doubleclicks the targeted field and inserts the new value                                               |
+| Variant          | ShopDirector tries to dubleclick ProductId (immutable field) => nothing happens                                      |
+| Variant 2        | the changed field value is invalid( price<0, qty <0, qtyThreshold<0 or ID already taken)  => Issue warning    |
+|                  |                                                                                                                      |
 
 # Relevant scenarios
 ## Scenario 1
@@ -402,7 +401,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              6 | totalSalaryCost in MonthlyAccounting is increased by the difference between the new and the old salary        |
 
 ## Scenario 4
-|   Scenario ID: | Corresponds to UC 4 Update Salary                                                                            |
+|   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
 |  ------------- | -------------                                                                                                |
 |    Description | Shopdirector wants to update the password of a member of the personnel                                       |
 |   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                             |
@@ -430,34 +429,159 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |              5 | press on raise issue button                                                     |
 |              6 | press on "end restock checking session" button                                  |
 
-## Scenario 6
-|   Scenario ID: | Corresponds to UC 6 PerformCheckoutSession   |
-|  ------------- | -------------                                |
-|    Description | Personnel performs his work shift as cashier |
-|   Precondition |User is logged in and he must have started a RestockCheckingSession by inputting it's starting cash amount|
-| Post condition | One or more sales have been carried out |
-|          Step# |                                              |
-|              1 | press start scanning button, start scanning button is switched to Abort Operation button      |
-|              2 | add each scanned product to the sale list of products, update total cost displayed    |
-|              3 | if barcode is unreadable, input by hand productId         |
-|              4 | if customer is provided with one, scan loyalty card with "scan loyalty card button"  |
-|              5 | if scanned, show customer's loyalty points and variation after the sale |
-|              6 | for any product scanned, update point prevision after sale, if lower than 0, do not add to list     |
-|              7 | press POS Paument or Cash Payment button and then wait for system confirmation, if transaction fails, do nothing  |
-|              8 | after transaction status is confirmed, Abort operation button is substituted with Start scanning button |
-
 ## Scenario 7
-|   Scenario ID: | Corresponds to UC 6 PerformCheckoutSession   |
-|  ------------- | -------------                                |
-|    Description | Personnel ends his work shift as cashier |
-|   Precondition |User is logged in and he must have started a RestockCheckingSession by inputting it's starting cash amount|
-| Post condition | Monthly accounting is updated with the money earned by that checkout |
-|          Step# |                                              |
-|              1 | press End Session button     |
-|              2 | count the cash amount present in the checkout and declare it into "counted cash amount" field  |
-|              3 | if difference between expected cash amount and counted cash amount is higher than 10$, issue a warn and update Shop Director session acivity view |
-|              4 | monthly accounting is updated accordingly to the tracked pos payments and the counted cash amount  |
-|              5 | End checkoutSession and update session activity view accordingly|
+| Scenario ID:   | Corresponds to UC 6 PerformCheckoutSession                                                                                                        |
+| -------------  | -------------                                                                                                                                     |
+| Description    | Personnel ends his work shift as cashier                                                                                                          |
+| Precondition   | User is logged in and he must have started a CheckoutSession by inputting it's starting cash amount                                               |
+| Post condition | sumTotalCheckouts in Monthly accounting is updated with the money earned by that checkoutSession                                                  |
+| Step#          |                                                                                                                                                   |
+| 1              | press End Session button                                                                                                                          |
+| 2              | count the cash amount present in the checkout and declare it into "counted cash amount" field                                                     |
+| 3              | if difference between expected cash amount and counted cash amount is higher than 10$, issue a warn and update Shop Director session acivity view |
+| 4              | monthly accounting is updated accordingly to the tracked pos payments and the counted cash amount                                                 |
+| 5              | End checkoutSession and update session activity view accordingly                                                                                  |
+
+
+## Scenario 8
+|   Scenario ID: | Corresponds to UC 7 Start DiscardExpiredSession                                                  |
+|  ------------- | -------------                                                                                    |
+|    Description | Personnel member wants to remove expired he has found from the inventory                         |
+|   Precondition | Personnel must be logged in, and he must have started a Discard expired Session                  |
+| Post condition | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated     |
+|          Step# |                                                                                                  |
+|              1 | "Start Scanning" button is pressed                                                               |
+|              1 | scanned Products are added to a list                                                             |
+|              2 | to remove products from the list the "remove" button is clicked                                  |
+|              2 | "Discard" button is pressed                                                                      |
+|              3 | The total cost of the products in the list is subtracted from costExpired in "MonthlyAccounting" |
+|              4 | all the products in the list are removed from the inventory                                      |
+
+## Scenario 9
+|   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                                      |
+|  ------------- | -------------                                                                                                                                        |
+|    Description | A list of missing items has been compiled by the personnel, the shopdirector wants to update the information on the system                           |
+|   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
+| Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
+|          Step# |                                                                                                                                                      |
+|              1 | (?)(problema: sulla gui c'è scritto che qui inseriamo la lista di tutti i prodotti nell'inventario e lui fa la differenza calcolando la stolen list) |
+|                | (Ma non lo avevamo definito che prendeva semplicemente la lista dei prodotti che mancano?)                                                           |
+|              2 |                                                                                                                                                      |
+|              3 |                                                                                                                                                      |
+|              5 |                                                                                                                                                      |
+|              4 |                                                                                                                                                      |
+|              5 |                                                                                                                                                      |
+|              6 |                                                                                                                                                      |
+
+
+## Scenario 11
+|   Scenario ID: | Corresponds to UC 9, Manage Sales(Perform Transaction)                                                        |
+|  ------------- | -------------                                                                                                 |
+|    Description | The cashier wants to perform a transaction with a client                                                      |
+|   Precondition | User must be logged in as Personnel, he must have an active CheckoutSession, he has started a new transaction |
+| Post condition | Transaction has ended, scanned products are removed from the inventory,                                       |
+|                | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated         |
+|          Step# |                                                                                                                  |
+|              1 | press start scanning button, start scanning button is switched to Abort Operation button                         |
+|              2 | add each scanned product to the sale list of products, update total cost displayed                               |
+|              3 | if barcode is unreadable, input by hand productId                                                                |
+|              4 | if customer is provided with one, scan loyalty card with "scan loyalty card button"                              |
+|              5 | if scanned, show customer's loyalty points and variation after the sale                                          |
+|              6 | for any product scanned, update point prevision after sale, if lower than 0, do not add to list                  |
+|              7 | press POS Paument or Cash Payment button and then wait for system confirmation, if transaction fails, do nothing |
+|              8 | after transaction status is confirmed, Abort operation button is substituted with Start scanning button          |
+## Scenario 12
+|   Scenario ID: | Corresponds to UC 10, Add ProductDescriptor                                                                     |
+|  ------------- | -------------                                                                                                   |
+|    Description | the "+" button is clicked, the properties for the file descriptor are inserted and confirmed clicking "Add"     |
+|   Precondition | ShopDirector must be logged in, he must be in the Manage Inventory screen                                       |
+| Post condition | New Product Descriptor with valid attributes has been added to the inventory                                    |
+|          Step# |                                                                                                                 |
+|              1 | ShopDirector clicks the "add" button                                                                            |
+|              2 | a list of properties for the file Descriptor are inserted( name, id, price, quantityThreshold, pointvalue, qty) |
+|              3 | if (id == already present in inventory) issue warning                                                           |
+|              5 | if (qty < 0  OR price <0 OR length(name)>15 OR length(name)<7 OR id contains letters) issue warning             |
+|              4 | add the file descriptor with the related attributes to the inventory                                            |
+
+## Scenario 13
+| Scenario ID:   | Corresponds to UC 11 Remove Product descriptor                                                             |
+| -------------  | -------------                                                                                              |
+| Description    | Shopdirector wants to completely remove 1 type of product from the inventory                               |
+| Precondition   | ShopDirector must be logged in, he must be in the Manage Inventory screen                                  |
+| Post condition | Product Descriptor been removed from the inventory                                                         |
+| Step#          |                                                                                                            |
+| 1              | ShopDirector finds the relative product descriptor in the list and clicks the remove button adjacent to it |
+| 2              | the entry corresponding to the product descriptor is removed from the inventory                            |
+
+## Scenario 14
+|   Scenario ID: | Corresponds to UC 12 Show inventory                                                                               |
+|  ------------- | -------------                                                                                                     |
+|    Description |                                                                                                                   |
+|   Precondition |                                                                                                                   |
+| Post condition | (?) questo scenario, cosi come lo usecase secondo me va tolto, è gia implicito in remove e add product descriptor |
+|          Step# |      vale anche per lo scenario successivo                                                                        |
+|              1 |                                                                                                                   |
+|              2 |                                                                                                                   |
+|              3 |                                                                                                                   |
+|              5 |                                                                                                                   |
+|              4 |                                                                                                                   |
+|              5 |                                                                                                                   |
+|              6 |                                                                                                                   |
+
+## Scenario 15
+|   Scenario ID: | Corresponds to UC  13 Show Restock Issues                                              |
+|  ------------- | -------------                                                                          |
+|    Description | Shopdirector wants to see if there where any issues during the RestockCheckingSessions |
+|   Precondition | User must be logged in as ShopDirector, he must be in manae restock issue view         |
+| Post condition | ShopDirector must be logged in, he must be in manage restock issue view                |
+|          Step# | ShopDirector clicks Manage Restock Order, then clicks Manage Restock Issues                                                                                       |
+
+
+## Scenario 16
+|   Scenario ID: | Corresponds to UC                                                                         |
+|  ------------- | -------------                                                                             |
+|    Description | The ShopDirector removes one Restock issue from the list                                  |
+|   Precondition | User must be logged in as ShopDirector                                                    |
+| Post condition | Restock Issue Is removed from the list                                                    |
+|          Step# |                                                                                           |
+|              1 | ShopDirector enters teh Manage Restock issues screen                                      |
+|              2 | ShopDirector scrolls through the list of issues until he finds the one he wants to remove |
+|              3 | shopDirector Clicks remove                                                                |
+|              5 | Issue is removed from the list                                                            |
+
+## Scenario 17
+|   Scenario ID: | Corresponds to UC 15                                                                                                      |
+|  ------------- | -------------                                                                                                             |
+|    Description | A new Customer needs to be registered, and a LoyaltyCard must be linked to him                                            |
+|   Precondition |                                                                                                                           |
+|                | User must be logged in as Personnel, he must be in the Manage Customer Session                                            |
+| Post condition | New Customer with valid attributes has been added to the inventory                                                        |
+|          Step# |                                                                                                                           |
+|              1 | the data associated to the customer is inserted                                                                           |
+|              2 | if waring is issued if (no attributes are left empty OR  either SSN or LoyaltyCardID is already used for another customer |
+
+## Scenario 18
+|   Scenario ID: | Corresponds to UC 16 Remove Customer                                                             |
+|  ------------- | -------------                                                                                    |
+|    Description | a memeber of the personnel wants to remove a customer from the database                          |
+|   Precondition | User must be logged in as personnel must be logged in, he must be in the Manage Customer Session |
+| Post condition | Customer has been successfully removed from the inventory                                        |
+|          Step# |                                                                                                  |
+|              1 | Personnel inserts the customer's loyalty card number and clicks remove                           |
+|              2 | The data associated to that loyaltyCardId is removed                                             |
+
+
+## Scenario 19
+| Scenario ID:   | Corresponds to UC 17 Update Product Descriptor                                                 |
+| -------------  | -------------                                                                                  |
+| Description    | one or more of the attributes of a product already present in the inventory need to be updated |
+| Precondition   | User must be logged in as Shopdirector, he must be in the Manage Inventory Screen              |
+| Post condition | One or more product descriptor fields have been updated                                        |
+| Step#          |                                                                                                |
+| 1              | ShopDirector finds and doubleclicks the targeted Field and inserts the new value               |
+| 2              | If the new value is invalid a warning is issued and no change is made                          |
+| 3              | The field is updated                                                                           |
+
 
 # Glossary
 | Class name | Meaning |

@@ -49,8 +49,8 @@ class Person{
         +name
         +surname
 }
-class Personnel{
-        +personnelID
+class Employee{
+        +employeeID
         +salary
         +password
 }
@@ -106,7 +106,7 @@ CheckoutSession o-- "*" Transaction
 
 ManageCustomerSession --|> Session
 ManageCustomerSession -- CustomerCard
-ManageCustomerSession -- Personnel: starts
+ManageCustomerSession -- Employee: starts
 
 Shop "1..*" -- ShopDirector :administers
 ShopDirector -- "*" RestockOrder :issues
@@ -119,17 +119,17 @@ Transaction -- "*" Product :of
 Transaction -- "0..1" CustomerCard
 Transaction -- "0..1" CreditCard: has
 CustomerCard "0..1" -- Person :belongs
-Personnel --|> Person
-Personnel -- "*" CheckoutSession : start as Cashier
-Personnel -- "*" RestockCheckingSession : start as Restock Checker
-ShopDirector --|> Personnel
-ShopDirector -- "*" Personnel : updates
-ShopDirector -- "*" Personnel : Fires
+Employee --|> Person
+Employee -- "*" CheckoutSession : start as Cashier
+Employee -- "*" RestockCheckingSession : start as Restock Checker
+ShopDirector --|> Employee
+ShopDirector -- "*" Employee : updates
+ShopDirector -- "*" Employee : Fires
 ShopDirector -- "*" Person :hires
 ShopDirector -- Inventory: manages
 DiscardExpiredSession -- Inventory: remove products from
 DiscardExpiredSession --|> Session
-Personnel -- "*" DiscardExpiredSession : start
+Employee -- "*" DiscardExpiredSession : start
 ShopDirector -- "*" MonthlyAccounting : isResponsibleFor
 MonthlyAccounting -- "*" CheckoutSession :tracks
 MonthlyAccounting -- "*" DiscardExpiredSession: updates
