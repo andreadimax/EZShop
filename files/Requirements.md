@@ -9,7 +9,7 @@
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
-
+| MySQL | DBMS used to store the application data in the server|
 
 # Context Diagram and interfaces
 
@@ -23,12 +23,13 @@
 | User( as Personnel or ShopDirector)   | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
-
+| MySQL          | MySQL Connector/J | Ethernet cable|
 # Stories and personas
 
 
-John is the shop owner and director of a small shop of 50-200 square meters and sells about 500-2000 different item types
+John is the shop owner and director of a small shop of 100 square meters that sells about 1500 different item types
 and he uses the application EZSHOP to help him manage it.
+He has 7 computers in his shop, one is the EZSHOP server, running the backend, the others run EZSHOP client, and replace the cash registers.
 
 John is able to easily keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
 In order to do so, John asks his employees to count all the goods present in the shop, which he then compares with the inventory tracked by the application.
