@@ -9,7 +9,7 @@
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
-| DBMS             | MySQL is used to store and share data between different terminals using EZShop at the same time within the same shop                                             |
+| MySQL             | MySQL is used to store and share data between different terminals using EZShop at the same time within the same shop                                             |
 
 # Context Diagram and interfaces
 
