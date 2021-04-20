@@ -1,6 +1,6 @@
 # Graphical User Interface Prototype  
 
-Authors: Alessio Bincoletto, Andrea Di Mauro, Daniele Cacciabue,
+Authors: Team 15 - Alessio Bincoletto, Andrea Di Mauro, Daniele Cacciabue.
 
 Date: 20/04/2021
 

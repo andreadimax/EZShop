@@ -9,7 +9,7 @@
 | Revenue agency   | gets shop's monthly accounting update notification                                                                                                               |
 | Barcode reader   | Barcode used to scan products                                                                                                                                    |
 | Product          | Sold goods                                                                                                                                                       |
-| MySQL             | MySQL is used to store and share data between different terminals using EZShop at the same time within the same shop                                             |
+| DBMS             | Used to store, acces and share data between different terminals using EZShop at the same time within the same shop                                             |
 
 # Context Diagram and interfaces
 
@@ -23,7 +23,6 @@
 | Employee or ShopDirector             | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
-| MySQL           | MySQL Connector/J | Ethernet cable                                  |
 
 # Stories and personas
 
