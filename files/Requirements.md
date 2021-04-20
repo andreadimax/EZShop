@@ -198,7 +198,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Precondition     | User is logged in as ShopDirector                                                                                                        |
 | Post condition   | Employee Account created(salary, password and employeeID have been assigned to it)                                                      |
 |                  | totalSalaryCost in MonthlyAccounting has been updated                                                                                    |
-| Nominal Scenario | ShopDirector creates new user specifying some specific attributes(salary, personellID and password                                       |
+| Nominal Scenario | ShopDirector creates new user specifying some specific attributes(salary, employeID and password                                         |
 |                  | Employee User is created with the inserted info as attributes, the attribute totalSalaryCost in MonthlyAccounting is updated            |
 |                  |                                                                                                                                          |
 | Variant          | EmployeeID is already taken by another member of the Employee or has not been inserted, issue warning, ask for alternative EmployeeId |
@@ -360,7 +360,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Precondition   | User is logged in as ShopDirector, in the manage employee Screen                                                    |
 | Post condition | Employee Account created(salary, password and employeeID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated  |
 | Step#          |                                                                                                                                        |
-| 1              | ShopDirector enters the attributes for the Employee(salary, personellID and password)                                                  |
+| 1              | ShopDirector enters the attributes for the Employee(salary, employeiD and password)                                                    |
 | 2              | Check for the validity of the attributes(see usecase variants), if not send a warning and go to step 1                                 |
 | 3              | the salary of the employee is added to totalSalaryCost in MonthlyAccounting                                                            |
 | 4              | a new instance of Employee is created                                                                                                 |
