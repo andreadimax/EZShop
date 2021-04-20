@@ -174,11 +174,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR13         | Efficiency                                      | Support for up to 15 active Sessions at a time                                                             |              |
 | NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
 | NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
-| NFR8          | Security                                        | For credit card payments only last 4 digits are stored                                                     |              |
 | NFR9          | Portability                                     | The application must be compatible with Windows based systems (Windows 7 version or later) for x86 systems and Windows Embedded Compact for embedded terminals                |              |
 | NFR10         | Usability                                       | Gui uses large buttons and large text size in order to be easily usable for people with sight deficiencies |              |
 | NFR12         | localization                                    | decimal numbers use .(dot) as decimal separator                                                            |              |
-| NFR14         | Reliability                                     | Save to disk every transaction performed                                                                   |              |
 | NFR11         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state of the system          |              |
 | NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
