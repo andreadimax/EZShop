@@ -158,8 +158,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |           FR8 | Store Suppliers Data                                                           |                                      |
 |               |                                                                                |                                      |
 |           FR9 | keep track of Session Activities                                               |                                      |
-|           9.1 | logs date, time and personnelId for any account login and logouts              |                                      |
-|           9.2 | logs date, time and personnelId for started/ended session                      |                                      |
+|           9.1 | logs date, time and employeeId for any account login and logouts               |                                      |
+|           9.2 | logs date, time and employeeId for started/ended session                       |                                      |
 |           9.3 | logs warns occurred during end checkout session procedure                      |                                      |
 |
 ## Non Functional Requirements
@@ -196,7 +196,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Actors Involved  | Employee, Shop Director                                                                                                                 |
 | -------------    | -------------                                                                                                                            |
 | Precondition     | User is logged in as ShopDirector                                                                                                        |
-| Post condition   | Employee Account created(salary, password and personnelID have been assigned to it)                                                     |
+| Post condition   | Employee Account created(salary, password and employeeID have been assigned to it)                                                      |
 |                  | totalSalaryCost in MonthlyAccounting has been updated                                                                                    |
 | Nominal Scenario | ShopDirector creates new user specifying some specific attributes(salary, personellID and password                                       |
 |                  | Employee User is created with the inserted info as attributes, the attribute totalSalaryCost in MonthlyAccounting is updated            |
@@ -371,11 +371,11 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 1
 | Scenario ID:   | Corresponds to UC 1 Create Employee                                                                                |
 | -------------  | -------------                                                                                                                          |
-| Description    | Shopdirector wants to hire a new member of the personnel                                                            |
+| Description    | Shopdirector wants to hire a new employee                                                                           |
 | Precondition   | User is logged in as ShopDirector, in the manage personnel Screen                                                   |
-| Post condition | Employee Account created(salary, password and personnelID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated |
+| Post condition | Employee Account created(salary, password and employeeID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated  |
 | Step#          |                                                                                                                                        |
-| 1              | ShopDirector enters the attributes for the personnel member(salary, personellID and password)                                          |
+| 1              | ShopDirector enters the attributes for the Employee(salary, personellID and password)                                                  |
 | 2              | Check for the validity of the attributes(see usecase variants), if not send a warning and go to step 1                                 |
 | 3              | the salary of the employee is added to totalSalaryCost in MonthlyAccounting                                                            |
 | 4              | a new instance of Employee is created                                                                                                 |
@@ -384,26 +384,26 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 2
 |   Scenario ID: | Corresponds to UC 2 Delete Employee                                                                |
 |  ------------- | -------------                                                                                       |
-|    Description | Shopdirector wants to delete a member of the personnel                                              |
+|    Description | Shopdirector wants to delete a member of the employee                                               |
 |   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                    |
 | Post condition | Employee Account does not exist anymore, totalSalaryCost has been updated                          |
 |          Step# |                                                                                                     |
-|              1 | ShopDirector inserts the personnelID of the member to remove from the system                        |
-|              2 | check for the existence of a personnel with such personnelID                                        |
-|              3 | The system displays the info about that personnel                                                   |
+|              1 | ShopDirector inserts the employeeID of the member to remove from the system                         |
+|              2 | check for the existence of an Employee with such employeelID                                        |
+|              3 | The system displays the info about that Employee                                                    |
 |              4 | ShopDirector clicks the delete button and confirms the action                                       |
 |              5 | totalSalaryCost in MonthlyAccounting is decreased by the amount of salary the deleted Employee had |
 |              6 | the Employee Account is Removed                                                                    |
 ## Scenario 3
 |   Scenario ID: | Corresponds to UC 3 Update Salary                                                                             |
 |  ------------- | -------------                                                                                                 |
-|    Description | Shopdirector wants to update the salary of a member of the personnel                                          |
+|    Description | Shopdirector wants to update the salary of an employee                               |
 |   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                              |
 | Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated       |
 |          Step# |                                                                                                               |
-|              1 | ShopDirector inserts the personnelID of the member to update the salary of                                    |
-|              2 | check for the existence of a personnel with such personnelID, if not issue a warning and step back to step 1  |
-|              3 | The system displays the info about that personnel                                                             |
+|              1 | ShopDirector inserts the employeeID of the member to update the salary of                                     |
+|              2 | check for the existence of a employee with such employeeID, if not issue a warning and step back to step 1 |
+|              3 | The system displays the info about that employee                                                      |
 |              4 | ShopDirector clicks the Update salary button                                                                  |
 |              5 | the inserted salary is checket to be bigger than zero, if not the user is asked to insert another valid value |
 |              6 | totalSalaryCost in MonthlyAccounting is increased by the difference between the new and the old salary        |
@@ -411,16 +411,16 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 4
 |   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
 |  ------------- | -------------                                                                                                |
-|    Description | Shopdirector wants to update the password of a member of the personnel                                       |
+|    Description | Shopdirector wants to update the password of an employee                                                     |
 |   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                             |
 | Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated      |
 |          Step# |                                                                                                              |
-|              1 | ShopDirector inserts the personnelID of the member to update the password of                                 |
-|              2 | check for the existence of a personnel with such personnelID, if not issue a warning and step back to step 1 |
-|              3 | The system displays the info about that personnel                                                            |
+|              1 | ShopDirector inserts the employeeID of the member to update the password of                                  |
+|              2 | check for the existence of an employee with such employeeID, if not issue a warning and step back to step 1 |
+|              3 | The system displays the info about that employee                                                             |
 |              4 | ShopDirector clicks the Update Password button                                                               |
 |              5 | the inserted Password to be of sufficient length, if not the user is asked to insert another valid value     |
-|              6 | The password of that personnel account is changed                                                            |
+|              6 | The password of that employee account is changed                                                             |
 
 
 ## Scenario 5
@@ -468,7 +468,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 9
 |   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                                      |
 |  ------------- | -------------                                                                                                                                        |
-|    Description | A list of missing items has been compiled by the personnel, the shopdirector wants to update the information on the system                           |
+|    Description | A list of missing items has been compiled by the employee, the shopdirector wants to update the information on the system                            |
 |   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
 | Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
 |          Step# |                                                                                                                                                      |
@@ -571,8 +571,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 18
 |   Scenario ID: | Corresponds to UC 16 Remove Customer                                                             |
 |  ------------- | -------------                                                                                    |
-|    Description | a memeber of the personnel wants to remove a customer from the database                          |
-|   Precondition | User must be logged in as personnel must be logged in, he must be in the Manage Customer Session |
+|    Description | one of the employees  wants to remove a customer from the database                               |
+|   Precondition | User must be logged in as Employee must be logged in, he must be in the Manage Customer Session  |
 | Post condition | Customer has been successfully removed from the inventory                                        |
 |          Step# |                                                                                                  |
 |              1 | Employee inserts the customer's loyalty card number and clicks remove                           |
