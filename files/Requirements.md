@@ -27,7 +27,7 @@
 
 John is the shop owner and director of a small shop of 100 square meters that sells about 1500 different item types
 and he uses the application EZSHOP to help him manage it.
-He has 7 computers in his shop, one is the EZSHOP server, running the backend, the others run EZSHOP client, and replace the cash registers.
+He has 7 computers in his shop, one is the EZSHOP server, running the backend, the others run EZSHOP client, and he uses them both for replacing the cash registers and for more complex accounting operations described below.
 
 John is able to easily keep the inventory in the application and the actual number of goods inside the shop in sync by compiling every month a MonthlyStolenReport(a list of the missing items in the shop, it is compiled once a month).
 In order to do so, John asks his employees to count all the goods present in the shop, which he then compares with the inventory tracked by the application.
@@ -41,14 +41,14 @@ John can easily manage all his employees from EZSHOP, he can change their salary
 
 In case the inventory needed to be updated, the shop director is able to manage the inventory, not only by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
-EZSHOP helps John knowing when it is time to order a new stock of a product. The Inventory view has the option to only display those items whose quantity is below a specific quantity threshold associated to them.
+EZSHOP helps John knowing when it is time to order a new stock of a product. When he accesses the inventory view, he can select the option to only display those items whose quantity is below a specific quantity threshold associated to them.
 
-When John wants, through the "session activities view" he can access to the records for the sessions of his Employee and view some information that may interest him, such as when the session was started and ended.
+When John wants, through the "session activities view", he can access to the records for the sessions of his Employees and view some information that may interest him, such as when the session was started and ended(For the meaning of the term Session, see the Glossary).
 
-If the shop is crowded, and all of his employees are busy, john can still help the shop remain efficient by behaving as an additional employee, since EZSHOP gives him the option of starting all the types of Sessions.
+If the shop is crowded, and all of his employees are busy, John can still help the shop remain efficient by working as an additional employee, since EZSHOP gives him the option of starting all the types of Sessions.
 
 ______________________________________________________________________________________________
-Sara,Tom, Tia and Mike are four of John's employees. As Employee, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
+Sara,Tom, Tia and Mike are four of John's employees. As Employees, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed, by means of Sessions. 
 
 When its Sara's turn to work at the checkout, she borrows a cash container containing cash from the shop, which she uses to give the rest to clients and  logs in using the credentials provided to her by John. 
 In order to correctly initiate the checkout session, she has to insert the borrowed amount into her terminal to let the system know her debt.
@@ -58,7 +58,7 @@ If the system automatically warns the shopdirector if the money she gathered are
 
 When the goods ordered by the shop director arrive to she shop, Tom can login as a RestockChecker, select the received order from the list of Restock Orders to retrieve the list of ordered items and check them. The system automatically updates the inventory without him having to do it manually. Morover, Tom has also the possibility of raise issues to the shopdirector, regarding some of the goods he has received by stating the affected products and quantity.
 
-With the term customers, we mean the people which buy in the shop using a Loyalty Card. When Tia logs in in a ManageCustomerSession, she is able to create new Loyalty cards and associate them to customers, morover, she can search through customer data in order to visualize the name, surname and SSN of the customer which has a specific cardID and the Amount of points associated to that card.
+With the term customers, we mean the people which have a Loyalty card. When Tia logs in in a ManageCustomerSession, she is able to create new Loyalty cards and associate them to customers, morover, she can look through customer data in order to visualize the name, surname and SSN of the customer which has a specific cardID and the Amount of points associated to that card.
 
 When Mike is reordering the shelves, and finds that a product has expired, he is able start a DiscardExpiredSession, which lets him scan the expired products. Thanks to this procedure, Mike is able to discard the expired products while still keeping the inventory synchronized with the actual number of items present in the shop.
 
@@ -68,9 +68,6 @@ Michael is a customer of the shop. When he wants to buy some products, he is not
 Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the employees in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
 Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product point value is lower than 0.
-
-
-
 
 
 
