@@ -220,13 +220,6 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Post condition   | Employee's salary has been updated, totalSalaryCost has been updated                             |
 | Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of salary |
 | Variant          | The value entered as salary is negative, stop the operation and issue a warning                   |
-### Use case 4, Update Employee password
-| Actors Involved  | Employee, Shop Director                                                                              |
-| -------------    | -------------                                                                                         |
-| Precondition     | User is logged in as ShopDirector, Employee Account to which to change password exists               |
-| Post condition   | Employee's password has been updated                                                                 |
-| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of password   |
-|                  |                                                                                                       |
 
 
 ### Use case 5, Perform RestockCheckingSession
