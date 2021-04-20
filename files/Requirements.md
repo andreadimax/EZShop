@@ -300,14 +300,6 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Post condition   | Product Descriptor been removed from the inventory                        |
 | Nominal Scenario | the Button "remove" is clicked                                            |
 
-### Use Case 12, Show Inventory
-| Actors Involved  | ShopDirector                                                                            |
-| -------------    | -------------                                                                           |
-| Precondition     | User must be logged in as ShopDirector                                                  |
-| Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
-| Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
-|                  |                                                                                         |
-|                  |                                                                                         |
 
 ### Use Case 13, Show Restock Issues
 | Actors Involved  | ShopDirector                                                                            |
@@ -472,10 +464,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
 | Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
 |          Step# |                                                                                                                                                      |
-|              1 | (?)(problema: sulla gui c'è scritto che qui inseriamo la lista di tutti i prodotti nell'inventario e lui fa la differenza calcolando la stolen list) |
-|                | (Ma non lo avevamo definito che prendeva semplicemente la lista dei prodotti che mancano?)                                                           |
-|              2 |                                                                                                                                                      |
-|              3 |                                                                                                                                                      |
+|              1 | stolen product list is compiled selecting for each product, product id's (by scanning or by keyboard) and actual quantity present in the shop        |
+|              2 | at each addition to product list update total stolen value displayed (quantity in inventory - Actual quantity)*Product price                         |
+|              3 | Confirm button is pressed, monthly stolen report session ends, inventory is updated, Mothly Accounting is updated                                    |
 |              5 |                                                                                                                                                      |
 |              4 |                                                                                                                                                      |
 |              5 |                                                                                                                                                      |
@@ -520,21 +511,6 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Step#          |                                                                                                            |
 | 1              | ShopDirector finds the relative product descriptor in the list and clicks the remove button adjacent to it |
 | 2              | the entry corresponding to the product descriptor is removed from the inventory                            |
-
-## Scenario 14
-|   Scenario ID: | Corresponds to UC 12 Show inventory                                                                               |
-|  ------------- | -------------                                                                                                     |
-|    Description |                                                                                                                   |
-|   Precondition |                                                                                                                   |
-| Post condition | (?) questo scenario, cosi come lo usecase secondo me va tolto, è gia implicito in remove e add product descriptor |
-|          Step# |      vale anche per lo scenario successivo                                                                        |
-|              1 |                                                                                                                   |
-|              2 |                                                                                                                   |
-|              3 |                                                                                                                   |
-|              5 |                                                                                                                   |
-|              4 |                                                                                                                   |
-|              5 |                                                                                                                   |
-|              6 |                                                                                                                   |
 
 ## Scenario 15
 |   Scenario ID: | Corresponds to UC  13 Show Restock Issues                                              |
