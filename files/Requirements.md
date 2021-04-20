@@ -357,6 +357,16 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Variant 2        | the changed field value is invalid( price<0, qty <0, qtyThreshold<0 or ID already taken)  => Issue warning    |
 |                  |                                                                                                                      |
 
+### Use Case 18, Register RestockOrder
+| Actors Involved  | Personnel                                                                                                            |
+| -------------    | -------------                                                                                                        |
+| Precondition     | User Must be logged in as ShopDirector, he must be in the Manage Inventory screen                                    |
+| Post condition   | One product descriptor field values has been updated                                                            |
+| Nominal Scenario | ShopDirector doubleclicks the targeted field and inserts the new value                                               |
+| Variant          | ShopDirector tries to dubleclick ProductId (immutable field) => nothing happens                                      |
+| Variant 2        | the changed field value is invalid( price<0, qty <0, qtyThreshold<0 or ID already taken)  => Issue warning    |
+|                  |                                                                                                                      |
+
 # Relevant scenarios
 ## Scenario 1
 | Scenario ID:   | Corresponds to UC 1 Create Personnel                                                                                |
