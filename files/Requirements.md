@@ -38,7 +38,7 @@ John also wants to know actual statistics about his shop earnings and losses, to
 
 Everytime he wants to order new goods, he accesses the RestockOrder page, in which he inserts The date and the cost of the order, which will be automatically used by EZSHOP to calculate the monthly accounting, and the list of ordered products.
 
-John can easily manage all his personnel from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
+John can easily manage all his employees from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
 In case the inventory needed to be updated, the shop director is able to manage the inventory, not only by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
@@ -46,7 +46,7 @@ EZSHOP helps John knowing when it is time to order a new stock of a product. The
 
 When John wants, through the "session activities view" he can access to the records for the sessions of his Employee and view some information that may interest him, such as when the session was started and ended.
 
-If the shop is crowded, and all of his personnel is busy, john can still help the shop remain efficient by behaving as an additional member of the personnel, since EZSHOP gives him the option of starting all the types of Sessions.
+If the shop is crowded, and all of his employees are busy, john can still help the shop remain efficient by behaving as an additional employee, since EZSHOP gives him the option of starting all the types of Sessions.
 
 ______________________________________________________________________________________________
 Sara,Tom, Tia and Mike are four of John's employees. As Employee, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
@@ -66,7 +66,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 _____________________________
 
 Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a Loyalty card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
-Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
+Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the employees in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
 Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product point value is lower than 0.
 
@@ -170,7 +170,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR3          | Efficiency                                      | GUI response time less than 0.5s                                                                           | FR1.2        |
 | NFR4          | Efficiency                                      | Support up to 10 Checkouts                                                                                 |              |
 | NFR5          | Efficiency                                      | Support up to 2000 different ProductDescriptors                                                            | FR2          |
-| NFR11         | Efficiency                                      | Support for up to 20 employees(personnel)                                                                  |              |
+| NFR11         | Efficiency                                      | Support for up to 20 employees                                                                             |              |
 | NFR13         | Efficiency                                      | Support for up to 15 active Sessions at a time                                                             |              |
 | NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
 | NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
@@ -180,7 +180,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR11         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state of the system          |              |
 | NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
-| NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
+| NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the employee know when to take breaks                |              |
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
 | NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
 | NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
@@ -364,7 +364,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Scenario ID:   | Corresponds to UC 1 Create Employee                                                                                |
 | -------------  | -------------                                                                                                                          |
 | Description    | Shopdirector wants to hire a new employee                                                                           |
-| Precondition   | User is logged in as ShopDirector, in the manage personnel Screen                                                   |
+| Precondition   | User is logged in as ShopDirector, in the manage employee Screen                                                    |
 | Post condition | Employee Account created(salary, password and employeeID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated  |
 | Step#          |                                                                                                                                        |
 | 1              | ShopDirector enters the attributes for the Employee(salary, personellID and password)                                                  |
@@ -376,11 +376,11 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 2
 |   Scenario ID: | Corresponds to UC 2 Delete Employee                                                                |
 |  ------------- | -------------                                                                                       |
-|    Description | Shopdirector wants to delete a member of the employee                                               |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                    |
+|    Description | Shopdirector wants to delete an  employee                                                           |
+|   Precondition | User is logged in as ShopDirector in the manage employee Screen                                    |
 | Post condition | Employee Account does not exist anymore, totalSalaryCost has been updated                          |
 |          Step# |                                                                                                     |
-|              1 | ShopDirector inserts the employeeID of the member to remove from the system                         |
+|              1 | ShopDirector inserts the employeeID of the employee to remove from the system                       |
 |              2 | check for the existence of an Employee with such employeelID                                        |
 |              3 | The system displays the info about that Employee                                                    |
 |              4 | ShopDirector clicks the delete button and confirms the action                                       |
@@ -390,10 +390,10 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Scenario ID: | Corresponds to UC 3 Update Salary                                                                             |
 |  ------------- | -------------                                                                                                 |
 |    Description | Shopdirector wants to update the salary of an employee                               |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                              |
+|   Precondition | User is logged in as ShopDirector in the manage employee Screen                                              |
 | Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated       |
 |          Step# |                                                                                                               |
-|              1 | ShopDirector inserts the employeeID of the member to update the salary of                                     |
+|              1 | ShopDirector inserts the employeeID of the employee to update the salary of                                   |
 |              2 | check for the existence of a employee with such employeeID, if not issue a warning and step back to step 1 |
 |              3 | The system displays the info about that employee                                                      |
 |              4 | ShopDirector clicks the Update salary button                                                                  |
@@ -404,10 +404,10 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
 |  ------------- | -------------                                                                                                |
 |    Description | Shopdirector wants to update the password of an employee                                                     |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                             |
+|   Precondition | User is logged in as ShopDirector in the manage employee Screen                                             |
 | Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated      |
 |          Step# |                                                                                                              |
-|              1 | ShopDirector inserts the employeeID of the member to update the password of                                  |
+|              1 | ShopDirector inserts the employeeID of the employee to update the password of                                |
 |              2 | check for the existence of an employee with such employeeID, if not issue a warning and step back to step 1 |
 |              3 | The system displays the info about that employee                                                             |
 |              4 | ShopDirector clicks the Update Password button                                                               |
@@ -446,7 +446,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 8
 |   Scenario ID: | Corresponds to UC 7 Start DiscardExpiredSession                                                  |
 |  ------------- | -------------                                                                                    |
-|    Description | Employee member wants to remove expired he has found from the inventory                         |
+|    Description | Employee wants to remove expired he has found from the inventory                                |
 |   Precondition | Employee must be logged in, and he must have started a Discard expired Session                  |
 | Post condition | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated     |
 |          Step# |                                                                                                  |
