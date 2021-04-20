@@ -423,26 +423,28 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Precondition | User is logged in and he must have started a RestockCheckingSession             |
 | Post condition | the inventory is updated according to the scanned goods                         |
 |          Step# |                                                                                 |
-|              1 | each time a product is scanned add it to a list                                 |
-|              2 | (?) non continuo perchè non sono sicurissimo di come funzioni l'interfaccia qui |
-|              3 |                                                                                 |
-|              4 |                                                                                 |
-|              5 |                                                                                 |
-|              6 |                                                                                 |
+|              1 | select the order to check from the list of registered Restock Orders            |
+|              2 | for any products in the list, check the confirm field if is present             |
+|              3 | if any problem is encountered with the restock order, describe it in the comment issue field  |
+|              4 | for any product related to the encountered problem, check the "link to issue" field |
+|              5 | press on raise issue button                                                     |
+|              6 | press on "end restock checking session" button                                  |
 
 ## Scenario 6
 |   Scenario ID: | Corresponds to UC 6 PerformCheckoutSession   |
 |  ------------- | -------------                                |
 |    Description | Personnel performs his work shift as cashier |
-|   Precondition |                                              |
-| Post condition |                                              |
+|   Precondition |User is logged in and he must have started a RestockCheckingSession by inputting it's starting cash amount|
+| Post condition | Monthly accounting is updated with the money earned by that checkout |
 |          Step# |                                              |
-|              1 |                                              |
-|              2 |                                              |
-|              3 |                                              |
-|              4 |                                              |
-|              5 |                                              |
-|              6 |                                              |
+|              1 | press start scanning button, start scanning button is switched to Abort Operation button      |
+|              2 | add each scanned product to the sale list of products, update total cost displayed    |
+|              3 | if barcode is unreadable, input by hand productId         |
+|              4 | if customer is provided with one, scan loyalty card with "scan loyalty card button"  |
+|              5 | if scanned, show customer's loyalty points and variation after the sale |
+|              6 | for any product scanned, update point prevision after sale, if lower than 0, do not add to list     |
+|              7 | press POS Paument or Cash Payment button and then wait for system confirmation, if transaction fails, do nothing  |
+|              8 | after transaction status is confirmed, Abort operation button is substituted with Start scanning button |
 
 ## Scenario 7
 
