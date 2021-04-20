@@ -1,7 +1,7 @@
 # Stakeholders
 | Stakeholder name | Description                                                                                                                                                      |
 | ---------------- | -----------                                                                                                                                                      |
-| User             | Any user who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Product Discarder<br> - Restock Checker<br> - Customer at POS <br> |
+| Employee         | Any employee who can interact with the system:<br>- Cashier<br> - Owner<br> - Shop Director<br> - Restock Checker<br> |
 | Small shops      | Any type of small-medium sized business (from 50 to 200 square meters) with an inventory ranging from 500 to 2000 different types of products.                   |
 | POS System       | The system interacts with a POS type application for managing transactions                                                                                       |
 | Developer        | Who develops and maintains the system (software engineer, marketing person, bank's IT specialist)                                                                |
@@ -20,7 +20,7 @@
 ## Interfaces
 | Actor          | Logical Interface | Physical Interface                              |
 | -------------  | :-------------:   | -----:                                          |
-| User( as Personnel or ShopDirector)   | GUI               | Screen, monitor, keyboard, mouse, cash register |
+| Employee   | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
 
@@ -40,18 +40,18 @@ John also wants to know actual statistics about his shop earnings and losses, to
 
 Everytime he wants to order new goods, he accesses the RestockOrder page, in which he inserts The date and the cost of the order, which will be automatically used by EZSHOP to calculate the monthly accounting, and the list of ordered products.
 
-John can easily manage all his personnel from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
+John can easily manage all his Employee from EZSHOP, he can change their salary and password, hire them, and fire them. The salary is automatically tracked by the monthly accounting.
 
 In case the inventory needed to be updated, the shop director is able to manage the inventory by adding or removing products but also by updating the properties of the goods present in the EZSHOP inventory, such as the price at which they are sold or the reorder threshold.
 
 John can easily see when it has to order a new stock of a product. The Inventory view has the option to only display those item whose quantity is below a specific quantity threshold associated to them.
 
-When John wants, through the "session activities view" he can access to the records for the sessions of his Personnel and view some information that may interest him, such as when the session was started and ended.
+When John wants, through the "session activities view" he can access to the records for the sessions of his Employee and view some information that may interest him, such as when the session was started and ended.
 
-If the shop is crowded, and all of his personnel is busy, john can still help the shop remain efficient by behaving as an additional member of the personnel, since EZSHOP gives him the option of starting all the types of Sessions.
+If the shop is crowded, and all of his Employee is busy, john can still help the shop remain efficient by behaving as an additional member of the Employee, since EZSHOP gives him the option of starting all the types of Sessions.
 
 ______________________________________________________________________________________________
-Sara,Tom, Tia and Mike are four of John's employees. As Personnel, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
+Sara,Tom, Tia and Mike are four of John's employees. As Employee, they can carry out many duties, from reordering the shelves, to cleaning. The EZSHOP application keeps them flexible in changing their tasks while still being tracked by the system when needed. 
 
 When its Sara's turn to work at the checkout, she borrows a cash container containing cash from the shop, which she uses to give the rest to clients and  logs in using the credentials provided to her by John. 
 In order to correctly initiate the checkout session, she has to insert the borrowed amount into her terminal to let the system know her debt.
@@ -68,7 +68,7 @@ When Mike is reordering the shelves, and finds that a product has expired, he is
 _____________________________
 
 Michael is a customer of the shop. When he wants to buy some products, he is not forced to have a Loyalty card with him, unless those products are specific promotional products which have a cost in Loyalty Card points. 
-Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the personnel in the shop.
+Since he wants to buy a product which needs Loyalty Card points to be bought, he asks to Sara, one of the Employee in the shop.
 Sara logs into the system's "ManageCustomerSession" and enters Michael's details. Michael's data will be  associated him to a specific card and stored. Then Sara hands him the loyalty card.
 Michael's Loyalty card increases its point value at each transaction, depending on the cumulative point value of the bought products, in the same way, points are subtracted from the card when a product point value is lower than 0.
 
@@ -136,9 +136,9 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |         5.4.2 | Notify ShopDirector if (CurrentCashAmount - human-counted) > checkoutThreshold |                                      |
 |               |                                                                                |                                      |
 |               |                                                                                |                                      |
-|           FR5 | Manage Personnel                                                               |                                      |
-|             1 | Hire Personnel                                                                 |                                      |
-|           1.1 | Set PersonnelId                                                                |                                      |
+|           FR5 | Manage Employee                                                               |                                      |
+|             1 | Hire Employee                                                                 |                                      |
+|           1.1 | Set employeeID                                                                |                                      |
 |           1.2 | Set Salary                                                                     |                                      |
 |           1.3 | Set Password                                                                   |                                      |
 |             2 | Update Salary                                                                  |                                      |
@@ -149,10 +149,10 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |             3 | Update Password                                                                |                                      |
 |           3.1 | Get new password                                                               |                                      |
 |           3.2 | Overwrite old password                                                         |                                      |
-|             4 | Fire Personnel                                                                 |                                      |
+|             4 | Fire Employee                                                                 |                                      |
 |               |                                                                                |                                      |
-|           FR6 | Authenticate User(Login and Logout)                                            |                                      |
-|             1 | Get PersonnelId and Password                                                   |                                      |
+|           FR6 | Authenticate Employee(Login and Logout)                                            |                                      |
+|             1 | Get employeeID and Password                                                   |                                      |
 |             2 | Verify Password is correct                                                     |                                      |
 |               |                                                                                |                                      |
 |           FR7 | Issue RestockOrder                                                             |                                      |
@@ -160,8 +160,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |           FR8 | Store Suppliers Data                                                           |                                      |
 |               |                                                                                |                                      |
 |           FR9 | keep track of Session Activities                                               |                                      |
-|           9.1 | logs date, time and personnelId for any account login and logouts              |                                      |
-|           9.2 | logs date, time and personnelId for started/ended session                      |                                      |
+|           9.1 | logs date, time and employeeID for any account login and logouts              |                                      |
+|           9.2 | logs date, time and employeeID for started/ended session                      |                                      |
 |           9.3 | logs warns occurred during end checkout session procedure                      |                                      |
 |
 ## Non Functional Requirements
@@ -172,7 +172,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR3          | Efficiency                                      | GUI response time less than 0.5s                                                                           | FR1.2        |
 | NFR4          | Efficiency                                      | Support up to 10 Checkouts                                                                                 |              |
 | NFR5          | Efficiency                                      | Support up to 2000 different ProductDescriptors                                                            | FR2          |
-| NFR11         | Efficiency                                      | Support for up to 20 employees(personnel)                                                                  |              |
+| NFR11         | Efficiency                                      | Support for up to 20 employees(Employee)                                                                  |              |
 | NFR13         | Efficiency                                      | Support for up to 15 active Sessions at a time                                                             |              |
 | NFR6          | Maintainability                                 | Time to restore system < 1 hr                                                                              |              |
 | NFR7          | Reliability                                     | number of data backup per day >= 1                                                                         |              |
@@ -184,7 +184,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | NFR11         | Reliability                                     | If power outage occurs during a transaction, roll back to the previous stable state of the system          |              |
 | NFR14         | Security                                        | Accept only Passwords longer than 8 characters                                                             |              |
 | NFR15         | Performance                                     | All mathematical operations performed by the system must be correct with maximum tolerance of 10^-3        |              |
-| NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the personnel know when to take breaks               |              |
+| NFR16         | Usability                                       | The EZSHOP GUI always shows the current time, helping the Employee know when to take breaks               |              |
 | NFR17         | Usability                                       | Presence of warning in case values inserted in the GUI are outside the range in which they are meaningful  |              |
 | NFR18         | Functionality                                   | Support for hand-held barcode scanners with basic IP54 protection, 3.5 in. color TFT display |
 | NFR19         | Functionality                                   | Support for Ingenico, MacLean MC Series and myPOS POS terminals |
@@ -196,56 +196,56 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 <img src="../uml/use_cases_diagram.png">
 
 ## Use Cases
-### Use case 1, Create Personnel
-| Actors Involved  | Personnel, Shop Director                                                                                                                 |
+### Use case 1, Create Employee
+| Actors Involved  | Employee                                                                                                         |
 | -------------    | -------------                                                                                                                            |
-| Precondition     | User is logged in as ShopDirector                                                                                                        |
-| Post condition   | Personnel Account created(salary, password and personnelID have been assigned to it)                                                     |
+| Precondition     | Employee is logged in as ShopDirector                                                                                                        |
+| Post condition   | Employee Account created(salary, password and employeeID have been assigned to it)                                                     |
 |                  | totalSalaryCost in MonthlyAccounting has been updated                                                                                    |
-| Nominal Scenario | ShopDirector creates new user specifying some specific attributes(salary, personellID and password                                       |
-|                  | Personnel User is created with the inserted info as attributes, the attribute totalSalaryCost in MonthlyAccounting is updated            |
+| Nominal Scenario | ShopDirector creates new employee specifying some specific attributes(salary, personellID and password                                       |
+|                  | Employee account is created with the inserted info as attributes, the attribute totalSalaryCost in MonthlyAccounting is updated            |
 |                  |                                                                                                                                          |
-| Variant          | PersonnelID is already taken by another member of the Personnel or has not been inserted, issue warning, ask for alternative PersonnelId |
+| Variant          | employeeID is already taken by another member of the Employee or has not been inserted, issue warning, ask for alternative employeeID |
 |                  | Salary inserted is negative, issue warning, ask for alternative                                                                          |
 |                  | Password inserted is shorter than 8 characters or empty, issue warning                                                                   |
 
-### Use case 2, Delete Personnel
-| Actors Involved  | Personnel, Shop Director                                                            |
+### Use case 2, Delete Employee
+| Actors Involved  | Employee                                                     |
 | -------------    | -------------                                                                       |
-| Precondition     | User is logged in as ShopDirector, Personnel Account to delete exist                |
-| Post condition   | Personnel Account does not exist anymore, totalSalaryCost has been updated          |
+| Precondition     | Employee is logged in as ShopDirector, Employee Account to delete exists                |
+| Post condition   | Employee Account does not exist anymore, totalSalaryCost has been updated          |
 | Nominal Scenario | ShopDirector, through the gui interface, finds the target account and clicks delete |
 | Variant          |                                                                                     |
 
-### Use case 3, Update Personnel salary
-| Actors Involved  | Personnel, Shop Director                                                                          |
+### Use case 3, Update Employee salary
+| Actors Involved  | Employee                                                       |
 | -------------    | -------------                                                                                     |
-| Precondition     | User is logged in as ShopDirector, Personnel Account to which update the salary exists            |
-| Post condition   | Personnel's salary has been updated, totalSalaryCost has been updated                             |
-| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of salary |
+| Precondition     | Employee is logged in as ShopDirector, Employee Account to which update the salary exists            |
+| Post condition   | Employee's salary has been updated, totalSalaryCost has been updated                             |
+| Nominal Scenario | ShopDirector, through the GUI interface, finds the target account and changes the value of salary |
 | Variant          | The value entered as salary is negative, stop the operation and issue a warning                   |
-### Use case 4, Update Personnel password
-| Actors Involved  | Personnel, Shop Director                                                                              |
+### Use case 4, Update Employee password
+| Actors Involved  | Employee                                                        |
 | -------------    | -------------                                                                                         |
-| Precondition     | User is logged in as ShopDirector, Personnel Account to which to change password exists               |
-| Post condition   | Personnel's password has been updated                                                                 |
-| Nominal Scenario | ShopDirector, through the gui interface, finds the target account and changes the value of password   |
+| Precondition     | Employee is logged in as ShopDirector, Employee Account to which to change password exists               |
+| Post condition   | Employee's password has been updated                                                                 |
+| Nominal Scenario | ShopDirector, through the GUI interface, finds the target account and changes the value of password   |
 |                  |                                                                                                       |
 
 
 ### Use case 5, Perform RestockCheckingSession
-| Actors Involved  | Personnel                                                                                                                                       |
+| Actors Involved  | Employee                                                                                                                                       |
 | -------------    | -------------                                                                                                                                   |
-| Precondition     | User must be logged in as Personnel, and he must have started a RestockChecking Session and selected a previously registered restock order                                       |
+| Precondition     | Employee must be logged in as RestockChecker, and he must have started a RestockChecking Session and selected a previously registered restock order                                       |
 | Post condition   | Inventory is updated according to the checked goods                                                                                             |
 | Nominal Scenario | Checks the Restocked items from the list of the order, then ends the Session                                                                     |
 | Variant 1        | During The session a power loss occurs, The system restores itself as before the start of the RestockCheckingSession                            |
 | Variant 2        | During the checking, one or more goods are damaged or any other problem occurs  =>  The user can raise an issue to the ShopDirector  |
 
 ### Use case 6, Perform Checkout Session
-| Actors Involved  | Personnel                                                                                                                                                        |
+| Actors Involved  | Employee                                                                                                                                                        |
 | -------------    | -------------                                                                                                                                                    |
-| Precondition     | User must be logged in as Personnel, and he must have started a CheckoutSession                                                                |
+| Precondition     | Employee must be logged in as Cashier, and he must have started a CheckoutSession                                                                |
 | Post condition   | Cashier Ends the session by logging the cash accumulated, totalCheckout in MonthlyAccounting is updated                                                          |
 | Nominal Scenario | Cashier executes many transactions, then he ends the session by logging the amount of cash he accumulated                                                        |
 | Variant 1        | The difference between the amount logged by the cashier and the correct amount is higher than the toleranceThreshold                                             |
@@ -255,29 +255,29 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |                  |                                                                                                                                                                  |
 
 ### Use case 7, Start DiscardExpiredSession
-| Actors Involved  | Personnel                                                                                                   |
+| Actors Involved  | Employee                                                                                                   |
 | -------------    | -------------                                                                                               |
-| Precondition     | User must be logged in as Personnel, and he must have started a Discard expired Session          |
+| Precondition     | Employee must be logged, and he must have started a Discard expired Session          |
 | Post condition   | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated                |
-| Nominal Scenario | Personnel opens a new session. Expired products are scanned with barcode reader, Personnel ends the Session |
+| Nominal Scenario | Employee opens a new session. Expired products are scanned with barcode reader, Employee ends the Session |
 | Variant          | Power outage occurs during the session, rolls back to the state it was in before starting the Session       |
 | Variant 2        | Products can also be inserted by typing the barcode manually with a keyboard                                |
 
 ### Use case 8, Perform MonthlyStolenReport
 | Actors Involved  | ShopDirector                                                                                                          |
 | -------------    | -------------                                                                                                                  |
-| Precondition     | User Must be logged in as ShopDirector, and he must have clicked MonthlyStolenReport                         |
+| Precondition     | Employee Must be logged in as ShopDirector, and he must have clicked MonthlyStolenReport                         |
 | Post condition   | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, inventory is updated            |
 | Nominal Scenario | ShopDirector inserts the list of missing items, either by keyboard or by barcodeScanner, then he ends the Session              |
 | Variant 1        | MonthlyStolenReport has already been compiled for the current month => the application warns the user and stops him from compiling it |
 
 ### Use case 9, Manage sales(Perform Transactions)
-| Actors Involved  | Personnel                                                                                                                                   |
+| Actors Involved  | Employee                                                                                                                                   |
 | -------------    | -------------                                                                                                                               |
-| Precondition     | User must be logged in as Personnel, he must have an active CheckoutSession, he has started a new transaction                               |
+| Precondition     | Employee must be logged in as Cashier, he must have an active CheckoutSession, he has started a new transaction                               |
 | Post condition   | Transaction has ended, scanned products are removed from the inventory,                                                                     |
 |                  | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated                                       |
-| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Personnel ends the Transaction                                            |
+| Nominal Scenario | products are scanned with a barcode reader, buyer pays with cash, Employee ends the Transaction                                            |
 | Variant          | Products can also be inserted by typing the barcode number manually with a keyboard                                                         |
 | Variant 2        | Power outage occurs during a transaction =>  the system doesn't save any operations performed by the transaction                            |
 | Variant 3        | The customer isn't able to pay for a started transaction => cashier can undo all the changes occurred during the unfinished transaction     |
@@ -307,7 +307,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 12, Show Inventory
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | User must be logged in as ShopDirector                                                  |
+| Precondition     | Employee must be logged in as ShopDirector                                                  |
 | Post condition   | ShopDirector is able to scroll through the list of product descriptors in the Inventory |
 | Nominal Scenario | ShopDirector clicks Manage Inventory                                                    |
 |                  |                                                                                         |
@@ -316,7 +316,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 13, Show Restock Issues
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | User must be logged in as ShopDirector, he must be in manae restock issue view |
+| Precondition     | Employee must be logged in as ShopDirector, he must be in manae restock issue view |
 | Post condition   | ShopDirector is able to scroll through the list of Restock Issues                       |
 | Nominal Scenario | ShopDirector clicks Manage Restock Order, then clicks Manage Restock Issues             |
 |                  |                                                                                         |
@@ -325,16 +325,16 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ### Use Case 14, Delete Restock Issue
 | Actors Involved  | ShopDirector                                                                            |
 | -------------    | -------------                                                                           |
-| Precondition     | User Must be logged in as ShopDirector and on the Restock Issue view  |
+| Precondition     | Employee Must be logged in as ShopDirector and on the Restock Issue view  |
 | Post condition   | Restock Issue Is removed from the list                                                  |
 | Nominal Scenario | ShopDirector clicks "Delete" button on the correspoding Restock Issue                   |
 |                  |                                                                                         |
 |                  |                                                                                         |
 
 ### Use Case 15, Add new Customer
-| Actors Involved  | Personnel                                                                                                                                                                             |
+| Actors Involved  | Employee                                                                                                                                                                             |
 | -------------    | -------------                                                                                                                                                                         |
-| Precondition     | User must be logged in as Personnel, he must be in the Manage Customer Session                                                                                                        |
+| Precondition     | Employee must be logged in, he must be in the Manage Customer Session                                                                                                        |
 | Post condition   | New Customer with valid attributes has been added to the inventory                                                                                                                    |
 | Nominal Scenario | the attributes for the Customer are inserted and confirmed clicking "Register Customer"                                                                                               |
 | Variant 2        | one or more the properties inserted is outside the range of specification => issue a warning                                                                                          |
@@ -342,17 +342,17 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 | Variant 3        | the inserted Loyalty Card's Id already identifies another Customer, issue warning                                                                                                     |
 
 ### Use Case 16, Remove Customer
-| Actors Involved  | Personnel                                                                               |
+| Actors Involved  | Employee                                                                               |
 | -------------    | -------------                                                                           |
-| Precondition     | User must be logged in as Personnel, he must be in the Manage Customer Session |
+| Precondition     | Employee must be logged in as Employee, he must be in the Manage Customer Session |
 | Post condition   | Customer has been successfully removed from the inventory                               |
-| Nominal Scenario | Personnel inserts the customer's loyalty card number, then clicks Remove Customer Infos |
+| Nominal Scenario | Employee inserts the customer's loyalty card number, then clicks Remove Customer Infos |
 | Variant          | Inserted Card Id is not valid(No customer is associated to it)  => issue warning        |
 |                  |                                                                                         |
 
 
 ### Use Case 17, Update ProductDescriptor
-| Actors Involved  | Personnel                                                                                                            |
+| Actors Involved  | Employee                                                                                                            |
 | -------------    | -------------                                                                                                        |
 | Precondition     | User Must be logged in as ShopDirector, he must be in the Manage Inventory screen                                    |
 | Post condition   | One product descriptor field values has been updated                                                            |
@@ -363,41 +363,41 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 
 # Relevant scenarios
 ## Scenario 1
-| Scenario ID:   | Corresponds to UC 1 Create Personnel                                                                                |
+| Scenario ID:   | Corresponds to UC 1 Create Employee                                                                                |
 | -------------  | -------------                                                                                                                          |
-| Description    | Shopdirector wants to hire a new member of the personnel                                                            |
-| Precondition   | User is logged in as ShopDirector, in the manage personnel Screen                                                   |
-| Post condition | Personnel Account created(salary, password and personnelID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated |
+| Description    | Shopdirector wants to hire a new member of the Employee                                                            |
+| Precondition   | User is logged in as ShopDirector, in the manage Employee Screen                                                   |
+| Post condition | Employee Account created(salary, password and employeeID have been assigned to it),  totalSalaryCost in MonthlyAccounting is updated |
 | Step#          |                                                                                                                                        |
-| 1              | ShopDirector enters the attributes for the personnel member(salary, personellID and password)                                          |
+| 1              | ShopDirector enters the attributes for the Employee member(salary, personellID and password)                                          |
 | 2              | Check for the validity of the attributes(see usecase variants), if not send a warning and go to step 1                                 |
 | 3              | the salary of the employee is added to totalSalaryCost in MonthlyAccounting                                                            |
-| 4              | a new instance of Personnel is created                                                                                                 |
+| 4              | a new instance of Employee is created                                                                                                 |
 
 
 ## Scenario 2
-|   Scenario ID: | Corresponds to UC 2 Delete Personnel                                                                |
+|   Scenario ID: | Corresponds to UC 2 Delete Employee                                                                |
 |  ------------- | -------------                                                                                       |
-|    Description | Shopdirector wants to delete a member of the personnel                                              |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                    |
-| Post condition | Personnel Account does not exist anymore, totalSalaryCost has been updated                          |
+|    Description | Shopdirector wants to delete a member of the Employee                                              |
+|   Precondition | User is logged in as ShopDirector in the manage Employee Screen                                    |
+| Post condition | Employee Account does not exist anymore, totalSalaryCost has been updated                          |
 |          Step# |                                                                                                     |
-|              1 | ShopDirector inserts the personnelID of the member to remove from the system                        |
-|              2 | check for the existence of a personnel with such personnelID                                        |
-|              3 | The system displays the info about that personnel                                                   |
+|              1 | ShopDirector inserts the employeeID of the member to remove from the system                        |
+|              2 | check for the existence of a Employee with such employeeID                                        |
+|              3 | The system displays the info about that Employee                                                   |
 |              4 | ShopDirector clicks the delete button and confirms the action                                       |
-|              5 | totalSalaryCost in MonthlyAccounting is decreased by the amount of salary the deleted Personnel had |
-|              6 | the Personnel Account is Removed                                                                    |
+|              5 | totalSalaryCost in MonthlyAccounting is decreased by the amount of salary the deleted Employee had |
+|              6 | the Employee Account is Removed                                                                    |
 ## Scenario 3
 |   Scenario ID: | Corresponds to UC 3 Update Salary                                                                             |
 |  ------------- | -------------                                                                                                 |
-|    Description | Shopdirector wants to update the salary of a member of the personnel                                          |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                              |
-| Post condition | Personnel Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated       |
+|    Description | Shopdirector wants to update the salary of a member of the Employee                                          |
+|   Precondition | User is logged in as ShopDirector in the manage Employee Screen                                              |
+| Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated       |
 |          Step# |                                                                                                               |
-|              1 | ShopDirector inserts the personnelID of the member to update the salary of                                    |
-|              2 | check for the existence of a personnel with such personnelID, if not issue a warning and step back to step 1  |
-|              3 | The system displays the info about that personnel                                                             |
+|              1 | ShopDirector inserts the employeeID of the member to update the salary of                                    |
+|              2 | check for the existence of a Employee with such employeeID, if not issue a warning and step back to step 1  |
+|              3 | The system displays the info about that Employee                                                             |
 |              4 | ShopDirector clicks the Update salary button                                                                  |
 |              5 | the inserted salary is checket to be bigger than zero, if not the user is asked to insert another valid value |
 |              6 | totalSalaryCost in MonthlyAccounting is increased by the difference between the new and the old salary        |
@@ -405,22 +405,22 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 4
 |   Scenario ID: | Corresponds to UC 4 Update Password                                                                          |
 |  ------------- | -------------                                                                                                |
-|    Description | Shopdirector wants to update the password of a member of the personnel                                       |
-|   Precondition | User is logged in as ShopDirector in the manage personnel Screen                                             |
-| Post condition | Personnel Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated      |
+|    Description | Shopdirector wants to update the password of a member of the Employee                                       |
+|   Precondition | User is logged in as ShopDirector in the manage Employee Screen                                             |
+| Post condition | Employee Account's attributes have been updated, totalSalaryCost in MonthlyAccounting has been updated      |
 |          Step# |                                                                                                              |
-|              1 | ShopDirector inserts the personnelID of the member to update the password of                                 |
-|              2 | check for the existence of a personnel with such personnelID, if not issue a warning and step back to step 1 |
-|              3 | The system displays the info about that personnel                                                            |
+|              1 | ShopDirector inserts the employeeID of the member to update the password of                                 |
+|              2 | check for the existence of a Employee with such employeeID, if not issue a warning and step back to step 1 |
+|              3 | The system displays the info about that Employee                                                            |
 |              4 | ShopDirector clicks the Update Password button                                                               |
 |              5 | the inserted Password to be of sufficient length, if not the user is asked to insert another valid value     |
-|              6 | The password of that personnel account is changed                                                            |
+|              6 | The password of that Employee account is changed                                                            |
 
 
 ## Scenario 5
 |   Scenario ID: | Corresponds to UC 5 Perform RestockCheckingSession                              |
 |  ------------- | -------------                                                                   |
-|    Description | Personnel checks the new arrived products for issues and counts them            |
+|    Description | Employee checks the new arrived products for issues and counts them            |
 |   Precondition | User is logged in and he must have started a RestockCheckingSession             |
 | Post condition | the inventory is updated according to the scanned goods                         |
 |          Step# |                                                                                 |
@@ -434,7 +434,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 7
 | Scenario ID:   | Corresponds to UC 6 PerformCheckoutSession                                                                                                        |
 | -------------  | -------------                                                                                                                                     |
-| Description    | Personnel ends his work shift as cashier                                                                                                          |
+| Description    | Employee ends his work shift as cashier                                                                                                          |
 | Precondition   | User is logged in and he must have started a CheckoutSession by inputting it's starting cash amount                                               |
 | Post condition | sumTotalCheckouts in Monthly accounting is updated with the money earned by that checkoutSession                                                  |
 | Step#          |                                                                                                                                                   |
@@ -448,8 +448,8 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 8
 |   Scenario ID: | Corresponds to UC 7 Start DiscardExpiredSession                                                  |
 |  ------------- | -------------                                                                                    |
-|    Description | Personnel member wants to remove expired he has found from the inventory                         |
-|   Precondition | Personnel must be logged in, and he must have started a Discard expired Session                  |
+|    Description | Employee member wants to remove expired he has found from the inventory                         |
+|   Precondition | Employee must be logged in, and he must have started a Discard expired Session                  |
 | Post condition | Scanned products are removed from the inventory, costExpired in MonthlyAccounting is updated     |
 |          Step# |                                                                                                  |
 |              1 | "Start Scanning" button is pressed                                                               |
@@ -462,7 +462,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 9
 |   Scenario ID: | Corresponds to UC 8 Perform MonthlyStolenReport                                                                                                      |
 |  ------------- | -------------                                                                                                                                        |
-|    Description | A list of missing items has been compiled by the personnel, the shopdirector wants to update the information on the system                           |
+|    Description | A list of missing items has been compiled by the Employee, the shopdirector wants to update the information on the system                           |
 |   Precondition | User Must be logged in as ShopDirector, and he must be in the MonthlyStolenReport screen                                                             |
 | Post condition | the MonthlyStolenReport for the month is computed, costStolen in MonthlyAccounting is updated, Inventory is Updated                                  |
 |          Step# |                                                                                                                                                      |
@@ -480,7 +480,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |   Scenario ID: | Corresponds to UC 9, Manage Sales(Perform Transaction)                                                        |
 |  ------------- | -------------                                                                                                 |
 |    Description | The cashier wants to perform a transaction with a client                                                      |
-|   Precondition | User must be logged in as Personnel, he must have an active CheckoutSession, he has started a new transaction |
+|   Precondition | User must be logged in as Employee, he must have an active CheckoutSession, he has started a new transaction |
 | Post condition | Transaction has ended, scanned products are removed from the inventory,                                       |
 |                | TotalCheckout and currentCashAmount in CheckoutSession are updated, points on LoyaltyCard are updated         |
 |          Step# |                                                                                                                  |
@@ -556,7 +556,7 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 |  ------------- | -------------                                                                                                             |
 |    Description | A new Customer needs to be registered, and a LoyaltyCard must be linked to him                                            |
 |   Precondition |                                                                                                                           |
-|                | User must be logged in as Personnel, he must be in the Manage Customer Session                                            |
+|                | User must be logged in as Employee, he must be in the Manage Customer Session                                            |
 | Post condition | New Customer with valid attributes has been added to the inventory                                                        |
 |          Step# |                                                                                                                           |
 |              1 | the data associated to the customer is inserted                                                                           |
@@ -565,11 +565,11 @@ Michael's Loyalty card increases its point value at each transaction, depending 
 ## Scenario 18
 |   Scenario ID: | Corresponds to UC 16 Remove Customer                                                             |
 |  ------------- | -------------                                                                                    |
-|    Description | a memeber of the personnel wants to remove a customer from the database                          |
-|   Precondition | User must be logged in as personnel must be logged in, he must be in the Manage Customer Session |
+|    Description | a memeber of the Employee wants to remove a customer from the database                          |
+|   Precondition | User must be logged in as Employee must be logged in, he must be in the Manage Customer Session |
 | Post condition | Customer has been successfully removed from the inventory                                        |
 |          Step# |                                                                                                  |
-|              1 | Personnel inserts the customer's loyalty card number and clicks remove                           |
+|              1 | Employee inserts the customer's loyalty card number and clicks remove                           |
 |              2 | The data associated to that loyaltyCardId is removed                                             |
 
 
