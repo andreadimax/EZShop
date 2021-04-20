@@ -23,6 +23,7 @@
 | Employee or ShopDirector             | GUI               | Screen, monitor, keyboard, mouse, cash register |
 | POS System     | POS API           | Ethernet cable                                  |
 | Barcode system | Driver            | Barcode reader                                  |
+| MySQL           | MySQL Connector/J | Ethernet cable                                  |
 
 # Stories and personas
 
