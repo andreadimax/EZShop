@@ -1,10 +1,13 @@
 # Graphical User Interface Prototype  
 
-Authors:
+Authors: Alessio Bincoletto, Andrea Di Mauro, Daniele Cacciabue,
 
-Date:
+Date: 20/04/2021
 
-Version:
+Version: 1.0
 
-\<Report here the GUI that you propose. You are free to organize it as you prefer. A suggested presentation matches the Use cases and scenarios defined in the Requirement document. The GUI can be shown as a sequence of graphical files (jpg, png)  >
+The GUI can be viewed as a pdf document: [here](../files/GUI-Related%20files/EZShopGUI.pdf)
+
+As well as in its Balasmiq Project version: [here](../files/GUI-Related%20files/EZProjectGUI.bmpr)
+
 
