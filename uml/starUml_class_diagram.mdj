@@ -13246,9 +13246,9 @@
 										"$ref": "AAAAAAF47vxvFk63qg4="
 									},
 									"font": "Arial;13;0",
-									"left": 622,
+									"left": 621,
 									"top": 232,
-									"width": 5.05908203125,
+									"width": 6.5,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -17125,11 +17125,11 @@
 												"$ref": "AAAAAAF465WdlOv62XI="
 											},
 											"font": "Arial;13;1",
-											"left": 732.5,
+											"left": 736,
 											"top": 483.5,
-											"width": 101,
+											"width": 117,
 											"height": 13,
-											"text": "Add new Person"
+											"text": "Add new Customer"
 										},
 										{
 											"_type": "LabelView",
@@ -17160,9 +17160,9 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 727.5,
+									"left": 731,
 									"top": 476.5,
-									"width": 111.84814453125,
+									"width": 128.45361328125,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF465Wdlev7PJY="
@@ -17262,7 +17262,7 @@
 							"containerChangeable": true,
 							"left": 704,
 							"top": 472,
-							"width": 158,
+							"width": 181,
 							"height": 35,
 							"nameCompartment": {
 								"$ref": "AAAAAAF465WdlOv62XI="
@@ -17324,11 +17324,11 @@
 												"$ref": "AAAAAAF465cG5Ozl8u0="
 											},
 											"font": "Arial;13;1",
-											"left": 731.5,
+											"left": 735,
 											"top": 526,
-											"width": 98,
+											"width": 114,
 											"height": 13,
-											"text": "Remove Person"
+											"text": "Remove Customer"
 										},
 										{
 											"_type": "LabelView",
@@ -17359,9 +17359,9 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 726.5,
+									"left": 730,
 									"top": 519,
-									"width": 108.26171875,
+									"width": 124.8671875,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAF465cG5Ozmlf8="
@@ -17461,7 +17461,7 @@
 							"containerChangeable": true,
 							"left": 704,
 							"top": 512,
-							"width": 153,
+							"width": 176,
 							"height": 40,
 							"nameCompartment": {
 								"$ref": "AAAAAAF465cG5Ozl8u0="
@@ -17506,7 +17506,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 595,
-									"top": 484,
+									"top": 485,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -17527,7 +17527,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"left": 594,
-									"top": 469,
+									"top": 470,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -17548,7 +17548,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 598,
-									"top": 513,
+									"top": 514,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -17632,7 +17632,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 675,
-									"top": 477,
+									"top": 478,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -17652,7 +17652,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 672,
-									"top": 464,
+									"top": 465,
 									"height": 13,
 									"alpha": -0.7853981633974483,
 									"distance": 40,
@@ -17672,7 +17672,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 682,
-									"top": 504,
+									"top": 505,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -17719,7 +17719,7 @@
 								"$ref": "AAAAAAF47wA/t3n81NA="
 							},
 							"lineStyle": 1,
-							"points": "492:515;703:496",
+							"points": "492:515;703:497",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAF465c6Le7Q6CM="
@@ -22758,7 +22758,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF464LKGb9JJ1M="
 					},
-					"name": "Add new Person",
+					"name": "Add new Customer",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
@@ -22795,7 +22795,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF464LKGb9JJ1M="
 					},
-					"name": "Remove Person",
+					"name": "Remove Customer",
 					"ownedElements": [
 						{
 							"_type": "UMLAssociation",
