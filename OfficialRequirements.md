@@ -93,7 +93,7 @@ ch -> (EZShop)
 | FR1.2     | Delete a user |
 | FR1.3     |    List all users   |
 | FR1.4    |    Search a user   |
-| FR1.5  |  Manage rights. Authorize access to functions to specific actors according to access rights|
+| FR1.5  |  Manage rights. Authorize access to functions to specific actors according to access rights (?)|
 | FR3   | Manage product catalog |
 | FR3.1    | Define a new product type, or modify an existing product type|
 | FR3.2     | Delete a product type |
