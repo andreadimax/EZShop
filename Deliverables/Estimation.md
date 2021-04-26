@@ -62,12 +62,12 @@ Version:
 ### 
 |             | Estimate                        |             
 | ----------- | ------------------------------- |  
-| NC =  Estimated number of classes to be developed   |                             |             
-|  A = Estimated average size per class, in LOC       |                            | 
-| S = Estimated size of project, in LOC (= NC * A) | |
-| E = Estimated effort, in person hours (here use productivity 10 LOC per person hour)  |                                      |   
-| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro) | | 
-| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) |                    |               
+| NC =  Estimated number of classes to be developed   |   21   |             
+|  A = Estimated average size per class, in LOC       |    150  | 
+| S = Estimated size of project, in LOC (= NC * A) |  3150  |
+| E = Estimated effort, in person hours (here use productivity 10 LOC per person hour)  |     315      |   
+| C = Estimated cost, in euro (here use 1 person hour cost = 30 euro) | 9450€ | 
+| Estimated calendar time, in calendar weeks (Assume team of 4 people, 8 hours per day, 5 days per week ) |    2 calendar weekss   (10 day of active work)        |               
 # Estimate by activity decomposition
 ### 
 |         Activity name    | Estimated effort (person hours)   |             
