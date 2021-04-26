@@ -112,7 +112,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "ID",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -121,7 +121,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "date",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -130,7 +130,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "time",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -139,7 +139,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "cost",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -148,7 +148,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "paymentType",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -157,7 +157,7 @@
 								"$ref": "AAAAAAF5BD8ahZ8YsRs="
 							},
 							"name": "discount rate",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -338,7 +338,7 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "description",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -347,7 +347,7 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "sellPrice",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -356,7 +356,7 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "quantity",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -365,7 +365,7 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "discountRate",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -374,7 +374,7 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "notes",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -447,7 +447,7 @@
 								"$ref": "AAAAAAF5BESZ35+c3Fo="
 							},
 							"name": "supplier",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -456,7 +456,7 @@
 								"$ref": "AAAAAAF5BESZ35+c3Fo="
 							},
 							"name": "pricePerUnit",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -465,7 +465,7 @@
 								"$ref": "AAAAAAF5BESZ35+c3Fo="
 							},
 							"name": "quantity",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -474,7 +474,7 @@
 								"$ref": "AAAAAAF5BESZ35+c3Fo="
 							},
 							"name": "status",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -558,7 +558,7 @@
 								"$ref": "AAAAAAF5BETk55/w2SM="
 							},
 							"name": "description",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -567,7 +567,7 @@
 								"$ref": "AAAAAAF5BETk55/w2SM="
 							},
 							"name": "amount",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -576,7 +576,7 @@
 								"$ref": "AAAAAAF5BETk55/w2SM="
 							},
 							"name": "date",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -625,7 +625,7 @@
 								"$ref": "AAAAAAF5BEUKPqAasXk="
 							},
 							"name": "ID",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -634,7 +634,7 @@
 								"$ref": "AAAAAAF5BEUKPqAasXk="
 							},
 							"name": "points",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -683,7 +683,7 @@
 								"$ref": "AAAAAAF5BEUlD6BELyM="
 							},
 							"name": "name",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -692,7 +692,7 @@
 								"$ref": "AAAAAAF5BEUlD6BELyM="
 							},
 							"name": "surname",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -701,7 +701,7 @@
 								"$ref": "AAAAAAF5BEUlD6BELyM="
 							},
 							"name": "SSN",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -2176,7 +2176,7 @@
 								"$ref": "AAAAAAF5BEY+bKGVS/8="
 							},
 							"name": "quantity",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2185,7 +2185,7 @@
 								"$ref": "AAAAAAF5BEY+bKGVS/8="
 							},
 							"name": "returnedValue",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -2227,7 +2227,7 @@
 								"$ref": "AAAAAAF5BE8Ze7Mu/Ag="
 							},
 							"name": "quantity",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -2390,7 +2390,7 @@
 								"$ref": "AAAAAAF5BGrRLvchpfw="
 							},
 							"name": "id",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2399,7 +2399,7 @@
 								"$ref": "AAAAAAF5BGrRLvchpfw="
 							},
 							"name": "password",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2408,7 +2408,7 @@
 								"$ref": "AAAAAAF5BGrRLvchpfw="
 							},
 							"name": "role",
-							"type": ""
+							"visibility": "private"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -2417,7 +2417,7 @@
 								"$ref": "AAAAAAF5BGrRLvchpfw="
 							},
 							"name": "username",
-							"type": ""
+							"visibility": "private"
 						}
 					]
 				},
@@ -2638,7 +2638,7 @@
 											"top": 1326,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+ID",
+											"text": "-ID",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2655,7 +2655,7 @@
 											"top": 1341,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+date",
+											"text": "-date",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2672,7 +2672,7 @@
 											"top": 1356,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+time",
+											"text": "-time",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2689,7 +2689,7 @@
 											"top": 1371,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+cost",
+											"text": "-cost",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2706,7 +2706,7 @@
 											"top": 1386,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+paymentType",
+											"text": "-paymentType",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2723,7 +2723,7 @@
 											"top": 1401,
 											"width": 99.708984375,
 											"height": 13,
-											"text": "+discount rate",
+											"text": "-discount rate",
 											"horizontalAlignment": 0
 										}
 									],
@@ -2935,7 +2935,7 @@
 											"top": 1109,
 											"width": 152.09619140625,
 											"height": 13,
-											"text": "+description",
+											"text": "-description",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2952,7 +2952,7 @@
 											"top": 1124,
 											"width": 152.09619140625,
 											"height": 13,
-											"text": "+sellPrice",
+											"text": "-sellPrice",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2969,7 +2969,7 @@
 											"top": 1139,
 											"width": 152.09619140625,
 											"height": 13,
-											"text": "+quantity",
+											"text": "-quantity",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2986,7 +2986,7 @@
 											"top": 1154,
 											"width": 152.09619140625,
 											"height": 13,
-											"text": "+discountRate",
+											"text": "-discountRate",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3003,7 +3003,7 @@
 											"top": 1169,
 											"width": 152.09619140625,
 											"height": 13,
-											"text": "+notes",
+											"text": "-notes",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3374,7 +3374,7 @@
 											"top": 750,
 											"width": 79.1171875,
 											"height": 13,
-											"text": "+supplier",
+											"text": "-supplier",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3391,7 +3391,7 @@
 											"top": 765,
 											"width": 79.1171875,
 											"height": 13,
-											"text": "+pricePerUnit",
+											"text": "-pricePerUnit",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3408,7 +3408,7 @@
 											"top": 780,
 											"width": 79.1171875,
 											"height": 13,
-											"text": "+quantity",
+											"text": "-quantity",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3425,7 +3425,7 @@
 											"top": 795,
 											"width": 79.1171875,
 											"height": 13,
-											"text": "+status",
+											"text": "-status",
 											"horizontalAlignment": 0
 										}
 									],
@@ -3796,7 +3796,7 @@
 											"top": 326,
 											"width": 121.37353515625,
 											"height": 13,
-											"text": "+description",
+											"text": "-description",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3813,7 +3813,7 @@
 											"top": 341,
 											"width": 121.37353515625,
 											"height": 13,
-											"text": "+amount",
+											"text": "-amount",
 											"horizontalAlignment": 0
 										},
 										{
@@ -3830,7 +3830,7 @@
 											"top": 356,
 											"width": 121.37353515625,
 											"height": 13,
-											"text": "+date",
+											"text": "-date",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4025,7 +4025,7 @@
 											"top": 1230,
 											"width": 78.74267578125,
 											"height": 13,
-											"text": "+ID",
+											"text": "-ID",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4042,7 +4042,7 @@
 											"top": 1245,
 											"width": 78.74267578125,
 											"height": 13,
-											"text": "+points",
+											"text": "-points",
 											"horizontalAlignment": 0
 										}
 									],
@@ -4237,7 +4237,7 @@
 											"top": 902,
 											"width": 63.2353515625,
 											"height": 13,
-											"text": "+name",
+											"text": "-name",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4254,7 +4254,7 @@
 											"top": 917,
 											"width": 63.2353515625,
 											"height": 13,
-											"text": "+surname",
+											"text": "-surname",
 											"horizontalAlignment": 0
 										},
 										{
@@ -4271,7 +4271,7 @@
 											"top": 932,
 											"width": 63.2353515625,
 											"height": 13,
-											"text": "+SSN",
+											"text": "-SSN",
 											"horizontalAlignment": 0
 										}
 									],
@@ -6374,7 +6374,7 @@
 											"top": 1246,
 											"width": 114.8544921875,
 											"height": 13,
-											"text": "+quantity",
+											"text": "-quantity",
 											"horizontalAlignment": 0
 										},
 										{
@@ -6391,7 +6391,7 @@
 											"top": 1261,
 											"width": 114.8544921875,
 											"height": 13,
-											"text": "+returnedValue",
+											"text": "-returnedValue",
 											"horizontalAlignment": 0
 										}
 									],
@@ -8233,7 +8233,7 @@
 											"top": 1390,
 											"width": 63.2353515625,
 											"height": 13,
-											"text": "+quantity",
+											"text": "-quantity",
 											"horizontalAlignment": 0
 										}
 									],
@@ -11134,7 +11134,7 @@
 											"top": 566,
 											"width": 65.39990234375,
 											"height": 13,
-											"text": "+id",
+											"text": "-id",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11151,7 +11151,7 @@
 											"top": 581,
 											"width": 65.39990234375,
 											"height": 13,
-											"text": "+password",
+											"text": "-password",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11168,7 +11168,7 @@
 											"top": 596,
 											"width": 65.39990234375,
 											"height": 13,
-											"text": "+role",
+											"text": "-role",
 											"horizontalAlignment": 0
 										},
 										{
@@ -11185,7 +11185,7 @@
 											"top": 611,
 											"width": 65.39990234375,
 											"height": 13,
-											"text": "+username",
+											"text": "-username",
 											"horizontalAlignment": 0
 										}
 									],
