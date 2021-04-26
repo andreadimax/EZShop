@@ -72,6 +72,9 @@ Version:
 ### 
 |         Activity name    | Estimated effort (person hours)   |             
 | ----------- | ------------------------------- | 
-| | |
+| Requirements | 72 |
+| Design | 48 |
+| Coding | 95 |
+| Testing | 100 |
 ###
 Insert here Gantt chart with above activities
