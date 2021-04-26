@@ -78,3 +78,20 @@ Version:
 | Testing | 100 |
 ###
 Insert here Gantt chart with above activities
+
+```
+@startuml
+Project starts 2021-03-05
+[Requirements] lasts 3 days
+
+[Design] lasts 2 days
+[Design] starts at [Requirements]'s end
+
+[Coding] lasts 2 days
+[Coding] starts at [Design]'s end
+
+[Testing] lasts 3 days
+[Testing] starts at [Coding]'s end
+
+@enduml
+```
