@@ -83,7 +83,7 @@ Requirements: only 2 people work at the same time, since low parallel work is po
 Design: only 2 people working at the same time,  since low parallel work is possible in this phase.
 Coding and Testing: Estimation Is based on a team of 4 people working at the project 8 hours per day, 5 days per week, writing code and tests at the same time divided in 2 sub-teams of 2 persons each.
 
-```
+```plantuml
 @startgantt
 saturday are closed
 sunday are closed
