@@ -2197,7 +2197,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLXQ+LxEDg0="
 									},
-									"name": "Integer transactionId"
+									"name": "Integer transactionId",
+									"type": ""
 								}
 							]
 						},
@@ -2215,7 +2216,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLYMM72dJFM="
 									},
-									"name": "Integer transactionId"
+									"name": "Integer transactionId",
+									"type": ""
 								}
 							]
 						},
@@ -2233,7 +2235,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLaM5MBPTE8="
 									},
-									"name": "Integer transactionId"
+									"name": "Integer transactionId",
+									"type": ""
 								}
 							]
 						},
@@ -2335,7 +2338,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLd52MeycJk="
 									},
-									"name": "Integer transactionId"
+									"name": "Integer transactionId",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -2343,7 +2347,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLd52MeycJk="
 									},
-									"name": "double cash"
+									"name": "double cash",
+									"type": ""
 								}
 							]
 						},
@@ -2361,7 +2366,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLeo8sk3bEI="
 									},
-									"name": "Integer transactionId"
+									"name": "Integer transactionId",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -2369,7 +2375,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5BLeo8sk3bEI="
 									},
-									"name": "String creditCard"
+									"name": "String creditCard",
+									"type": ""
 								}
 							]
 						},
@@ -2474,14 +2481,6 @@
 								"$ref": "AAAAAAF5BEW0o6DCKrU="
 							},
 							"name": "double computeBalance"
-						},
-						{
-							"_type": "UMLOperation",
-							"_id": "AAAAAAF5EinMMAAllYo=",
-							"_parent": {
-								"$ref": "AAAAAAF5BEW0o6DCKrU="
-							},
-							"name": "Operation1"
 						}
 					]
 				},
@@ -6118,30 +6117,13 @@
 											"height": 13,
 											"text": "+double computeBalance()",
 											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLOperationView",
-											"_id": "AAAAAAF5EinMXgAo8w8=",
-											"_parent": {
-												"$ref": "AAAAAAF5BSoAiNYLmto="
-											},
-											"model": {
-												"$ref": "AAAAAAF5EinMMAAllYo="
-											},
-											"font": "Arial;13;0",
-											"left": 1434,
-											"top": 954,
-											"width": 637.72998046875,
-											"height": 13,
-											"text": "+Operation1()",
-											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1429,
 									"top": 214,
 									"width": 647.72998046875,
-									"height": 758
+									"height": 743
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
