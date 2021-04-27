@@ -73,25 +73,32 @@ Version:
 |         Activity name    | Estimated effort (person hours)   |             
 | ----------- | ------------------------------- | 
 | Requirements | 72 |
-| Design | 48 |
+| Design | 32 |
 | Coding | 95 |
 | Testing | 100 |
 ###
 Insert here Gantt chart with above activities
 
+Requirements: only 2 people work at the same time, since low parallel work is possible in this phase.
+Design: only 2 people working at the same time,  since low parallel work is possible in this phase.
+Coding and Testing: Estimation Is based on a team of 4 people working at the project 8 hours per day, 5 days per week, writing code and tests at the same time divided in 2 sub-teams of 2 persons each.
+
 ```
-@startuml
-Project starts 2021-03-05
+@startgantt
+saturday are closed
+sunday are closed
+
+Project starts 2021-03-08
 [Requirements] lasts 3 days
 
 [Design] lasts 2 days
 [Design] starts at [Requirements]'s end
 
-[Coding] lasts 2 days
+[Coding] lasts 5 days
 [Coding] starts at [Design]'s end
 
-[Testing] lasts 3 days
-[Testing] starts at [Coding]'s end
+[Testing] lasts 5 days
+[Testing] starts at [Design]'s end
 
-@enduml
+@endgantt
 ```
