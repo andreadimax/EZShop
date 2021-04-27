@@ -57,7 +57,10 @@ Version:
 - [Estimate by product decomposition]
 - [Estimate by activity decomposition ]
 # Estimation approach
-<Consider the EZGas  project as described in YOUR requirement document, assume that you are going to develop the project INDEPENDENT of the deadlines of the course>
+Estimation is based on our EZShop Project, considering a team of 4 people working 8h per day, 5 days per week.
+Estimation by product decomposition gives an estimation result 30% lower in terms of active days of work if compared to the estimation by activity decomposition visualized as a gantt chart.
+This is due to the fact that estimation by product decomposition, computing the calendar time, doesn't take into  account the impossibility to parallelize some phases of the work such as creating Requirement documents and Design.
+therefore estimation by product decomposition might be better to estimate the size of the final product to deliver while by activity decomposition is better to estimate calendar time and Person Hours.
 # Estimate by product decomposition
 ### 
 |             | Estimate                        |             
@@ -77,11 +80,6 @@ Version:
 | Coding | 80 |
 | Testing | 80 |
 ###
-Insert here Gantt chart with above activities
-
-Requirements: only 2 people work at the same time, since low parallel work is possible in this phase.
-Design: only 2 people working at the same time,  since low parallel work is possible in this phase.
-Coding and Testing: Estimation Is based on a team of 4 people working at the project 8 hours per day, 5 days per week, writing code and tests at the same time divided in 2 sub-teams of 2 persons each.
 
 ```plantuml
 @startgantt
@@ -102,3 +100,7 @@ Project starts 2021-03-08
 
 @endgantt
 ```
+
+**Requirements**: only 2 people work at the same time, since low parallel work is possible in this phase.\
+**Design**: only 2 people working at the same time,  since low parallel work is possible in this phase.\
+**Coding and Testing**: Estimation Is based on a team of 4 people working at the project 8 hours per day, 5 days per week, writing code and tests at the same time divided in 2 sub-teams of 2 persons each.
