@@ -50,9 +50,9 @@
 50
 51
 # Project Estimation  
-Authors:
-Date:
-Version:
+Authors: Team 15 - Alessio Bincoletto, Andrea Di Mauro, Daniele Cacciabue \
+Date: 27/04/2021 \
+Version: 1.0
 # Contents
 - [Estimate by product decomposition]
 - [Estimate by activity decomposition ]
