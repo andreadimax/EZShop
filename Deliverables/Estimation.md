@@ -74,8 +74,8 @@ Version:
 | ----------- | ------------------------------- | 
 | Requirements | 72 |
 | Design | 32 |
-| Coding | 95 |
-| Testing | 100 |
+| Coding | 80 |
+| Testing | 80 |
 ###
 Insert here Gantt chart with above activities
 
@@ -89,15 +89,15 @@ saturday are closed
 sunday are closed
 
 Project starts 2021-03-08
-[Requirements] lasts 3 days
+[Requirements] lasts 5 days
 
-[Design] lasts 2 days
+[Design] lasts 2     days
 [Design] starts at [Requirements]'s end
 
-[Coding] lasts 5 days
+[Coding] lasts 6 days
 [Coding] starts at [Design]'s end
 
-[Testing] lasts 5 days
+[Testing] lasts 6 days
 [Testing] starts at [Design]'s end
 
 @endgantt
