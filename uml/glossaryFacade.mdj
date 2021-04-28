@@ -551,7 +551,8 @@
 								"$ref": "AAAAAAF5BERgyp9IBgc="
 							},
 							"name": "Integer availableQty",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -15620,7 +15621,7 @@
 											"top": 850,
 											"width": 637.72998046875,
 											"height": 13,
-											"text": "+boolean deleteProductFromSale(Integer transactionId, String productCode, int amount)",
+											"text": "+Integer startSaleTransaction()",
 											"horizontalAlignment": 0
 										},
 										{
@@ -18971,36 +18972,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF5GGfkRg9ysNs="
 							},
-							"name": "boolean deleteProductFromSale",
-							"parameters": [
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF5GNa9fdlruZM=",
-									"_parent": {
-										"$ref": "AAAAAAF5GNazndjLuoU="
-									},
-									"name": "Integer transactionId",
-									"type": ""
-								},
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF5GNa9fdlszwg=",
-									"_parent": {
-										"$ref": "AAAAAAF5GNazndjLuoU="
-									},
-									"name": "String productCode",
-									"type": ""
-								},
-								{
-									"_type": "UMLParameter",
-									"_id": "AAAAAAF5GNa9fdltkhw=",
-									"_parent": {
-										"$ref": "AAAAAAF5GNazndjLuoU="
-									},
-									"name": "int amount",
-									"type": ""
-								}
-							]
+							"name": "Integer startSaleTransaction"
 						},
 						{
 							"_type": "UMLOperation",
