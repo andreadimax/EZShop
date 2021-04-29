@@ -12786,19 +12786,6 @@
 							}
 						},
 						{
-							"_type": "UMLNoteView",
-							"_id": "AAAAAAF5EgHS3otxKVo=",
-							"_parent": {
-								"$ref": "AAAAAAF5BSloxK6luAM="
-							},
-							"font": "Arial;13;0",
-							"left": 1632,
-							"top": 648,
-							"width": 209,
-							"height": 40,
-							"text": "HashMap<Integer, FinancialTransaction>"
-						},
-						{
 							"_type": "UMLNoteLinkView",
 							"_id": "AAAAAAF5EgN9to9n5aY=",
 							"_parent": {
@@ -15126,22 +15113,6 @@
 							"headQualifiersCompartment": {
 								"$ref": "AAAAAAF5GMQDnj/oF0k="
 							}
-						},
-						{
-							"_type": "UMLNoteLinkView",
-							"_id": "AAAAAAF5GMRTCEEMnYA=",
-							"_parent": {
-								"$ref": "AAAAAAF5BSloxK6luAM="
-							},
-							"font": "Arial;13;0",
-							"head": {
-								"$ref": "AAAAAAF5GMQDnD/ds4Y="
-							},
-							"tail": {
-								"$ref": "AAAAAAF5EgHS3otxKVo="
-							},
-							"lineStyle": 1,
-							"points": "1746:688;1760:720"
 						},
 						{
 							"_type": "UMLNoteView",
