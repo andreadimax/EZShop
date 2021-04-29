@@ -974,7 +974,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF5BDvWQZ6Vass="
 					},
-					"name": "FinancialTrasaction",
+					"name": "BalanceOperation",
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
@@ -8231,7 +8231,7 @@
 											"top": 383,
 											"width": 121.37353515625,
 											"height": 13,
-											"text": "FinancialTrasaction"
+											"text": "BalanceOperation"
 										},
 										{
 											"_type": "LabelView",
