@@ -15049,7 +15049,7 @@
 											"top": 454,
 											"width": 268.82958984375,
 											"height": 13,
-											"text": "+balance",
+											"text": "+double balance",
 											"horizontalAlignment": 0
 										}
 									],
@@ -19082,8 +19082,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF5H5wXsIG5Ju0="
 							},
-							"name": "balance",
-							"type": ""
+							"name": "double balance"
 						}
 					],
 					"operations": [
