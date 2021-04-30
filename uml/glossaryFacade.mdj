@@ -570,8 +570,8 @@
 									"_parent": {
 										"$ref": "AAAAAAF5DS+pcYtaYGQ="
 									},
-									"name": "toBeAdded",
-									"type": "integer"
+									"name": "Integer",
+									"type": "amount"
 								}
 							]
 						}
@@ -7688,7 +7688,7 @@
 											"top": 992,
 											"width": 268.49951171875,
 											"height": 13,
-											"text": "+boolean changeQuantity(toBeAdded: integer)",
+											"text": "+boolean changeQuantity(Integer: amount)",
 											"horizontalAlignment": 0
 										}
 									],
