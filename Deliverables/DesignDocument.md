@@ -103,7 +103,7 @@ Some scenarios among Use Cases 1 - 2 - 3 - 6 have been selected as key scenarios
 
 <img src="../pictures/uc3.jpg">
 
-### UC&
+### UC6
 
 <img src="../pictures/uc6.png">
 
