@@ -17597,8 +17597,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF5GM0+fY1aqiM="
 									},
-									"name": "Integer id",
-									"type": ""
+									"name": "Integer id"
 								},
 								{
 									"_type": "UMLParameter",
@@ -17606,8 +17605,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF5GM0+fY1aqiM="
 									},
-									"name": "String newDescription",
-									"type": ""
+									"name": "String newDescription"
 								},
 								{
 									"_type": "UMLParameter",
@@ -17615,8 +17613,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF5GM0+fY1aqiM="
 									},
-									"name": "String newCode",
-									"type": ""
+									"name": "String newCode"
 								},
 								{
 									"_type": "UMLParameter",
@@ -17624,8 +17621,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF5GM0+fY1aqiM="
 									},
-									"name": "double newPrice",
-									"type": ""
+									"name": "double newPrice"
 								},
 								{
 									"_type": "UMLParameter",
@@ -17633,8 +17629,7 @@
 									"_parent": {
 										"$ref": "AAAAAAF5GM0+fY1aqiM="
 									},
-									"name": "String newNote",
-									"type": ""
+									"name": "String newNote"
 								}
 							]
 						},
