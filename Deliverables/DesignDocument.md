@@ -24,8 +24,7 @@ The design must satisfy the Official Requirements document, notably functional a
 
 # High level design 
 
-<discuss architectural styles used, if any>
-<report package diagram>
+Architectural pattern: 3 tier layer with Model View Controller
 
 
 
