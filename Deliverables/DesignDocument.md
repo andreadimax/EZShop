@@ -1,11 +1,11 @@
 # Design Document 
 
 
-Authors: 
+Authors: Andrea Di Mauro, Alessio Bincoletto, Daniele Cacciabue (Team 15)
 
-Date:
+Date: 30/05/2021
 
-Version:
+Version: 1.0
 
 
 # Contents
@@ -26,26 +26,13 @@ The design must satisfy the Official Requirements document, notably functional a
 
 Architectural pattern: 3 tier layer with Model View Controller
 
-
-
-
-
-
 # Low level design
 
-<for each package, report class diagram>
-
-
-
-
-
-
-
+<img src="../pictures/low_level_design.jpg">
 
 
 # Verification traceability matrix
 
-\<for each functional requirement from the requirement document, list which classes concur to implement it>
 
 |        | shop  | AccountBook | BalanceOperation | User  | Order | ProductType | Position | ReturnTransaction | CreditCardSystem | SaleTransaction | LoyaltyCard | Customer |
 | :----: | :---: | :---------: | :--------------: | :---: | :---: | :---------: | :------: | :---------------: | :--------------: | :-------------: | :---------: | :------: |
@@ -101,13 +88,22 @@ Architectural pattern: 3 tier layer with Model View Controller
 | FR8.4  |   x   |      x      |                  |       |       |             |          |                   |                  |                 |             |          |
 
 
-
-
-
-
-
-
-
 # Verification sequence diagrams 
-\<select key scenarios from the requirement document. For each of them define a sequence diagram showing that the scenario can be implemented by the classes and methods in the design>
+Some scenarios among Use Cases 1 - 2 - 3 - 6 have been selected as key scenarios
+
+### UC1
+
+<img src="../pictures/uc1.png">
+
+### UC2
+
+<img src="../pictures/uc2.png">
+
+### UC3
+
+<img src="../pictures/uc3.jpg">
+
+### UC&
+
+<img src="../pictures/uc6.png">
 
