@@ -15746,7 +15746,7 @@
 							"top": 256,
 							"width": 209,
 							"height": 40,
-							"text": "HashMap<int, LoyaltyCard>"
+							"text": "HashMap<Integer, LoyaltyCard>"
 						},
 						{
 							"_type": "UMLNoteLinkView",
