@@ -8,6 +8,14 @@ import java.util.List;
 
 public class EZShop implements EZShopInterface {
 
+    private UsersData usersData;
+    private Integer usersCount;
+    private User userLogged;
+
+    public EZShop(){
+        usersData = new UsersData();
+        usersCount = 0;
+    }
 
     @Override
     public void reset() {
@@ -16,37 +24,95 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createUser(String username, String password, String role) throws InvalidUsernameException, InvalidPasswordException, InvalidRoleException {
-        return null;
+        if(password == null | password == ""){
+            throw new InvalidPasswordException("Invalid password");
+        }
+
+        if(role == null |( role != "Administrator" & role != "Cashier" & role != "ShopManager")){
+            throw new InvalidRoleException("Invalid role");
+        }
+
+
+        User user = new UserImplementation(usersCount++, username, password, role);
+        if(!usersData.addUser(user)){
+            throw new InvalidUsernameException("User already present");
+        };
+        return user.getId();
     }
 
     @Override
     public boolean deleteUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        return false;
+        if(userLogged == null | userLogged.getRole() != "Administrator"){
+            throw new UnauthorizedException();
+        }
+
+        if(!usersData.removeUser(id)){
+            throw new InvalidUserIdException();
+        }
+        return true;
     }
 
     @Override
     public List<User> getAllUsers() throws UnauthorizedException {
-        return null;
+        if(userLogged == null | userLogged.getRole() != "Administrator"){
+            throw new UnauthorizedException();
+        }
+
+        return usersData.getUserslist();
     }
 
     @Override
     public User getUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        return null;
+        if(userLogged == null | userLogged.getRole() != "Administrator"){
+            throw new UnauthorizedException();
+        }
+
+        User user;
+        if((user = usersData.getUser(id)) != null ){
+            return user;
+        }
+        else{
+            throw new InvalidUserIdException();
+        }
     }
 
     @Override
     public boolean updateUserRights(Integer id, String role) throws InvalidUserIdException, InvalidRoleException, UnauthorizedException {
-        return false;
+        if(userLogged == null | userLogged.getRole() != "Administrator"){
+            throw new UnauthorizedException();
+        }
+
+        if(role == null |( role != "Administrator" & role != "Cashier" & role != "ShopManager")){
+            throw new InvalidRoleException("Invalid role");
+        }
+        User user;
+        if((user = usersData.getUser(id)) != null ){
+            user.setRole(role);
+            return true;
+        }
+        else{
+            throw new InvalidUserIdException();
+        }
     }
 
     @Override
     public User login(String username, String password) throws InvalidUsernameException, InvalidPasswordException {
-        return null;
+        if(username == null | username == ""){
+            throw new InvalidUsernameException();
+        }
+        if(!usersData.searchForLogin(username, password)){
+            throw new InvalidPasswordException("Username or password wrong");
+        }
+
+        this.userLogged = usersData.getUser(username);
+
+        return userLogged;
     }
 
     @Override
     public boolean logout() {
-        return false;
+        userLogged = null;
+        return true;
     }
 
     @Override
