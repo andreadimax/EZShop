@@ -59,7 +59,8 @@ public class UsersData {
     public void parseUserObject(JSONObject user){
 
         //Get employee first name
-        Integer id = (Integer) user.get("id");
+        String ID =  (String) user.get("id");
+        Integer id = Integer.parseInt((ID));
 
         //Get employee last name
         String username = (String) user.get("username");
@@ -112,7 +113,7 @@ public class UsersData {
         this.users_data.put(user.getId(), user);
 
         JSONObject userDetails = new JSONObject();
-        userDetails.put("id", user.getId());
+        userDetails.put("id", user.getId().toString());
         userDetails.put("username", user.getUsername());
         userDetails.put("password", user.getPassword());
         userDetails.put("role", user.getRole());
