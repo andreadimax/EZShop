@@ -61,6 +61,7 @@ public class UsersData {
         //Get employee first name
         String ID =  (String) user.get("id");
         Integer id = Integer.parseInt((ID));
+        System.out.println("ciao andre");
 
         //Get employee last name
         String username = (String) user.get("username");
