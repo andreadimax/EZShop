@@ -1,8 +1,17 @@
 package it.polito.ezshop.data;
 
 import it.polito.ezshop.exceptions.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -11,10 +20,106 @@ public class EZShop implements EZShopInterface {
     private UsersData usersData;
     private Integer usersCount;
     private User userLogged;
+    private HashMap<Integer, ProductType> productMap;
+    private HashMap <String,Position> positionMap;
+    private FileReader productsFile;
+    private FileReader positionsFile;
 
     public EZShop(){
         usersData = new UsersData();
         usersCount = 0;
+
+        initializeProductTypes();
+        initializePositions();
+
+    }
+
+    //  INITIALIZATION FOR PRODUCT TYPES
+    private void initializeProductTypes(){
+        // Loading Products
+        JSONParser parser = new JSONParser();
+        this.productMap = new HashMap<Integer,ProductType>();
+        try {
+            this.productsFile = new FileReader("src/main/persistent_data/productTypes.json");
+        }
+        catch (FileNotFoundException f){
+            f.printStackTrace();
+        }
+
+        try
+        {
+            //Read JSON file
+
+            JSONArray jArray = (JSONArray) parser.parse(this.productsFile);
+
+            jArray.forEach( x -> parseProductTypeObject( (JSONObject) x ) );
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    public void parseProductTypeObject(JSONObject productType){
+        //Get ProductID
+        Integer id = Integer.parseInt((String) productType.get("id"));
+        // Get Barcode
+        String barCode = (String) productType.get("barCode");
+        //Get ProductDescription
+        String description = (String) productType.get("description");
+        //Get sellPrice
+        Double sellPrice = Double.parseDouble((String) productType.get("sellPrice"));
+        // Get discountRate
+        Double discountRate = Double.parseDouble((String) productType.get("discountRate"));
+        // Get notes
+        String notes = (String) productType.get("notes");
+        // Get availableQty
+        Integer availableQty = Integer.parseInt((String) productType.get("availableQty"));
+
+        ProductType newProduct = new ProductTypeImplementation(barCode,description,sellPrice,discountRate,notes,availableQty);
+        this.productMap.put(id, newProduct);
+    }
+
+    ///       INITIALIZATION OF POSITIONS
+    private void initializePositions(){
+        // Loading Products
+        JSONParser parser = new JSONParser();
+        this.positionMap = new HashMap<String,Position>();
+        try {
+            this.positionsFile = new FileReader("src/main/persistent_data/positions.json");
+        }
+        catch (FileNotFoundException f){
+            f.printStackTrace();
+        }
+
+        try
+        {
+            //Read JSON file
+            Object obj = parser.parse(this.positionsFile);
+
+            JSONArray jArray = (JSONArray) obj;
+
+            jArray.forEach( x -> parsePositionObject( (JSONObject) x ) );
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+    public void parsePositionObject(JSONObject pos){
+        //Get positionName
+        String position = (String) pos.get("position");
+        //Get productId associated
+        String productId = (String) pos.get("productID");
+
+        ProductType p = productMap.get(productId);
+        Position newPos = new Position(position, p);
+        this.positionMap.put(position, newPos);
     }
 
     @Override

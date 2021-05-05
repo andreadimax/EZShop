@@ -59,9 +59,7 @@ public class UsersData {
     public void parseUserObject(JSONObject user){
 
         //Get employee first name
-        String ID =  (String) user.get("id");
-        Integer id = Integer.parseInt((ID));
-        System.out.println("ciao andre");
+        Integer id = Integer.parseInt((String) user.get("id"));
 
         //Get employee last name
         String username = (String) user.get("username");
