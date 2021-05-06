@@ -80,6 +80,8 @@ public class EZShop implements EZShopInterface {
 
         ProductType newProduct = new ProductTypeImplementation(barCode,description,sellPrice,discountRate,notes,availableQty);
         this.productMap.put(id, newProduct);
+        System.out.println(discountRate);
+
     }
 
     ///       INITIALIZATION OF POSITIONS
@@ -222,6 +224,9 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
+        //check user privilegies
+        Integer productID;
+
         return null;
     }
 
