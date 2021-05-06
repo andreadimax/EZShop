@@ -15,32 +15,47 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+
 public class EZShop implements EZShopInterface {
 
     private UsersData usersData;
     private Integer usersCount;
     private User userLogged;
-    private HashMap<Integer, ProductType> productMap;
-    private HashMap <String,Position> positionMap;
+    private HashMap<Integer, ProductType> productMap = new HashMap<Integer,ProductType>();
+    private HashMap <String,Position> positionMap = new HashMap<String,Position>();
     private FileReader productsFile;
     private FileReader positionsFile;
+
+    //Inner Class
+    private class Init{
+        String filename;
+        HashMap map;
+        FileReader file;
+        String type;
+
+        public Init(String filename, HashMap map, String type) {
+            this.filename = filename;
+            this.map = map;
+            this.type=type;
+        }
+    }
 
     public EZShop(){
         usersData = new UsersData();
         usersCount = 0;
 
-        initializeProductTypes();
-        initializePositions();
+        initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
+        initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
+
 
     }
 
     //  INITIALIZATION FOR PRODUCT TYPES
-    private void initializeProductTypes(){
+    private void initializeMap(Init i){
         // Loading Products
         JSONParser parser = new JSONParser();
-        this.productMap = new HashMap<Integer,ProductType>();
         try {
-            this.productsFile = new FileReader("src/main/persistent_data/productTypes.json");
+            i.file = new FileReader(i.filename);
         }
         catch (FileNotFoundException f){
             f.printStackTrace();
@@ -50,60 +65,9 @@ public class EZShop implements EZShopInterface {
         {
             //Read JSON file
 
-            JSONArray jArray = (JSONArray) parser.parse(this.productsFile);
+            JSONArray jArray = (JSONArray) parser.parse(i.file);
 
-            jArray.forEach( x -> parseProductTypeObject( (JSONObject) x ) );
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-    public void parseProductTypeObject(JSONObject productType){
-        //Get ProductID
-        Integer id = Integer.parseInt((String) productType.get("id"));
-        // Get Barcode
-        String barCode = (String) productType.get("barCode");
-        //Get ProductDescription
-        String description = (String) productType.get("description");
-        //Get sellPrice
-        Double sellPrice = Double.parseDouble((String) productType.get("sellPrice"));
-        // Get discountRate
-        Double discountRate = Double.parseDouble((String) productType.get("discountRate"));
-        // Get notes
-        String notes = (String) productType.get("notes");
-        // Get availableQty
-        Integer availableQty = Integer.parseInt((String) productType.get("availableQty"));
-
-        ProductType newProduct = new ProductTypeImplementation(barCode,description,sellPrice,discountRate,notes,availableQty);
-        this.productMap.put(id, newProduct);
-        System.out.println(discountRate);
-
-    }
-
-    ///       INITIALIZATION OF POSITIONS
-    private void initializePositions(){
-        // Loading Products
-        JSONParser parser = new JSONParser();
-        this.positionMap = new HashMap<String,Position>();
-        try {
-            this.positionsFile = new FileReader("src/main/persistent_data/positions.json");
-        }
-        catch (FileNotFoundException f){
-            f.printStackTrace();
-        }
-
-        try
-        {
-            //Read JSON file
-            Object obj = parser.parse(this.positionsFile);
-
-            JSONArray jArray = (JSONArray) obj;
-
-            jArray.forEach( x -> parsePositionObject( (JSONObject) x ) );
+            jArray.forEach( x -> parseObjectType( (JSONObject) x, i.type ) );
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -113,15 +77,45 @@ public class EZShop implements EZShopInterface {
             e.printStackTrace();
         }
     }
+
+
+    public void parseObjectType(JSONObject obj, String type){
+        if(type.equals("product")){
+            //Get ProductID
+            Integer id = Integer.parseInt((String) obj.get("id"));
+            // Get Barcode
+            String barCode = (String) obj.get("barCode");
+            //Get ProductDescription
+            String description = (String) obj.get("description");
+            //Get sellPrice
+            double sellPrice = Double.parseDouble((String) obj.get("sellPrice"));
+            // Get discountRate
+            double discountRate = Double.parseDouble((String) obj.get("discountRate"));
+            // Get notes
+            String notes = (String) obj.get("notes");
+            // Get availableQty
+            Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
+
+            ProductType newProduct = new ProductTypeImplementation(barCode,description,sellPrice,discountRate,notes,availableQty);
+            this.productMap.put(id, newProduct);
+        }
+        else if(type.equals("position")){
+            //Get positionName
+            String position = (String) obj.get("position");
+            //Get productId associated
+            Integer productId = (Integer) obj.get("productID");
+            //Fetch Product
+            ProductType p = productMap.get(productId);
+            //instantiate position
+            Position newPos = new Position(position, p);
+            this.positionMap.put(position, newPos);
+        }
+
+
+    }
+
     public void parsePositionObject(JSONObject pos){
-        //Get positionName
-        String position = (String) pos.get("position");
-        //Get productId associated
-        String productId = (String) pos.get("productID");
 
-        ProductType p = productMap.get(productId);
-        Position newPos = new Position(position, p);
-        this.positionMap.put(position, newPos);
     }
 
     @Override
@@ -131,7 +125,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createUser(String username, String password, String role) throws InvalidUsernameException, InvalidPasswordException, InvalidRoleException {
-        if(password == null | password == ""){
+        if(password == null | "".equals(password)){
             throw new InvalidPasswordException("Invalid password");
         }
 
