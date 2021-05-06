@@ -20,11 +20,12 @@ public class EZShop implements EZShopInterface {
 
     private UsersData usersData;
     private Integer usersCount;
-    private User userLogged;
-    private HashMap<Integer, ProductType> productMap = new HashMap<Integer,ProductType>();
-    private HashMap <String,Position> positionMap = new HashMap<String,Position>();
+    private User userLogged = null;
+    private HashMap<Integer, ProductType> productMap = new HashMap<>();
+    private HashMap <String,Position> positionMap = new HashMap<>();
     private FileReader productsFile;
     private FileReader positionsFile;
+    private AccountBook accountBook = new AccountBook();
 
     //Inner Class
     private class Init{
@@ -129,7 +130,7 @@ public class EZShop implements EZShopInterface {
             throw new InvalidPasswordException("Invalid password");
         }
 
-        if(role == null |( role != "Administrator" & role != "Cashier" & role != "ShopManager")){
+        if(role == null || ( !role.equals("Administrator") && !role.equals("Cashier") && !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
 
@@ -137,13 +138,13 @@ public class EZShop implements EZShopInterface {
         User user = new UserImplementation(usersCount++, username, password, role);
         if(!usersData.addUser(user)){
             throw new InvalidUsernameException("User already present");
-        };
+        }
         return user.getId();
     }
 
     @Override
     public boolean deleteUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        if(userLogged == null | userLogged.getRole() != "Administrator"){
+        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
@@ -155,7 +156,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<User> getAllUsers() throws UnauthorizedException {
-        if(userLogged == null | userLogged.getRole() != "Administrator"){
+        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
@@ -164,7 +165,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public User getUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        if(userLogged == null | userLogged.getRole() != "Administrator"){
+        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
@@ -179,11 +180,11 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean updateUserRights(Integer id, String role) throws InvalidUserIdException, InvalidRoleException, UnauthorizedException {
-        if(userLogged == null | userLogged.getRole() != "Administrator"){
+        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
-        if(role == null |( role != "Administrator" & role != "Cashier" & role != "ShopManager")){
+        if(role == null |( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
         User user;
@@ -198,7 +199,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public User login(String username, String password) throws InvalidUsernameException, InvalidPasswordException {
-        if(username == null | username == ""){
+        if(username == null || !username.equals("")){
             throw new InvalidUsernameException();
         }
         if(!usersData.searchForLogin(username, password)){
@@ -261,7 +262,21 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer issueOrder(String productCode, int quantity, double pricePerUnit) throws InvalidProductCodeException, InvalidQuantityException, InvalidPricePerUnitException, UnauthorizedException {
-        return null;
+        //Exception checks
+        if( productCode == null || productCode.equals("")){throw new InvalidProductCodeException();}
+        if( quantity <= 0 ){throw new InvalidQuantityException();}
+        if( pricePerUnit <= 0 ){throw new InvalidPricePerUnitException();}
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && this.userLogged.getRole().equals("ShopManager"))
+            ){throw new UnauthorizedException();}
+
+        //return -1 if product doesn't exist
+        if(this.getProductTypeByBarCode(productCode) == null){
+            return -1;
+        }
+        //otherwise finally generates the order in "issued" state
+        Order order = new OrderImpl(productCode,quantity,pricePerUnit);
+        //this.accountBook.addOperation(Order); <-- uncomment when Order will extend BalanceOperation
+        return order.getOrderId();
     }
 
     @Override

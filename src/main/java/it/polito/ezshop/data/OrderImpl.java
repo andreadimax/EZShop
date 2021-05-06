@@ -6,6 +6,7 @@ import java.time.LocalDate;
 public class OrderImpl implements Order {
 
     //Attributes that should inherit from BalanceOperation:
+    private static int balanceCounter = 0;
     private int balanceId;
     private String description;
     private double money;
@@ -20,10 +21,11 @@ public class OrderImpl implements Order {
 
     public OrderImpl(String productCode, int quantity, double pricePerUnit){
         //should be set from super constructor of BalanceOperation...
+        balanceCounter++;
+        this.balanceId = balanceCounter;
         this.description = "";
         this.money = 0;
         this.date = LocalDate.now();
-        this.balanceId = 0;
 
         //setting proper of this class
         this.productCode = productCode;

@@ -14,11 +14,11 @@ public class BalanceOperationImpl implements BalanceOperation {
     protected LocalDate date;
 
     public BalanceOperationImpl(){
+        balanceCounter++;
         this.balanceId = balanceCounter;
         this.description = "";
         this.money = 0;
         this.date = LocalDate.now();
-        balanceCounter++;
     }
 
     /**
