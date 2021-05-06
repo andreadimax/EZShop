@@ -103,7 +103,7 @@ public class EZShop implements EZShopInterface {
             //Get positionName
             String position = (String) obj.get("position");
             //Get productId associated
-            Integer productId = (Integer) obj.get("productID");
+            Integer productId = Integer.parseInt( (String) obj.get("productID"));
             //Fetch Product
             ProductType p = productMap.get(productId);
             //instantiate position
