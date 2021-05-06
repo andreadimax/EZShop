@@ -47,6 +47,10 @@ public class AccountBook {
         this.balance += amount;
     }
 
+    public double getBalance(){
+        return this.balance;
+    }
+
 
 
 }

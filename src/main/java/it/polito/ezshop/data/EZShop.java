@@ -115,9 +115,6 @@ public class EZShop implements EZShopInterface {
 
     }
 
-    public void parsePositionObject(JSONObject pos){
-
-    }
 
     @Override
     public void reset() {
@@ -219,7 +216,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
-        //check user privilegies
+        //check user privileges
         Integer productID;
 
         return null;
@@ -266,7 +263,7 @@ public class EZShop implements EZShopInterface {
         if( productCode == null || productCode.equals("")){throw new InvalidProductCodeException();}
         if( quantity <= 0 ){throw new InvalidQuantityException();}
         if( pricePerUnit <= 0 ){throw new InvalidPricePerUnitException();}
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && this.userLogged.getRole().equals("ShopManager"))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
             ){throw new UnauthorizedException();}
 
         //return -1 if product doesn't exist
@@ -275,18 +272,50 @@ public class EZShop implements EZShopInterface {
         }
         //otherwise finally generates the order in "issued" state
         Order order = new OrderImpl(productCode,quantity,pricePerUnit);
-        //this.accountBook.addOperation(Order); <-- uncomment when Order will extend BalanceOperation
+        //this.accountBook.addOperation(Order); //@todo <-- uncomment when Order will extend BalanceOperation
         return order.getOrderId();
     }
 
     @Override
     public Integer payOrderFor(String productCode, int quantity, double pricePerUnit) throws InvalidProductCodeException, InvalidQuantityException, InvalidPricePerUnitException, UnauthorizedException {
-        return null;
+        int orderId = issueOrder(productCode, quantity, pricePerUnit);
+        if( orderId == -1){ return -1; }
+
+        //check for the order existence
+        if( !(this.accountBook.getOperation(orderId) instanceof Order) ){return -1;}
+
+        Order order = (Order) this.accountBook.getOperation(orderId);
+
+        //check if the balance is enough to pay the order
+        double moneyToPay = order.getPricePerUnit() * order.getQuantity();
+        if(accountBook.getBalance() - moneyToPay < 0){ return -1; }
+
+        //if it is enough, change status and change balance
+        accountBook.changeBalance(-moneyToPay);
+        order.setStatus("PAYED");
+        return orderId;
     }
 
     @Override
     public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
+        ){throw new UnauthorizedException();}
+
+        //check for the order existence
+        if( !(this.accountBook.getOperation(orderId) instanceof Order) ){return false;}
+
+        Order order = (Order) this.accountBook.getOperation(orderId);
+        if( order.getStatus().equals("PAYED") ){ return false; }
+
+        //i check if the balance is enough to pay the order
+        double moneyToPay = order.getPricePerUnit() * order.getQuantity();
+        if(accountBook.getBalance() - moneyToPay < 0){ return false; }
+        //if it is enough, change status and change balance
+        accountBook.changeBalance(-moneyToPay);
+        order.setStatus("PAYED");
+        return true;
     }
 
     @Override
