@@ -8,18 +8,29 @@ public class BalanceOperationImpl implements BalanceOperation {
     private static int balanceCounter = 0;
 
     //class attributes
-    private int balanceId;
-    private String description;
-    private double amount;
-    private LocalDate date;
+    protected int balanceId;
+    protected String description;
+    protected double money;
+    protected LocalDate date;
 
-    public BalanceOperationImpl(int balanceId, String description, double amount, LocalDate date){
-        this.balanceId = balanceId;
-        this.description = description;
-        this.amount = amount;
-        this.date = date;
+    public BalanceOperationImpl(){
+        this.balanceId = balanceCounter;
+        this.description = "";
+        this.money = 0;
+        this.date = LocalDate.now();
         balanceCounter++;
     }
+
+    /**
+     * possible constructor overloading:
+     *
+    public BalanceOperationImpl(int balanceId, String description, double money, LocalDate date){
+        this.balanceId = balanceId;
+        this.description = description;
+        this.money = money;
+        this.date = date;
+        balanceCounter++;
+    }**/
 
     @Override
     public int getBalanceId() {
@@ -43,12 +54,12 @@ public class BalanceOperationImpl implements BalanceOperation {
 
     @Override
     public double getMoney() {
-        return amount;
+        return money;
     }
 
     @Override
     public void setMoney(double money) {
-        this.amount = money;
+        this.money = money;
     }
 
     @Override
