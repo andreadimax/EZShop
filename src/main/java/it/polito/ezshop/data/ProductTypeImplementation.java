@@ -7,6 +7,7 @@ public class ProductTypeImplementation implements ProductType {
     private double discountRate;
     private String notes;
     private Integer availableQty;
+    private String location;
 
     //Constructor
     public ProductTypeImplementation(String barCode, String description, double sellPrice, double discountRate, String notes, Integer availableQty) {
@@ -39,12 +40,12 @@ public class ProductTypeImplementation implements ProductType {
 
     @Override
     public String getLocation() {
-        return null;
+        return this.location;
     }
 
     @Override
     public void setLocation(String location) {
-
+        this.location = location;
     }
 
     @Override

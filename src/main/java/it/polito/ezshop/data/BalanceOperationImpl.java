@@ -21,17 +21,6 @@ public class BalanceOperationImpl implements BalanceOperation {
         this.date = LocalDate.now();
     }
 
-    /**
-     * possible constructor overloading:
-     *
-    public BalanceOperationImpl(int balanceId, String description, double money, LocalDate date){
-        this.balanceId = balanceId;
-        this.description = description;
-        this.money = money;
-        this.date = date;
-        balanceCounter++;
-    }**/
-
     @Override
     public int getBalanceId() {
         return this.balanceId;

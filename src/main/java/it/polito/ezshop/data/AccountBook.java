@@ -1,10 +1,11 @@
 package it.polito.ezshop.data;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AccountBook {
 
     private HashMap <Integer,BalanceOperation> operationsMap = new HashMap<>();
-
     //net balance of all the BalanceOperations performed (payed)
     private double balance;
 
@@ -51,6 +52,11 @@ public class AccountBook {
         return this.balance;
     }
 
-
+    public List getOrdersList(){
+        List<Order> orders = operationsMap.values().stream()
+                .filter( balOp -> balOp instanceof Order ).map( balOp -> (Order) balOp)
+                .collect(Collectors.toList());
+        return orders;
+    }
 
 }

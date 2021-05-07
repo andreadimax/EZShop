@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -320,12 +321,34 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException {
-        return false;
+        //exceptions
+        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
+        ){throw new UnauthorizedException();}
+
+        //making sure the order exists, has an existing location assigned and is in
+        if( !(accountBook.getOperation(orderId) instanceof Order) ){ return false; }
+        Order order = (Order) accountBook.getOperation(orderId);
+        ProductType product = this.productMap.get(order.getProductCode());
+        if(product.getLocation() == null || !this.positionMap.containsValue(product.getLocation())
+        ){ throw new InvalidLocationException(); }
+
+        //registering the order arrival and updating the product quantity (unless it was already completed)
+        if(order.getStatus().equals("COMPLETED")){
+            return true;
+        }
+        product.setQuantity( product.getQuantity() + order.getQuantity() );
+        order.setStatus("COMPLETED");
+        return true;
     }
 
     @Override
     public List<Order> getAllOrders() throws UnauthorizedException {
-        return null;
+        //exception
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
+        ){throw new UnauthorizedException();}
+
+        return accountBook.getOrdersList();
     }
 
     @Override
@@ -350,7 +373,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<Customer> getAllCustomers() throws UnauthorizedException {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
