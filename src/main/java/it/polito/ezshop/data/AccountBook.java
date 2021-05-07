@@ -52,11 +52,8 @@ public class AccountBook {
         return this.balance;
     }
 
-    public List getOrdersList(){
-        List<Order> orders = operationsMap.values().stream()
-                .filter( balOp -> balOp instanceof Order ).map( balOp -> (Order) balOp)
-                .collect(Collectors.toList());
-        return orders;
+    public HashMap <Integer,BalanceOperation> getOperationsMap(){
+        return this.operationsMap;
     }
 
 }

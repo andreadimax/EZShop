@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 
 public class EZShop implements EZShopInterface {
@@ -235,7 +235,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<ProductType> getAllProductTypes() throws UnauthorizedException {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -245,7 +245,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<ProductType> getProductTypesByDescription(String description) throws UnauthorizedException {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -272,8 +272,8 @@ public class EZShop implements EZShopInterface {
             return -1;
         }
         //otherwise finally generates the order in "issued" state
-        Order order = new OrderImpl(productCode,quantity,pricePerUnit);
-        //this.accountBook.addOperation(Order); //@todo <-- uncomment when Order will extend BalanceOperation
+        OrderImpl order = new OrderImpl(productCode,quantity,pricePerUnit);
+        this.accountBook.addOperation(order);
         return order.getOrderId();
     }
 
@@ -283,16 +283,15 @@ public class EZShop implements EZShopInterface {
         if( orderId == -1){ return -1; }
 
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof Order) ){return -1;}
+        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return -1;}
 
-        Order order = (Order) this.accountBook.getOperation(orderId);
+        OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
 
-        //check if the balance is enough to pay the order
-        double moneyToPay = order.getPricePerUnit() * order.getQuantity();
-        if(accountBook.getBalance() - moneyToPay < 0){ return -1; }
+        //check if the balance is enough to pay the order, operation is '+' because getMoney() has a negative value for subclass OrderImpl
+        if(accountBook.getBalance() + order.getMoney() < 0){ return -1; }
 
         //if it is enough, change status and change balance
-        accountBook.changeBalance(-moneyToPay);
+        accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
         return orderId;
     }
@@ -305,16 +304,16 @@ public class EZShop implements EZShopInterface {
         ){throw new UnauthorizedException();}
 
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof Order) ){return false;}
+        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return false;}
 
-        Order order = (Order) this.accountBook.getOperation(orderId);
+        //check if already payed
+        OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
         if( order.getStatus().equals("PAYED") ){ return false; }
 
-        //i check if the balance is enough to pay the order
-        double moneyToPay = order.getPricePerUnit() * order.getQuantity();
-        if(accountBook.getBalance() - moneyToPay < 0){ return false; }
+        //check if the balance is enough to pay the order, operation is '+' because getMoney() has a negative value for subclass OrderImpl
+        if(accountBook.getBalance() + order.getMoney() < 0){ return false; }
         //if it is enough, change status and change balance
-        accountBook.changeBalance(-moneyToPay);
+        accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
         return true;
     }
@@ -327,8 +326,8 @@ public class EZShop implements EZShopInterface {
         ){throw new UnauthorizedException();}
 
         //making sure the order exists, has an existing location assigned and is in
-        if( !(accountBook.getOperation(orderId) instanceof Order) ){ return false; }
-        Order order = (Order) accountBook.getOperation(orderId);
+        if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
+        OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
         ProductType product = this.productMap.get(order.getProductCode());
         if(product.getLocation() == null || !this.positionMap.containsValue(product.getLocation())
         ){ throw new InvalidLocationException(); }
@@ -348,7 +347,10 @@ public class EZShop implements EZShopInterface {
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
-        return accountBook.getOrdersList();
+        return accountBook.getOperationsMap().values().stream()
+                .filter( balOp -> balOp instanceof OrderImpl )
+                .map( balOp -> new OrderAdapter((OrderImpl) balOp))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -483,7 +485,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<BalanceOperation> getCreditsAndDebits(LocalDate from, LocalDate to) throws UnauthorizedException {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
