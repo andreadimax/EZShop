@@ -20,11 +20,10 @@ import java.util.stream.Collectors;
 
 public class EZShop implements EZShopInterface {
     //users
-    private UsersData usersData;
-
     private Integer usersCount;
     private User userLogged = null;
     private HashMap<Integer, User> users_data;
+    private JSONArray jArrayUsers;
     //products
     private HashMap<Integer, ProductType> productMap;
     private JSONArray jArrayProduct;
@@ -61,7 +60,7 @@ public class EZShop implements EZShopInterface {
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
-        initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
+        jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
 
 
     }
@@ -186,6 +185,35 @@ public class EZShop implements EZShopInterface {
         //Adding to map
         this.users_data.put(user.getId(), user);
 
+        /* Adding to JSON Array (needed to update thr JSON file with new user data) */
+        /* ------------------------------------------------------------------------ */
+
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("id", user.getId().toString());
+        userDetails.put("username", user.getUsername());
+        userDetails.put("password", user.getPassword());
+        userDetails.put("role", user.getRole());
+
+
+        /* JSON Array updating...
+           NOTE: id is used to insert object so that when there's the need
+           to delete it it's easier to find it
+         */
+        this.jArrayUsers.add(user.getId(), userDetails);
+
+        //Updating file
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+            fout.write(jArrayUsers.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+        }
+
         return user.getId();
     }
 
@@ -197,7 +225,23 @@ public class EZShop implements EZShopInterface {
 
         //Checking if user exists...
         if(users_data.get(id) != null){
+            //Deleting from JSON Array...
+            jArrayUsers.remove(users_data.get(id));
+            //Deleting from map
             users_data.remove(id);
+
+            //Updating JSON File
+            try
+            {
+                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+                fout.write(jArrayUsers.toJSONString());
+                fout.flush();
+                fout.close();
+
+            }
+            catch(IOException f) {
+                f.printStackTrace();
+            }
         }
         else {
             throw new InvalidUserIdException("User not present!");
@@ -221,7 +265,7 @@ public class EZShop implements EZShopInterface {
         }
 
         User user;
-        if((user = usersData.getUser(id)) != null ){
+        if( (user = this.users_data.get(id)) != null ){
             return user;
         }
         else{
@@ -239,8 +283,24 @@ public class EZShop implements EZShopInterface {
             throw new InvalidRoleException("Invalid role");
         }
         User user;
-        if((user = usersData.getUser(id)) != null ){
+        if((user = users_data.get(id)) != null ){
             user.setRole(role);
+
+            //Updating JSON OBject in the JSON Array
+            ((JSONObject) jArrayUsers.get(user.getId())).put("role", user.getRole());
+
+            //Updating JSON File
+            try
+            {
+                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+                fout.write(jArrayUsers.toJSONString());
+                fout.flush();
+                fout.close();
+
+            }
+            catch(IOException f) {
+                f.printStackTrace();
+            }
             return true;
         }
         else{
@@ -253,12 +313,19 @@ public class EZShop implements EZShopInterface {
         if(username == null || !username.equals("")){
             throw new InvalidUsernameException();
         }
-        if(!usersData.searchForLogin(username, password)){
-            throw new InvalidPasswordException("Username or password wrong");
+
+        //Checking credentials
+        for(User user: this.users_data.values()){
+            if(username.equals(user.getUsername())){
+                if( !password.equals(user.getPassword())){
+                    throw new InvalidPasswordException("Username or password wrong");
+                }
+                else{
+                    //Credentials ok!
+                    this.userLogged = user;
+                }
+            }
         }
-
-        this.userLogged = usersData.getUser(username);
-
         return userLogged;
     }
 
