@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -98,7 +99,9 @@ public class EZShop implements EZShopInterface {
             // Get availableQty
             Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
 
-            ProductType newProduct = new ProductTypeImplementation(barCode,description,sellPrice,discountRate,notes,availableQty);
+            ProductTypeImplementation newProduct = new ProductTypeImplementation(id,barCode,description,sellPrice,notes);
+            newProduct.setQuantity(availableQty);
+            newProduct.setDiscountRate(discountRate);
             this.productMap.put(id, newProduct);
         }
         else if(type.equals("position")){
@@ -221,7 +224,34 @@ public class EZShop implements EZShopInterface {
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
         Integer productID;
 
-        return null;
+        // check description
+        if(description == null || description.isEmpty()) throw new InvalidProductDescriptionException();
+
+        //check productCode
+        if((productCode==null || productCode.isEmpty() || !productCode.matches("-?\\d+"))) {
+            throw new InvalidProductCodeException();
+        }
+        Integer id=Integer.parseInt(productCode);
+        if(id<0 || this.productMap.get(id)!=null) throw new InvalidProductCodeException();
+
+
+        ProductTypeImplementation p = new ProductTypeImplementation(id,productCode, description,pricePerUnit,note);
+        p.changeQuantity(1);
+        this.productMap.put(id,p);
+
+
+        JSONObject pDetails = new JSONObject();
+        pDetails.put("id", p.getId());
+        pDetails.put("avaliableQty", p.getQuantity());
+        pDetails.put("barCode", p.getBarCode());
+        pDetails.put("description", description);
+        pDetails.put("discountRate", p.getDiscountRate());
+        pDetails.put("Note", p.getNote());
+        pDetails.put("sellPrice", p.getPricePerUnit());
+
+        //MI FERMO PERCHè non mi è ancora chiaro il perchè della mappa e della lista
+        // quando si memorizza su json
+        return p.getId();
     }
 
     @Override

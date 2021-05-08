@@ -5,37 +5,39 @@ public class ProductTypeImplementation implements ProductType {
     private String description;
     private double sellPrice;
     private double discountRate;
-    private String notes;
+    private String note;
     private Integer availableQty;
     private String location;
+    private Integer id;
 
     //Constructor
-    public ProductTypeImplementation(String barCode, String description, double sellPrice, double discountRate, String notes, Integer availableQty) {
+    public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note) {
         this.barCode = barCode;
         this.description = description;
         this.sellPrice = sellPrice;
         this.discountRate = discountRate;
-        this.notes = notes;
-        this.availableQty = availableQty;
+        this.note = note;
+        this.id=id;
     }
 
     //Methods
     public boolean changeQuantity(Integer amount){
-        if(this.availableQty<amount){
+        //if i am subtracting and the available quantity is not enough
+        if(amount<0 && this.availableQty<amount){
             return false;
         }
-        this.availableQty-=amount;
+        this.availableQty+=amount;
         return true;
     }
     // getters and setters
     @Override
     public Integer getQuantity() {
-        return null;
+        return availableQty;
     }
 
     @Override
     public void setQuantity(Integer quantity) {
-
+        this.availableQty=quantity;
     }
 
     @Override
@@ -50,51 +52,59 @@ public class ProductTypeImplementation implements ProductType {
 
     @Override
     public String getNote() {
-        return null;
+        return note;
     }
 
     @Override
     public void setNote(String note) {
-
+        this.note=note;
     }
 
     @Override
     public String getProductDescription() {
-        return null;
+        return description;
     }
 
     @Override
     public void setProductDescription(String productDescription) {
-
+        this.description=productDescription;
     }
 
     @Override
     public String getBarCode() {
-        return null;
+        return barCode;
     }
 
     @Override
     public void setBarCode(String barCode) {
-
+        this.barCode=barCode;
     }
 
     @Override
     public Double getPricePerUnit() {
-        return null;
+        return sellPrice;
     }
 
     @Override
     public void setPricePerUnit(Double pricePerUnit) {
-
+        this.sellPrice=pricePerUnit;
     }
 
     @Override
     public Integer getId() {
-        return null;
+        return id;
     }
 
     @Override
     public void setId(Integer id) {
 
+    }
+
+    public double getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(double discountRate) {
+        this.discountRate=discountRate;
     }
 }
