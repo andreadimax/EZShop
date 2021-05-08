@@ -16,15 +16,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 
 public class EZShop implements EZShopInterface {
     //users
-    private UsersData usersData;
-
-    private Integer usersCount;
-    private UserImplementation userLogged = null;
+    private User userLogged = null;
     private HashMap<Integer, User> users_data;
+    private JSONArray jArrayUsers;
     //products
     private HashMap<Integer, ProductType> productMap;
     private JSONArray jArrayProduct;
@@ -34,6 +33,9 @@ public class EZShop implements EZShopInterface {
     private JSONArray jArrayPosition;
     private FileReader positionsFile;
     private AccountBook accountBook;
+    //Customers
+    private HashMap<Integer, Customer>  customersMap;
+    private JSONArray jArrayCustomers;
 
 
 
@@ -53,15 +55,16 @@ public class EZShop implements EZShopInterface {
 
     public EZShop(){
         /* ------ Initializing data structures ------ */
-        this.productMap = new HashMap<Integer, ProductType>();                  //Products
-        this.positionMap = new HashMap<String, Position>();                     //Positions
+        this.productMap = new HashMap<>();                  //Products
+        this.positionMap = new HashMap<>();                     //Positions
         this.accountBook = new AccountBook();                                   //Account book object
-        this.users_data = new HashMap<Integer, User>();                         //Users
-        usersCount = 0;                                                         //usersCount is used to assign progressive IDs to new users
+        this.users_data = new HashMap<>();                         //Users
+        this.customersMap = new HashMap<>();                   //Customers
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
-        initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
+        jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
+        jArrayCustomers=initializeMap(new Init("src/main/persistent_data/customers.json", customersMap,"customer"));
 
 
     }
@@ -150,6 +153,22 @@ public class EZShop implements EZShopInterface {
             User new_user = new UserImplementation(id, username, password, role);
             this.users_data.put(id, new_user);
         }
+        else if(type.equals("customer")){
+
+            //Get customer name
+            Integer id = Integer.parseInt((String) obj.get("id"));
+
+            //Get employee last name
+            String card = (String) obj.get("card");
+
+            //Get employee website name
+            String name = (String) obj.get("name");
+
+            Integer points = Integer.parseInt((String) obj.get("points"));
+
+            Customer new_customer = new CustomerImplementation(name, id, points, card);
+            this.customersMap.put(id, new_customer);
+        }
 
 
     }
@@ -165,6 +184,9 @@ public class EZShop implements EZShopInterface {
         if(password == null | "".equals(password)){
             throw new InvalidPasswordException("Invalid password");
         }
+        if(username == null | "".equals(username)){
+            throw new InvalidUsernameException("Invalid username");
+        }
 
         if(role == null || ( !role.equals("Administrator") && !role.equals("Cashier") && !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
@@ -173,14 +195,44 @@ public class EZShop implements EZShopInterface {
         //Checking if User exists...
         for(User u: this.users_data.values()){
             if(u.getUsername().equals(username)){
-                throw new InvalidUsernameException("User already present");
+                return -1;
             }
         }
 
         //Creating new user
-        User user = new UserImplementation(usersCount++, username, password, role);
+        User user = new UserImplementation(users_data.size()+1, username, password, role);
         //Adding to map
         this.users_data.put(user.getId(), user);
+
+        /* Adding to JSON Array (needed to update thr JSON file with new user data) */
+        /* ------------------------------------------------------------------------ */
+
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("id", user.getId().toString());
+        userDetails.put("username", user.getUsername());
+        userDetails.put("password", user.getPassword());
+        userDetails.put("role", user.getRole());
+
+
+        /* JSON Array updating...
+           NOTE: id is used to insert object so that when there's the need
+           to delete it it's easier to find it
+         */
+        this.jArrayUsers.add(user.getId(), userDetails);
+
+        //Updating file
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+            fout.write(jArrayUsers.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+            return -1;
+        }
 
         return user.getId();
     }
@@ -193,7 +245,24 @@ public class EZShop implements EZShopInterface {
 
         //Checking if user exists...
         if(users_data.get(id) != null){
+            //Deleting from JSON Array...
+            jArrayUsers.remove(users_data.get(id));
+            //Deleting from map
             users_data.remove(id);
+
+            //Updating JSON File
+            try
+            {
+                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+                fout.write(jArrayUsers.toJSONString());
+                fout.flush();
+                fout.close();
+
+            }
+            catch(IOException f) {
+                f.printStackTrace();
+                return false;
+            }
         }
         else {
             throw new InvalidUserIdException("User not present!");
@@ -216,12 +285,16 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
+        if(id==0 | id == null){
+            throw new InvalidUserIdException();
+        }
+
         User user;
-        if((user = usersData.getUser(id)) != null ){
+        if( (user = this.users_data.get(id)) != null ){
             return user;
         }
         else{
-            throw new InvalidUserIdException();
+            return null;
         }
     }
 
@@ -234,13 +307,32 @@ public class EZShop implements EZShopInterface {
         if(role == null |( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
+        if(id==0 | id == null){
+            throw new InvalidUserIdException();
+        }
         User user;
-        if((user = usersData.getUser(id)) != null ){
+        if((user = users_data.get(id)) != null ){
             user.setRole(role);
+
+            //Updating JSON OBject in the JSON Array
+            ((JSONObject) jArrayUsers.get(user.getId())).put("role", user.getRole());
+
+            //Updating JSON File
+            try
+            {
+                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
+                fout.write(jArrayUsers.toJSONString());
+                fout.flush();
+                fout.close();
+
+            }
+            catch(IOException f) {
+                f.printStackTrace();
+            }
             return true;
         }
         else{
-            throw new InvalidUserIdException();
+            return false;
         }
     }
 
@@ -249,18 +341,34 @@ public class EZShop implements EZShopInterface {
         if(username == null || !username.equals("")){
             throw new InvalidUsernameException();
         }
-        if(!usersData.searchForLogin(username, password)){
+
+        if(password == null || !password.equals("")){
             throw new InvalidPasswordException("Username or password wrong");
         }
 
-        this.userLogged = (UserImplementation) usersData.getUser(username);
-
+        //Checking credentials
+        for(User user: this.users_data.values()){
+            if(username.equals(user.getUsername())){
+                if( !password.equals(user.getPassword())){
+                    return null;
+                }
+                else{
+                    //Credentials ok!
+                    this.userLogged = user;
+                }
+            }
+        }
         return userLogged;
     }
 
     @Override
     public boolean logout() {
-        userLogged = null;
+        if(userLogged != null) {
+            userLogged = null;
+        }
+        else {
+            return false;
+        }
         return true;
     }
 
@@ -486,41 +594,244 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer defineCustomer(String customerName) throws InvalidCustomerNameException, UnauthorizedException {
-        return null;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+
+        if(customerName == null || customerName.equals("")){
+            throw new InvalidCustomerNameException();
+        }
+
+        for(Customer c: this.customersMap.values()){
+            if(c.getCustomerName() == customerName){
+                return -1;
+            }
+        }
+
+        //Create customer
+        Customer c = new CustomerImplementation(customerName, customersMap.size(), 0, null);
+        //Add customer to map
+        customersMap.put(c.getId(), c);
+
+        /* Adding to JSON Array (needed to update thr JSON file with new user data) */
+        /* ------------------------------------------------------------------------ */
+
+        JSONObject userDetails = new JSONObject();
+        userDetails.put("id", c.getId().toString());
+        userDetails.put("card", c.getCustomerCard());
+        userDetails.put("name", c.getCustomerName());
+        userDetails.put("points",c.getPoints());
+
+
+        /* JSON Array updating...
+           NOTE: id is used to insert object so that when there's the need
+           to delete it it's easier to find it
+         */
+        this.jArrayCustomers.add(c.getId(), userDetails);
+
+        //Updating file
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
+            fout.write(jArrayCustomers.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+            return -1;
+        }
+
+
+        return c.getId();
     }
 
     @Override
     public boolean modifyCustomer(Integer id, String newCustomerName, String newCustomerCard) throws InvalidCustomerNameException, InvalidCustomerCardException, InvalidCustomerIdException, UnauthorizedException {
-        return false;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(newCustomerName.equals("") || newCustomerName == null){
+            throw new InvalidCustomerNameException();
+        }
+        if(newCustomerCard == null || newCustomerCard.matches("\\d{10}")){
+            throw new InvalidCustomerCardException();
+        }
+        if(!this.customersMap.containsKey(id)){
+            throw new InvalidCustomerIdException();
+        }
+
+
+
+        //Checking if card code is already assigned to someone
+        for(Customer c: customersMap.values()){
+            if(c.getCustomerCard() == newCustomerCard){
+                return false;
+            }
+        }
+
+        //Updating values
+        customersMap.get(id).setCustomerCard(newCustomerCard);
+        customersMap.get(id).setCustomerName(newCustomerName);
+
+        //Updating JSON OBject in the JSON Array
+        ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("name", customersMap.get(id).getCustomerName());
+        ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("card", customersMap.get(id).getCustomerCard());
+
+        //Updating JSON File
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
+            fout.write(jArrayUsers.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
     public boolean deleteCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException {
-        return false;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+
+        if(id<=0 | id == null){
+            throw new InvalidCustomerIdException();
+        }
+
+        //Checking if customer exists...
+        if(customersMap.get(id) != null){
+            //Deleting from JSON Array...
+            jArrayUsers.remove(customersMap.get(id));
+            //Deleting from map
+            customersMap.remove(id);
+
+            //Updating JSON File
+            try
+            {
+                FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
+                fout.write(jArrayCustomers.toJSONString());
+                fout.flush();
+                fout.close();
+
+            }
+            catch(IOException f) {
+                f.printStackTrace();
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public Customer getCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException {
-        return null;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(id<=0 | id == null){
+            throw new InvalidCustomerIdException();
+        }
+        if(!this.customersMap.containsKey(id)){
+            return null;
+        }
+
+        return this.customersMap.get(id);
     }
 
     @Override
     public List<Customer> getAllCustomers() throws UnauthorizedException {
-        return new ArrayList<>();
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        return (List<Customer>) customersMap.values();
     }
 
     @Override
     public String createCard() throws UnauthorizedException {
-        return null;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        String serialNumber = "";
+        //Generating card...
+        for(int i=0; i<11; i++){
+            Random rand = new Random(); //instance of random class
+            Integer int_random = rand.nextInt(9);
+            serialNumber += int_random.toString();
+        }
+        //Checking if it's already assigned
+        for(Customer c: customersMap.values()){
+            if(c.getCustomerCard() == serialNumber){
+                System.out.println("Error");
+            }
+        }
+
+        return serialNumber;
     }
 
     @Override
     public boolean attachCardToCustomer(String customerCard, Integer customerId) throws InvalidCustomerIdException, InvalidCustomerCardException, UnauthorizedException {
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(customerId<=0 | customerId == null){
+            throw new InvalidCustomerIdException();
+        }
+        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+            throw new InvalidCustomerCardException();
+        }
+
+        for (Customer c: customersMap.values()){
+            if(c.getCustomerCard() == customerCard){
+                return false;
+            }
+        }
+
+        //Checking if customer exists...
+        if(customersMap.containsKey(customerId)){
+            customersMap.get(customerId).setCustomerName(customerCard);
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean modifyPointsOnCard(String customerCard, int pointsToBeAdded) throws InvalidCustomerCardException, UnauthorizedException {
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+            throw new InvalidCustomerCardException();
+        }
+
+        //Checking validity of data
+        for(Customer c: customersMap.values()){
+            if(c.getCustomerCard() == customerCard){
+                if(c.getPoints() + pointsToBeAdded > 0){
+                    c.setPoints(c.getPoints() + pointsToBeAdded);
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
