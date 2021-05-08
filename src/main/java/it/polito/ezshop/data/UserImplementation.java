@@ -15,6 +15,13 @@ public class UserImplementation implements User {
 
 
     }
+    public boolean isAtLeastShopManager(){
+        if(!role.equals("Administrator") && !role.equals("ShopManager")){
+            return false;
+        }
+        return true;
+    }
+
 
     @Override
     public Integer getId(){

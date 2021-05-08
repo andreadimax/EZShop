@@ -22,7 +22,7 @@ public class EZShop implements EZShopInterface {
     //users
     private UsersData usersData;
     private Integer usersCount;
-    private User userLogged = null;
+    private UserImplementation userLogged = null;
     //products
     private HashMap<Integer, ProductType> productMap = new HashMap<>();
     private JSONArray jArrayProduct;
@@ -81,11 +81,7 @@ public class EZShop implements EZShopInterface {
 
             jArray.forEach( x -> parseObjectType( (JSONObject) x, i.type ) );
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
         return jArray;
@@ -217,7 +213,7 @@ public class EZShop implements EZShopInterface {
             throw new InvalidPasswordException("Username or password wrong");
         }
 
-        this.userLogged = usersData.getUser(username);
+        this.userLogged = (UserImplementation) usersData.getUser(username);
 
         return userLogged;
     }
@@ -231,7 +227,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check privilegies
-        if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
+        if(userLogged!=null && !userLogged.isAtLeastShopManager()) throw new UnauthorizedException();
         Integer productID;
 
         // check description
@@ -248,22 +244,25 @@ public class EZShop implements EZShopInterface {
         ProductTypeImplementation p = new ProductTypeImplementation(id,productCode, description,pricePerUnit,note);
         p.changeQuantity(1);
         this.productMap.put(id,p);
-
-
-        JSONObject pDetails = new JSONObject();
-        pDetails.put("id", p.getId());
-        pDetails.put("avaliableQty", p.getQuantity());
-        pDetails.put("barCode", p.getBarCode());
-        pDetails.put("description", description);
-        pDetails.put("discountRate", p.getDiscountRate());
-        pDetails.put("Note", p.getNote());
-        pDetails.put("sellPrice", p.getPricePerUnit());
+        JSONObject pDetails = initializeJsonProductObject(p);
 
         this.jArrayProduct.add(pDetails);
         String filePath= "src/main/persistent_data/productTypes.json";
         if(!writejArraytoFile(filePath, jArrayProduct))System.out.println("Couldn't write to file"+filePath);
 
         return p.getId();
+    }
+    private JSONObject initializeJsonProductObject(ProductTypeImplementation p){
+        //initialize jsonObject
+        JSONObject pDetails = new JSONObject();
+        pDetails.put("id", p.getId());
+        pDetails.put("avaliableQty", p.getQuantity());
+        pDetails.put("barCode", p.getBarCode());
+        pDetails.put("description", p.getProductDescription());
+        pDetails.put("discountRate", p.getDiscountRate());
+        pDetails.put("Note", p.getNote());
+        pDetails.put("sellPrice", p.getPricePerUnit());
+        return pDetails;
     }
 
     private boolean writejArraytoFile(String filepath, JSONArray jArr){
@@ -284,12 +283,45 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
+        //check for invalid user
+        if(!userLogged.isAtLeastShopManager())throw new UnauthorizedException();
+        //check for invalid product id
+        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
+
+        //needs to remove object from memory array and commit to disk
+        if(!jArrayProduct.remove(productMap.get(id)))return false;
+        //update object in map
+        ProductTypeImplementation p =(ProductTypeImplementation) productMap.get(id);
+        p.setId(id);
+        p.setProductDescription(newDescription);
+        p.setBarCode(newCode);
+        p.setPricePerUnit(newPrice);
+        p.setNote(newNote);
+
+        JSONObject pDetails=null;
+        pDetails = initializeJsonProductObject(p);
+        jArrayProduct.add(pDetails);
+        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+        if(!writejArraytoFile("",jArrayProduct)) return false;
+
         return false;
     }
 
+
     @Override
     public boolean deleteProductType(Integer id) throws InvalidProductIdException, UnauthorizedException {
-        return false;
+        //check for invalid user
+        if(userLogged!=null && !userLogged.isAtLeastShopManager()) throw new UnauthorizedException();
+        //check for invalid product id
+        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
+
+        //needs to remove object from memory array and commit to disk
+        if(!jArrayProduct.remove(productMap.get(id)))return false;
+        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+        if(!writejArraytoFile("",jArrayProduct)) return false;
+        //remove object from map
+        productMap.remove(id);
+        return true;
     }
 
     @Override
