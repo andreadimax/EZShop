@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 
 public class EZShop implements EZShopInterface {
@@ -54,11 +55,11 @@ public class EZShop implements EZShopInterface {
 
     public EZShop(){
         /* ------ Initializing data structures ------ */
-        this.productMap = new HashMap<Integer, ProductType>();                  //Products
-        this.positionMap = new HashMap<String, Position>();                     //Positions
+        this.productMap = new HashMap<>();                  //Products
+        this.positionMap = new HashMap<>();                     //Positions
         this.accountBook = new AccountBook();                                   //Account book object
-        this.users_data = new HashMap<Integer, User>();                         //Users
-        this.customersMap = new HashMap<Integer, Customer>();                   //Customers
+        this.users_data = new HashMap<>();                         //Users
+        this.customersMap = new HashMap<>();                   //Customers
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
@@ -561,7 +562,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer defineCustomer(String customerName) throws InvalidCustomerNameException, UnauthorizedException {
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
@@ -617,7 +618,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean modifyCustomer(Integer id, String newCustomerName, String newCustomerCard) throws InvalidCustomerNameException, InvalidCustomerCardException, InvalidCustomerIdException, UnauthorizedException {
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
@@ -666,12 +667,12 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean deleteCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException {
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
 
-        if(id==0 | id == null){
+        if(id<=0 | id == null){
             throw new InvalidCustomerIdException();
         }
 
@@ -705,11 +706,11 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Customer getCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException {
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
-        if(id==0 | id == null){
+        if(id<=0 | id == null){
             throw new InvalidCustomerIdException();
         }
         if(!this.customersMap.containsKey(id)){
@@ -721,7 +722,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<Customer> getAllCustomers() throws UnauthorizedException {
-        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
@@ -730,16 +731,75 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public String createCard() throws UnauthorizedException {
-        return null;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        String serialNumber = "";
+        //Generating card...
+        for(int i=0; i<11; i++){
+            Random rand = new Random(); //instance of random class
+            Integer int_random = rand.nextInt(9);
+            serialNumber += int_random.toString();
+        }
+        //Checking if it's already assigned
+        for(Customer c: customersMap.values()){
+            if(c.getCustomerCard() == serialNumber){
+                System.out.println("Error");
+            }
+        }
+
+        return serialNumber;
     }
 
     @Override
     public boolean attachCardToCustomer(String customerCard, Integer customerId) throws InvalidCustomerIdException, InvalidCustomerCardException, UnauthorizedException {
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(customerId<=0 | customerId == null){
+            throw new InvalidCustomerIdException();
+        }
+        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+            throw new InvalidCustomerCardException();
+        }
+
+        for (Customer c: customersMap.values()){
+            if(c.getCustomerCard() == customerCard){
+                return false;
+            }
+        }
+
+        //Checking if customer exists...
+        if(customersMap.containsKey(customerId)){
+            customersMap.get(customerId).setCustomerName(customerCard);
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean modifyPointsOnCard(String customerCard, int pointsToBeAdded) throws InvalidCustomerCardException, UnauthorizedException {
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+            throw new InvalidCustomerCardException();
+        }
+
+        //Checking validity of data
+        for(Customer c: customersMap.values()){
+            if(c.getCustomerCard() == customerCard){
+                if(c.getPoints() + pointsToBeAdded > 0){
+                    c.setPoints(c.getPoints() + pointsToBeAdded);
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
