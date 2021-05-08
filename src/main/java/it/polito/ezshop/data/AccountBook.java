@@ -6,11 +6,12 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-
+//@todo implement json/file update for all methods
 public class AccountBook {
 
     private HashMap <Integer,BalanceOperation> operationsMap;
@@ -77,8 +78,11 @@ public class AccountBook {
 
             //building order with the full constructor
             OrderImpl order = new OrderImpl(balanceId, description, money, date, productCode, quantity, pricePerUnit, status);
-            //adding the loaded order back into the operationsMap
-            this.addOperation( order );
+            //adding the loaded order back into the operationsMap checking for duplicates
+            if(!this.operationsMap.containsKey(balanceId)){
+                this.operationsMap.put(order.getBalanceId(), order);
+                if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
+            }
         }
         else if(sub.equals("SaleTrans")){
             //@todo implement SaleTrans subclass loading
@@ -100,7 +104,21 @@ public class AccountBook {
             return false;
         }
         this.operationsMap.put(NewOp.getBalanceId(), NewOp);
-        this.balance += NewOp.getMoney(); //Money < 0 for Orders.
+        //Updating JSON OBject in the JSON Array
+        jArrayOperations.add(NewOp);
+
+        //Updating JSON File
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/operations.json");
+            fout.write(jArrayOperations.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+        }
         return true;
     }
 
