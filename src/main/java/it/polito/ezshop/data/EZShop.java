@@ -25,11 +25,11 @@ public class EZShop implements EZShopInterface {
     private HashMap<Integer, User> users_data;
     private JSONArray jArrayUsers;
     //products
-    private HashMap<Integer, ProductType> productMap;
-    private JSONArray jArrayProduct;
+    private HashMap<Integer, ProductType> productMap=null;
+    private JSONArray jArrayProduct=null;
     private FileReader productsFile;
     //position
-    private HashMap <String,Position> positionMap;
+    private final HashMap <String,Position> positionMap;
     private JSONArray jArrayPosition;
     private FileReader positionsFile;
     private AccountBook accountBook;
@@ -181,6 +181,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createUser(String username, String password, String role) throws InvalidUsernameException, InvalidPasswordException, InvalidRoleException {
+
         if(password == null | "".equals(password)){
             throw new InvalidPasswordException("Invalid password");
         }
@@ -338,11 +339,11 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public User login(String username, String password) throws InvalidUsernameException, InvalidPasswordException {
-        if(username == null || !username.equals("")){
+        if(username == null || username.equals("")){
             throw new InvalidUsernameException();
         }
 
-        if(password == null || !password.equals("")){
+        if(password == null || password.equals("")){
             throw new InvalidPasswordException("Username or password wrong");
         }
 
@@ -375,7 +376,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check privilegies
-        if(userLogged!=null && !userLogged.isAtLeastShopManager()) throw new UnauthorizedException();
+        if(userLogged!=null && !("ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
         Integer productID;
 
         // check description
@@ -432,7 +433,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check for invalid user
-        if(!userLogged.isAtLeastShopManager())throw new UnauthorizedException();
+        if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
         //check for invalid product id
         if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
 
@@ -459,7 +460,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean deleteProductType(Integer id) throws InvalidProductIdException, UnauthorizedException {
         //check for invalid user
-        if(userLogged!=null && !userLogged.isAtLeastShopManager()) throw new UnauthorizedException();
+        if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
         //check for invalid product id
         if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
 
