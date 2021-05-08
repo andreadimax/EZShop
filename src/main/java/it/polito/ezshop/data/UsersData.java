@@ -78,8 +78,8 @@ public class UsersData {
 
     boolean searchForLogin(String username, String password){
         for(User user: this.users_data.values()){
-            if(user.getUsername() == username){
-                if(user.getPassword() == password){
+            if(username.equals(user.getUsername())){
+                if( password.equals(user.getPassword())){
                     return true;
                 }
             }
@@ -89,7 +89,7 @@ public class UsersData {
 
     User getUser(String username){
         for(User user: this.users_data.values()){
-            if(user.getUsername() == username){
+            if(  username.equals(user.getUsername())){
                 return user;
             }
         }
