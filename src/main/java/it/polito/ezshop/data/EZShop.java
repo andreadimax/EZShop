@@ -21,19 +21,19 @@ import java.util.stream.Collectors;
 public class EZShop implements EZShopInterface {
     //users
     private UsersData usersData;
+
     private Integer usersCount;
     private UserImplementation userLogged = null;
+    private HashMap<Integer, User> users_data;
     //products
-    private HashMap<Integer, ProductType> productMap = new HashMap<>();
+    private HashMap<Integer, ProductType> productMap;
     private JSONArray jArrayProduct;
     private FileReader productsFile;
     //position
-    private HashMap <String,Position> positionMap = new HashMap<>();
+    private HashMap <String,Position> positionMap;
     private JSONArray jArrayPosition;
     private FileReader positionsFile;
-
-
-    private AccountBook accountBook = new AccountBook();
+    private AccountBook accountBook;
 
 
 
@@ -52,16 +52,29 @@ public class EZShop implements EZShopInterface {
     }
 
     public EZShop(){
-        usersData = new UsersData();
-        usersCount = 0;
+        /* ------ Initializing data structures ------ */
+        this.productMap = new HashMap<Integer, ProductType>();                  //Products
+        this.positionMap = new HashMap<String, Position>();                     //Positions
+        this.accountBook = new AccountBook();                                   //Account book object
+        this.users_data = new HashMap<Integer, User>();                         //Users
+        usersCount = 0;                                                         //usersCount is used to assign progressive IDs to new users
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
+        initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
 
 
     }
 
-    //  INITIALIZATION FOR PRODUCT TYPES
+    /*
+       This method allows to initialize HashMaps
+       with persistent data red from the JSON
+       files
+       @param i: object of type Init containing
+                 all info about map to
+                 initialize, file to read, and
+                 type of data
+     */
     private JSONArray initializeMap(Init i){
         // Loading Products
         JSONParser parser = new JSONParser();
@@ -121,6 +134,22 @@ public class EZShop implements EZShopInterface {
             Position newPos = new Position(position, p);
             this.positionMap.put(position, newPos);
         }
+        else if(type.equals("user")){
+
+            //Get user id
+            Integer id = Integer.parseInt((String) obj.get("id"));
+
+            //Get employee last name
+            String username = (String) obj.get("username");
+
+            //Get employee website name
+            String password = (String) obj.get("password");
+
+            String role = (String) obj.get("role");
+
+            User new_user = new UserImplementation(id, username, password, role);
+            this.users_data.put(id, new_user);
+        }
 
 
     }
@@ -141,11 +170,18 @@ public class EZShop implements EZShopInterface {
             throw new InvalidRoleException("Invalid role");
         }
 
-
-        User user = new UserImplementation(usersCount++, username, password, role);
-        if(!usersData.addUser(user)){
-            throw new InvalidUsernameException("User already present");
+        //Checking if User exists...
+        for(User u: this.users_data.values()){
+            if(u.getUsername().equals(username)){
+                throw new InvalidUsernameException("User already present");
+            }
         }
+
+        //Creating new user
+        User user = new UserImplementation(usersCount++, username, password, role);
+        //Adding to map
+        this.users_data.put(user.getId(), user);
+
         return user.getId();
     }
 
@@ -155,8 +191,12 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        if(!usersData.removeUser(id)){
-            throw new InvalidUserIdException();
+        //Checking if user exists...
+        if(users_data.get(id) != null){
+            users_data.remove(id);
+        }
+        else {
+            throw new InvalidUserIdException("User not present!");
         }
         return true;
     }
@@ -167,7 +207,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        return usersData.getUserslist();
+        return (List<User>) users_data.values();
     }
 
     @Override
