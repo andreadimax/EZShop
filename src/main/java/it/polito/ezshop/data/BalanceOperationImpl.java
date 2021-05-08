@@ -21,6 +21,15 @@ public class BalanceOperationImpl implements BalanceOperation {
         this.date = LocalDate.now();
     }
 
+    //used in loading phase by super() call of subclasses constructors
+    public BalanceOperationImpl(int balanceId, String description, double money, LocalDate date){
+        balanceCounter++;
+        this.balanceId = balanceId;
+        this.description = description;
+        this.money = money;
+        this.date = date;
+    }
+
     @Override
     public int getBalanceId() {
         return this.balanceId;

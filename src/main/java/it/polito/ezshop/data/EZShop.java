@@ -277,7 +277,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        return (List<User>) users_data.values();
+        return (List<User>) users_data.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -759,7 +759,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return (List<Customer>) customersMap.values();
+        return (List<Customer>) customersMap.values().stream().collect(Collectors.toList());
     }
 
     @Override

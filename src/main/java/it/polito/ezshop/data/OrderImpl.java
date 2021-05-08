@@ -2,7 +2,11 @@ package it.polito.ezshop.data;
 
 import java.time.LocalDate;
 
-//should extend BalanceOperation but there is a conflict between return type (int) vs (Integer) of method getBalanceId
+/**
+ * should implement Order Interface but there is a conflict between return type (int) vs (Integer) of method getBalanceId
+ * so this is the adapted class extending BalanceOperationImpl to be accessed by the gui through the adapter class
+ * OrderAdapter implementing Order Interface.
+ */
 public class OrderImpl extends BalanceOperationImpl {
 
     //Attributes properly of this class
@@ -18,8 +22,18 @@ public class OrderImpl extends BalanceOperationImpl {
         this.productCode = productCode;
         this.quantity = quantity;
         this.pricePerUnit = pricePerUnit;
-        this.status = "issued";
+        this.status = "ISSUED";
         super.money = -(quantity * pricePerUnit);
+    }
+
+    public OrderImpl(int balanceId, String description, double money, LocalDate date,
+                     String productCode, int quantity, double pricePerUnit, String status){
+        super(balanceId, description, money, date);
+        //setting proper of this class
+        this.productCode = productCode;
+        this.quantity = quantity;
+        this.pricePerUnit = pricePerUnit;
+        this.status = status;
     }
 
     @Override
