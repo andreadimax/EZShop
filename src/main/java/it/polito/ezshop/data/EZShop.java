@@ -19,15 +19,23 @@ import java.util.stream.Collectors;
 
 
 public class EZShop implements EZShopInterface {
-
+    //users
     private UsersData usersData;
     private Integer usersCount;
     private User userLogged = null;
+    //products
     private HashMap<Integer, ProductType> productMap = new HashMap<>();
-    private HashMap <String,Position> positionMap = new HashMap<>();
+    private JSONArray jArrayProduct;
     private FileReader productsFile;
+    //position
+    private HashMap <String,Position> positionMap = new HashMap<>();
+    private JSONArray jArrayPosition;
     private FileReader positionsFile;
+
+
     private AccountBook accountBook = new AccountBook();
+
+
 
     //Inner Class
     private class Init{
@@ -47,16 +55,17 @@ public class EZShop implements EZShopInterface {
         usersData = new UsersData();
         usersCount = 0;
 
-        initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
-        initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
+        jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
+        jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
 
 
     }
 
     //  INITIALIZATION FOR PRODUCT TYPES
-    private void initializeMap(Init i){
+    private JSONArray initializeMap(Init i){
         // Loading Products
         JSONParser parser = new JSONParser();
+        JSONArray jArray=null;
         try {
             i.file = new FileReader(i.filename);
         }
@@ -68,7 +77,7 @@ public class EZShop implements EZShopInterface {
         {
             //Read JSON file
 
-            JSONArray jArray = (JSONArray) parser.parse(i.file);
+            jArray = (JSONArray) parser.parse(i.file);
 
             jArray.forEach( x -> parseObjectType( (JSONObject) x, i.type ) );
 
@@ -79,6 +88,7 @@ public class EZShop implements EZShopInterface {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return jArray;
     }
 
 
@@ -249,9 +259,27 @@ public class EZShop implements EZShopInterface {
         pDetails.put("Note", p.getNote());
         pDetails.put("sellPrice", p.getPricePerUnit());
 
-        //MI FERMO PERCHè non mi è ancora chiaro il perchè della mappa e della lista
-        // quando si memorizza su json
+        this.jArrayProduct.add(pDetails);
+        String filePath= "src/main/persistent_data/productTypes.json";
+        if(!writejArraytoFile(filePath, jArrayProduct))System.out.println("Couldn't write to file"+filePath);
+
         return p.getId();
+    }
+
+    private boolean writejArraytoFile(String filepath, JSONArray jArr){
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/productTypes.json");
+            fout.write(jArr.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
