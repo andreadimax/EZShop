@@ -22,7 +22,7 @@ import java.util.Random;
 public class EZShop implements EZShopInterface {
     //users
     private User userLogged = null;
-    private HashMap<Integer, User> users_data;
+    private HashMap<Integer, User> users_data=null;
     private JSONArray jArrayUsers;
     //products
     private HashMap<Integer, ProductType> productMap=null;
@@ -32,10 +32,10 @@ public class EZShop implements EZShopInterface {
     private final HashMap <String,Position> positionMap;
     private JSONArray jArrayPosition;
     private FileReader positionsFile;
-    private AccountBook accountBook;
+    private AccountBook accountBook=null;
     //Customers
-    private HashMap<Integer, Customer>  customersMap;
-    private JSONArray jArrayCustomers;
+    private HashMap<Integer, Customer>  customersMap=null;
+    private JSONArray jArrayCustomers=null;
 
 
 
@@ -214,12 +214,15 @@ public class EZShop implements EZShopInterface {
         userDetails.put("password", user.getPassword());
         userDetails.put("role", user.getRole());
 
-
+        System.out.println(userDetails.get("id"));
+        System.out.println(userDetails.get("username"));
+        System.out.println(userDetails.get("password"));
+        System.out.println(userDetails.get("role"));
         /* JSON Array updating...
            NOTE: id is used to insert object so that when there's the need
            to delete it it's easier to find it
          */
-        this.jArrayUsers.add(user.getId(), userDetails);
+        this.jArrayUsers.add(userDetails);
 
         //Updating file
         try
