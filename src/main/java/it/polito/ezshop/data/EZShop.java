@@ -105,69 +105,74 @@ public class EZShop implements EZShopInterface {
 
 
     public void parseObjectType(JSONObject obj, String type){
-        if(type.equals("product")){
-            //Get ProductID
-            Integer id = Integer.parseInt((String) obj.get("id"));
-            // Get Barcode
-            String barCode = (String) obj.get("barCode");
-            //Get ProductDescription
-            String description = (String) obj.get("description");
-            //Get sellPrice
-            double sellPrice = Double.parseDouble((String) obj.get("sellPrice"));
-            // Get discountRate
-            double discountRate = Double.parseDouble((String) obj.get("discountRate"));
-            // Get notes
-            String notes = (String) obj.get("notes");
-            // Get availableQty
-            Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
+        switch (type) {
+            case "product": {
+                //Get ProductID
+                Integer id = Integer.parseInt((String) obj.get("id"));
+                // Get Barcode
+                String barCode = (String) obj.get("barCode");
+                //Get ProductDescription
+                String description = (String) obj.get("description");
+                //Get sellPrice
+                double sellPrice = Double.parseDouble((String) obj.get("sellPrice"));
+                // Get discountRate
+                double discountRate = Double.parseDouble((String) obj.get("discountRate"));
+                // Get notes
+                String notes = (String) obj.get("notes");
+                // Get availableQty
+                Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
 
-            ProductTypeImplementation newProduct = new ProductTypeImplementation(id,barCode,description,sellPrice,notes);
-            newProduct.setQuantity(availableQty);
-            newProduct.setDiscountRate(discountRate);
-            this.productMap.put(id, newProduct);
-        }
-        else if(type.equals("position")){
-            //Get positionName
-            String position = (String) obj.get("position");
-            //Get productId associated
-            Integer productId = Integer.parseInt( (String) obj.get("productID"));
-            //Fetch Product
-            ProductType p = productMap.get(productId);
-            //instantiate position
-            Position newPos = new Position(position, p);
-            this.positionMap.put(position, newPos);
-        }
-        else if(type.equals("user")){
+                ProductTypeImplementation newProduct = new ProductTypeImplementation(id, barCode, description, sellPrice, notes);
+                newProduct.setQuantity(availableQty);
+                newProduct.setDiscountRate(discountRate);
+                this.productMap.put(id, newProduct);
+                break;
+            }
+            case "position":
+                //Get positionName
+                String position = (String) obj.get("position");
+                //Get productId associated
+                Integer productId = Integer.parseInt((String) obj.get("productID"));
+                //Fetch Product
+                ProductType p = productMap.get(productId);
+                //instantiate position
+                Position newPos = new Position(position, p);
+                this.positionMap.put(position, newPos);
+                break;
+            case "user": {
 
-            //Get user id
-            Integer id = Integer.parseInt((String) obj.get("id"));
+                //Get user id
+                Integer id = Integer.parseInt((String) obj.get("id"));
 
-            //Get employee last name
-            String username = (String) obj.get("username");
+                //Get employee last name
+                String username = (String) obj.get("username");
 
-            //Get employee website name
-            String password = (String) obj.get("password");
+                //Get employee website name
+                String password = (String) obj.get("password");
 
-            String role = (String) obj.get("role");
+                String role = (String) obj.get("role");
 
-            User new_user = new UserImplementation(id, username, password, role);
-            this.users_data.put(id, new_user);
-        }
-        else if(type.equals("customer")){
+                User new_user = new UserImplementation(id, username, password, role);
+                this.users_data.put(id, new_user);
+                break;
+            }
+            case "customer": {
 
-            //Get customer name
-            Integer id = Integer.parseInt((String) obj.get("id"));
+                //Get customer name
+                Integer id = Integer.parseInt((String) obj.get("id"));
 
-            //Get employee last name
-            String card = (String) obj.get("card");
+                //Get employee last name
+                String card = (String) obj.get("card");
 
-            //Get employee website name
-            String name = (String) obj.get("name");
+                //Get employee website name
+                String name = (String) obj.get("name");
 
-            Integer points = Integer.parseInt((String) obj.get("points"));
+                Integer points = Integer.parseInt((String) obj.get("points"));
 
-            Customer new_customer = new CustomerImplementation(name, id, points, card);
-            this.customersMap.put(id, new_customer);
+                Customer new_customer = new CustomerImplementation(name, id, points, card);
+                this.customersMap.put(id, new_customer);
+                break;
+            }
         }
 
 
@@ -243,7 +248,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean deleteUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
+        if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
@@ -276,20 +281,20 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public List<User> getAllUsers() throws UnauthorizedException {
-        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
+        if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
-        return (List<User>) users_data.values().stream().collect(Collectors.toList());
+        return (List<User>) new ArrayList<>(users_data.values());
     }
 
     @Override
     public User getUser(Integer id) throws InvalidUserIdException, UnauthorizedException {
-        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
+        if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
-        if(id==0 | id == null){
+        if(id == null || id==0){
             throw new InvalidUserIdException();
         }
 
@@ -304,14 +309,15 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean updateUserRights(Integer id, String role) throws InvalidUserIdException, InvalidRoleException, UnauthorizedException {
-        if(userLogged == null | !userLogged.getRole().equals("Administrator")){
+
+        if(userLogged == null || userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
-        if(role == null |( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
+        if(role == null ||( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
-        if(id==0 | id == null){
+        if(id == null || id==0){
             throw new InvalidUserIdException();
         }
         User user;
@@ -482,7 +488,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return (List<ProductType>) productMap.values().stream().collect(Collectors.toList());
+        return (List<ProductType>) new ArrayList<>(productMap.values());
     }
 
     @Override
@@ -511,8 +517,7 @@ public class EZShop implements EZShopInterface {
         }
         if(productId==null || productId<=0)throw new InvalidProductIdException();
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
-        if(p==null || !p.changeQuantity(toBeAdded)) return false;
-        return true;
+        return p != null && p.changeQuantity(toBeAdded);
     }
 
     @Override
@@ -633,7 +638,7 @@ public class EZShop implements EZShopInterface {
         }
 
         for(Customer c: this.customersMap.values()){
-            if(c.getCustomerName() == customerName){
+            if( customerName.equals(c.getCustomerName())){
                 return -1;
             }
         }
@@ -683,7 +688,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(newCustomerName.equals("") || newCustomerName == null){
+        if(newCustomerName == null || newCustomerName.equals("") ){
             throw new InvalidCustomerNameException();
         }
         if(newCustomerCard == null || newCustomerCard.matches("\\d{10}")){
@@ -697,7 +702,7 @@ public class EZShop implements EZShopInterface {
 
         //Checking if card code is already assigned to someone
         for(Customer c: customersMap.values()){
-            if(c.getCustomerCard() == newCustomerCard){
+            if(newCustomerCard.equals(c.getCustomerCard())){
                 return false;
             }
         }
@@ -733,7 +738,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        if(id<=0 | id == null){
+        if(id == null || id<=0){
             throw new InvalidCustomerIdException();
         }
 
@@ -771,7 +776,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(id<=0 | id == null){
+        if(id == null || id<=0){
             throw new InvalidCustomerIdException();
         }
         if(!this.customersMap.containsKey(id)){
@@ -787,7 +792,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return (List<Customer>) customersMap.values().stream().collect(Collectors.toList());
+        return (List<Customer>) new ArrayList<>(customersMap.values());
     }
 
     @Override
@@ -796,21 +801,21 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        String serialNumber = "";
+        StringBuilder serialNumber = new StringBuilder();
         //Generating card...
         for(int i=0; i<11; i++){
             Random rand = new Random(); //instance of random class
-            Integer int_random = rand.nextInt(9);
-            serialNumber += int_random.toString();
+            int int_random = rand.nextInt(9);
+            serialNumber.append(Integer.toString(int_random));
         }
         //Checking if it's already assigned
         for(Customer c: customersMap.values()){
-            if(c.getCustomerCard() == serialNumber){
+            if(c.getCustomerCard().equals(serialNumber.toString())){
                 System.out.println("Error");
             }
         }
 
-        return serialNumber;
+        return serialNumber.toString();
     }
 
     @Override
@@ -819,7 +824,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(customerId<=0 | customerId == null){
+        if(customerId == null || customerId<=0 ){
             throw new InvalidCustomerIdException();
         }
         if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
@@ -827,7 +832,7 @@ public class EZShop implements EZShopInterface {
         }
 
         for (Customer c: customersMap.values()){
-            if(c.getCustomerCard() == customerCard){
+            if(c.getCustomerCard().equals(customerCard)){
                 return false;
             }
         }
@@ -853,7 +858,7 @@ public class EZShop implements EZShopInterface {
 
         //Checking validity of data
         for(Customer c: customersMap.values()){
-            if(c.getCustomerCard() == customerCard){
+            if(c.getCustomerCard().equals(customerCard)){
                 if(c.getPoints() + pointsToBeAdded > 0){
                     c.setPoints(c.getPoints() + pointsToBeAdded);
                     return true;
