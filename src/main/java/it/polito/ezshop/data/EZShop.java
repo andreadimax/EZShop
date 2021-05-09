@@ -527,8 +527,16 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         if( productId==null || productId<=0)throw new InvalidProductIdException();
-        //toBeContinued
-        return false;
+        //if position is not null, check if it satisfies <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber> format
+        if(newPos!=null && !newPos.matches("[0-9]*-[^0-9]-[0-9]*"))throw new InvalidLocationException();
+
+
+        //if position is not unique, or productid has no match return false
+        ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
+        if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(newPos))))return false;
+        //(?) qui dovrei aggiungere la posizione alla lista di posizioni etc ma sono dell'idea di eliminare la classe posizione
+        p.setLocation(newPos);
+        return true;
     }
 
     @Override
