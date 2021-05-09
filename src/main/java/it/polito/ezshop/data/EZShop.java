@@ -28,10 +28,6 @@ public class EZShop implements EZShopInterface {
     private HashMap<Integer, ProductType> productMap=null;
     private JSONArray jArrayProduct=null;
     private FileReader productsFile;
-    //position
-    private final HashMap <String,Position> positionMap;
-    private JSONArray jArrayPosition;
-    private FileReader positionsFile;
     private AccountBook accountBook=null;
     //Customers
     private HashMap<Integer, Customer>  customersMap=null;
@@ -56,14 +52,12 @@ public class EZShop implements EZShopInterface {
     public EZShop(){
         /* ------ Initializing data structures ------ */
         this.productMap = new HashMap<>();                  //Products
-        this.positionMap = new HashMap<>();                     //Positions
         this.accountBook = new AccountBook();                                   //Account book object
         this.users_data = new HashMap<>();                         //Users
         this.customersMap = new HashMap<>();                   //Customers
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
-        jArrayPosition=initializeMap(new Init("src/main/persistent_data/positions.json", positionMap,"position"));
-        jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", positionMap,"user"));
+        jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", users_data,"user"));
         jArrayCustomers=initializeMap(new Init("src/main/persistent_data/customers.json", customersMap,"customer"));
 
 
@@ -128,17 +122,6 @@ public class EZShop implements EZShopInterface {
                 this.productMap.put(id, newProduct);
                 break;
             }
-            case "position":
-                //Get positionName
-                String position = (String) obj.get("position");
-                //Get productId associated
-                Integer productId = Integer.parseInt((String) obj.get("productID"));
-                //Fetch Product
-                ProductType p = productMap.get(productId);
-                //instantiate position
-                Position newPos = new Position(position, p);
-                this.positionMap.put(position, newPos);
-                break;
             case "user": {
 
                 //Get user id
@@ -610,8 +593,7 @@ public class EZShop implements EZShopInterface {
         if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
         OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
         ProductType product = this.productMap.get(order.getProductCode());
-        if(product.getLocation() == null || !this.positionMap.containsValue(product.getLocation())
-        ){ throw new InvalidLocationException(); }
+        if(product.getLocation() == null || null!=product.getLocation()){ throw new InvalidLocationException(); }
 
         //registering the order arrival and updating the product quantity (unless it was already completed)
         if(order.getStatus().equals("COMPLETED")){
