@@ -62,7 +62,7 @@ public class EZShop implements EZShopInterface {
 
 
     }
-
+//-------------------------Start of our custom FUNCTIONS-------------------
     /*
        This method allows to initialize HashMaps
        with persistent data red from the JSON
@@ -161,7 +161,36 @@ public class EZShop implements EZShopInterface {
 
     }
 
+    private JSONObject initializeJsonProductObject(ProductTypeImplementation p){
+        //initialize jsonObject
+        JSONObject pDetails = new JSONObject();
+        pDetails.put("id", p.getId());
+        pDetails.put("avaliableQty", p.getQuantity());
+        pDetails.put("barCode", p.getBarCode());
+        pDetails.put("description", p.getProductDescription());
+        pDetails.put("discountRate", p.getDiscountRate());
+        pDetails.put("Note", p.getNote());
+        pDetails.put("sellPrice", p.getPricePerUnit());
+        return pDetails;
+    }
 
+    private boolean writejArraytoFile(String filepath, JSONArray jArr){
+        try
+        {
+            FileWriter fout = new FileWriter("src/main/persistent_data/productTypes.json");
+            fout.write(jArr.toJSONString());
+            fout.flush();
+            fout.close();
+
+        }
+        catch(IOException f) {
+            f.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+//---------- Start of Ezshop Interface functions -------------
     @Override
     public void reset() {
 
@@ -393,34 +422,6 @@ public class EZShop implements EZShopInterface {
 
         return p.getId();
     }
-    private JSONObject initializeJsonProductObject(ProductTypeImplementation p){
-        //initialize jsonObject
-        JSONObject pDetails = new JSONObject();
-        pDetails.put("id", p.getId());
-        pDetails.put("avaliableQty", p.getQuantity());
-        pDetails.put("barCode", p.getBarCode());
-        pDetails.put("description", p.getProductDescription());
-        pDetails.put("discountRate", p.getDiscountRate());
-        pDetails.put("Note", p.getNote());
-        pDetails.put("sellPrice", p.getPricePerUnit());
-        return pDetails;
-    }
-
-    private boolean writejArraytoFile(String filepath, JSONArray jArr){
-        try
-        {
-            FileWriter fout = new FileWriter("src/main/persistent_data/productTypes.json");
-            fout.write(jArr.toJSONString());
-            fout.flush();
-            fout.close();
-
-        }
-        catch(IOException f) {
-            f.printStackTrace();
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
@@ -645,7 +646,7 @@ public class EZShop implements EZShopInterface {
         userDetails.put("id", c.getId().toString());
         userDetails.put("card", c.getCustomerCard());
         userDetails.put("name", c.getCustomerName());
-        userDetails.put("points",c.getPoints());
+        userDetails.put("points",c.getPoints().toString());
 
 
         /* JSON Array updating...
