@@ -477,27 +477,52 @@ public class EZShop implements EZShopInterface {
     }
 
     @Override
-    public List<ProductType> getAllProductTypes() throws UnauthorizedException {
-        return new ArrayList<>();
+    public List<ProductType> getAllProductTypes() throws UnauthorizedException{
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
+        {
+            throw new UnauthorizedException();
+        }
+        return (List<ProductType>) productMap.values().stream().collect(Collectors.toList());
     }
 
     @Override
     public ProductType getProductTypeByBarCode(String barCode) throws InvalidProductCodeException, UnauthorizedException {
-        return null;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        {
+            throw new UnauthorizedException();
+        }
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().get();
     }
 
     @Override
     public List<ProductType> getProductTypesByDescription(String description) throws UnauthorizedException {
-        return new ArrayList<>();
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        {
+            throw new UnauthorizedException();
+        }
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().equals(description)).collect(Collectors.toList());
     }
 
     @Override
     public boolean updateQuantity(Integer productId, int toBeAdded) throws InvalidProductIdException, UnauthorizedException {
-        return false;
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        {
+            throw new UnauthorizedException();
+        }
+        if(productId==null || productId<=0)throw new InvalidProductIdException();
+        ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
+        if(p==null || !p.changeQuantity(toBeAdded)) return false;
+        return true;
     }
 
     @Override
     public boolean updatePosition(Integer productId, String newPos) throws InvalidProductIdException, InvalidLocationException, UnauthorizedException {
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
+        {
+            throw new UnauthorizedException();
+        }
+        if( productId==null || productId<=0)throw new InvalidProductIdException();
+        //toBeContinued
         return false;
     }
 
@@ -632,7 +657,7 @@ public class EZShop implements EZShopInterface {
            NOTE: id is used to insert object so that when there's the need
            to delete it it's easier to find it
          */
-        this.jArrayCustomers.add(c.getId(), userDetails);
+        this.jArrayCustomers.add(userDetails);
 
         //Updating file
         try

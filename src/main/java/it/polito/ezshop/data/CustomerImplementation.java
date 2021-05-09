@@ -10,7 +10,8 @@ public class CustomerImplementation implements Customer {
         this.id = id;
         this.name = name;
         this.points = points;
-        if(customerCard.matches("\\d{10}")) {
+        this.customerCard=null;
+        if(customerCard!=null && customerCard.matches("\\d{10}")) {
             this.customerCard = customerCard;
         }
     }
