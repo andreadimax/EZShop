@@ -1,33 +1,42 @@
-[{
-  "id":"1",
-  "barCode": "1",
-  "description": "Blue Mallet",
-  "sellPrice": "9.99",
-  "discountRate": "0.33",
-  "notes": "very blue product",
-  "availableQty": "10",
-  "position": "213-abc-99"
-},
+[
   {
-    "id":"2",
-    "barCode": "2",
-    "description": "Red Mallet",
-    "sellPrice": "7.99",
-    "discountRate": "0.43",
-    "notes": "very red product",
-    "availableQty": "11",
-    "position": "213-adc-99"
-
+    "id": "1",
+    "description": "blue mallet",
+    "note": "blue indeed",
+    "position": "234-adf-3443",
+    "barCode": "1",
+    "sellPrice": "9.99",
+    "discountRate": "0.5",
+    "availableQty": "50"
   },
   {
-    "id":"3",
+    "id": "2",
+    "description": "red ball",
+    "note": "red indeed",
+    "position": "2334-abf-343",
+    "barCode": "2",
+    "sellPrice": "7.79",
+    "discountRate": "0.2",
+    "availableQty": "5"
+  },
+  {
+    "id": "3",
+    "description": "chair",
+    "note": null,
+    "position": "434-atf-3443",
     "barCode": "3",
-    "description": "Red Headphones",
-    "sellPrice": "20.99",
-    "discountRate": "1",
-    "notes": null,
-    "availableQty": "11",
-    "position": "213-add-99"
-
+    "sellPrice": "19.99",
+    "discountRate": "0",
+    "availableQty": "1"
+  },
+  {
+    "id": "4",
+    "description": "dentasticks",
+    "note": "dog food",
+    "position": "234-add-3443",
+    "barCode": "4",
+    "sellPrice": "8.99",
+    "discountRate": "0.1",
+    "availableQty": "10"
   }
 ]

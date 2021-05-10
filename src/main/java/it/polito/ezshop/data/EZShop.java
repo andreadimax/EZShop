@@ -181,7 +181,7 @@ public class EZShop implements EZShopInterface {
     private boolean writejArrayToFile(String filepath, JSONArray jArr){
         try
         {
-            FileWriter fOut = new FileWriter("src/main/persistent_data/productTypes.json");
+            FileWriter fOut = new FileWriter(filepath);
             fOut.write(jArr.toJSONString());
             fOut.flush();
             fOut.close();
