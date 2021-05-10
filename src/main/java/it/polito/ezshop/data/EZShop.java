@@ -101,6 +101,7 @@ public class EZShop implements EZShopInterface {
     public void parseObjectType(JSONObject obj, String type){
         switch (type) {
             case "product": {
+
                 //Get ProductID
                 Integer id = Integer.parseInt((String) obj.get("id"));
                 // Get Barcode
@@ -115,10 +116,13 @@ public class EZShop implements EZShopInterface {
                 String notes = (String) obj.get("notes");
                 // Get availableQty
                 Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
+                // Get position
+                String position = (String) obj.get("position");
 
                 ProductTypeImplementation newProduct = new ProductTypeImplementation(id, barCode, description, sellPrice, notes);
                 newProduct.setQuantity(availableQty);
                 newProduct.setDiscountRate(discountRate);
+                newProduct.setLocation(position);
                 this.productMap.put(id, newProduct);
                 break;
             }
@@ -370,11 +374,12 @@ public class EZShop implements EZShopInterface {
         // check description
         if(description == null || description.isEmpty()) throw new InvalidProductDescriptionException();
 
-        //check productCode
+        //check if productCode is null or empty and if it is a number
         if((productCode==null || productCode.isEmpty() || !productCode.matches("-?\\d+"))) {
             throw new InvalidProductCodeException();
         }
         Integer id=Integer.parseInt(productCode);
+        // check if product code is positive and if it already present in map
         if(id<0 || this.productMap.get(id)!=null) throw new InvalidProductCodeException();
 
 
@@ -411,7 +416,7 @@ public class EZShop implements EZShopInterface {
         pDetails = initializeJsonProductObject(p);
         jArrayProduct.add(pDetails);
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArrayToFile("",jArrayProduct)) return false;
+        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
 
         return false;
     }
@@ -427,7 +432,7 @@ public class EZShop implements EZShopInterface {
         //needs to remove object from memory array and commit to disk
         if(!jArrayProduct.remove(productMap.get(id)))return false;
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArrayToFile("",jArrayProduct)) return false;
+        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
         //remove object from map
         productMap.remove(id);
         return true;

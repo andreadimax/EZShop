@@ -1,8 +1,33 @@
 [{
-  "id":"102",
-  "barCode":"g323h23jk4h",
-  "description":"description1",
-  "sellPrice":"9.99",
-  "discountRate": "0.2",
-  "availableQty":"51"
-}]
+  "id":"1",
+  "barCode": "1",
+  "description": "Blue Mallet",
+  "sellPrice": "9.99",
+  "discountRate": "0.33",
+  "notes": "very blue product",
+  "availableQty": "10",
+  "position": "213-abc-99"
+},
+  {
+    "id":"2",
+    "barCode": "2",
+    "description": "Red Mallet",
+    "sellPrice": "7.99",
+    "discountRate": "0.43",
+    "notes": "very red product",
+    "availableQty": "11",
+    "position": "213-adc-99"
+
+  },
+  {
+    "id":"3",
+    "barCode": "3",
+    "description": "Red Headphones",
+    "sellPrice": "20.99",
+    "discountRate": "1",
+    "notes": null,
+    "availableQty": "11",
+    "position": "213-add-99"
+
+  }
+]
