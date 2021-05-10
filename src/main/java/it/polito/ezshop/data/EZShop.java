@@ -144,10 +144,10 @@ public class EZShop implements EZShopInterface {
                 //Get customer name
                 Integer id = Integer.parseInt((String) obj.get("id"));
 
-                //Get employee last name
+                //Get customer last name
                 String card = (String) obj.get("card");
 
-                //Get employee website name
+                //Get customer name
                 String name = (String) obj.get("name");
 
                 Integer points = Integer.parseInt((String) obj.get("points"));
@@ -174,13 +174,13 @@ public class EZShop implements EZShopInterface {
         return pDetails;
     }
 
-    private boolean writejArraytoFile(String filepath, JSONArray jArr){
+    private boolean writejArrayToFile(String filepath, JSONArray jArr){
         try
         {
-            FileWriter fout = new FileWriter("src/main/persistent_data/productTypes.json");
-            fout.write(jArr.toJSONString());
-            fout.flush();
-            fout.close();
+            FileWriter fOut = new FileWriter("src/main/persistent_data/productTypes.json");
+            fOut.write(jArr.toJSONString());
+            fOut.flush();
+            fOut.close();
 
         }
         catch(IOException f) {
@@ -242,18 +242,7 @@ public class EZShop implements EZShopInterface {
         this.jArrayUsers.add(userDetails);
 
         //Updating file
-        try
-        {
-            FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
-            fout.write(jArrayUsers.toJSONString());
-            fout.flush();
-            fout.close();
-
-        }
-        catch(IOException f) {
-            f.printStackTrace();
-            return -1;
-        }
+        if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return -1;
 
         return user.getId();
     }
@@ -272,18 +261,7 @@ public class EZShop implements EZShopInterface {
             users_data.remove(id);
 
             //Updating JSON File
-            try
-            {
-                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
-                fout.write(jArrayUsers.toJSONString());
-                fout.flush();
-                fout.close();
-
-            }
-            catch(IOException f) {
-                f.printStackTrace();
-                return false;
-            }
+            if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return false;
         }
         else {
             throw new InvalidUserIdException("User not present!");
@@ -340,18 +318,7 @@ public class EZShop implements EZShopInterface {
             ((JSONObject) jArrayUsers.get(user.getId())).put("role", user.getRole());
 
             //Updating JSON File
-            try
-            {
-                FileWriter fout = new FileWriter("src/main/persistent_data/users.json");
-                fout.write(jArrayUsers.toJSONString());
-                fout.flush();
-                fout.close();
-
-            }
-            catch(IOException f) {
-                f.printStackTrace();
-            }
-            return true;
+            return writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers);
         }
         else{
             return false;
@@ -418,7 +385,7 @@ public class EZShop implements EZShopInterface {
 
         this.jArrayProduct.add(pDetails);
         String filePath= "src/main/persistent_data/productTypes.json";
-        if(!writejArraytoFile(filePath, jArrayProduct))System.out.println("Couldn't write to file"+filePath);
+        if(!writejArrayToFile(filePath, jArrayProduct))System.out.println("Couldn't write to file"+filePath);
 
         return p.getId();
     }
@@ -444,7 +411,7 @@ public class EZShop implements EZShopInterface {
         pDetails = initializeJsonProductObject(p);
         jArrayProduct.add(pDetails);
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArraytoFile("",jArrayProduct)) return false;
+        if(!writejArrayToFile("",jArrayProduct)) return false;
 
         return false;
     }
@@ -460,7 +427,7 @@ public class EZShop implements EZShopInterface {
         //needs to remove object from memory array and commit to disk
         if(!jArrayProduct.remove(productMap.get(id)))return false;
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArraytoFile("",jArrayProduct)) return false;
+        if(!writejArrayToFile("",jArrayProduct)) return false;
         //remove object from map
         productMap.remove(id);
         return true;
@@ -619,15 +586,16 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer defineCustomer(String customerName) throws InvalidCustomerNameException, UnauthorizedException {
+        // verifying user privilegies
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
         }
-
+        // verifying  customer name is valid
         if(customerName == null || customerName.equals("")){
             throw new InvalidCustomerNameException();
         }
-
+        // the customer name should be unique
         for(Customer c: this.customersMap.values()){
             if( customerName.equals(c.getCustomerName())){
                 return -1;
@@ -656,19 +624,7 @@ public class EZShop implements EZShopInterface {
         this.jArrayCustomers.add(userDetails);
 
         //Updating file
-        try
-        {
-            FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
-            fout.write(jArrayCustomers.toJSONString());
-            fout.flush();
-            fout.close();
-
-        }
-        catch(IOException f) {
-            f.printStackTrace();
-            return -1;
-        }
-
+        if(!writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers))return -1;
 
         return c.getId();
     }
@@ -707,19 +663,7 @@ public class EZShop implements EZShopInterface {
         ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("card", customersMap.get(id).getCustomerCard());
 
         //Updating JSON File
-        try
-        {
-            FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
-            fout.write(jArrayUsers.toJSONString());
-            fout.flush();
-            fout.close();
-
-        }
-        catch(IOException f) {
-            f.printStackTrace();
-            return false;
-        }
-        return true;
+        return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
     }
 
     @Override
@@ -741,24 +685,12 @@ public class EZShop implements EZShopInterface {
             customersMap.remove(id);
 
             //Updating JSON File
-            try
-            {
-                FileWriter fout = new FileWriter("src/main/persistent_data/customers.json");
-                fout.write(jArrayCustomers.toJSONString());
-                fout.flush();
-                fout.close();
+            return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
 
-            }
-            catch(IOException f) {
-                f.printStackTrace();
-                return false;
-            }
         }
         else {
             return false;
         }
-
-        return true;
     }
 
     @Override
@@ -783,6 +715,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
+
         return (List<Customer>) new ArrayList<>(customersMap.values());
     }
 
