@@ -14,8 +14,8 @@ import java.util.HashMap;
 //@todo implement json/file update for all methods
 public class AccountBook {
 
-    private HashMap <Integer,BalanceOperation> operationsMap;
-    private JSONArray jArrayOperations;
+    private HashMap <Integer,BalanceOperation> operationsMap=null;
+    private JSONArray jArrayOperations=null;
     //net balance of all the BalanceOperations performed (payed)
     private double balance;
 
@@ -84,8 +84,23 @@ public class AccountBook {
                 if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
         }
-        else if(sub.equals("SaleTrans")){
-            //@todo implement SaleTrans subclass loading
+        else if(sub.equals("sale")){
+            /* TO MODIFY
+            String productCode = (String) x.get("productCode");
+            double pricePerUnit = Double.parseDouble((String) x.get("pricePerUnit"));
+            int quantity = Integer.parseInt((String) x.get("quantity"));
+            String status = (String) x.get("status");
+
+            //building order with the full constructor
+            OrderImpl order = new OrderImpl(balanceId, description, money, date, productCode, quantity, pricePerUnit, status);
+            //adding the loaded order back into the operationsMap checking for duplicates
+            if(!this.operationsMap.containsKey(balanceId)){
+                this.operationsMap.put(order.getBalanceId(), order);
+                if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
+
+
+            }
+            */
         }
         else if(sub.equals("ReturnTrans")){
             //@todo implement ReturnTrans subclass loading

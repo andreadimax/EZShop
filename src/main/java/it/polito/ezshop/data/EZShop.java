@@ -652,15 +652,19 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
+
         if(newCustomerName == null || newCustomerName.equals("") ){
             throw new InvalidCustomerNameException();
         }
+
         if(newCustomerCard == null || newCustomerCard.matches("\\d{10}")){
             throw new InvalidCustomerCardException();
         }
+
         if(!this.customersMap.containsKey(id)){
             throw new InvalidCustomerIdException();
         }
+
 
 
 
@@ -670,6 +674,7 @@ public class EZShop implements EZShopInterface {
                 return false;
             }
         }
+
 
         //Updating values
         customersMap.get(id).setCustomerCard(newCustomerCard);

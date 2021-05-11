@@ -20,3 +20,4 @@ public interface SaleTransaction {
 
     void setPrice(double price);
 }
+

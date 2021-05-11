@@ -4,8 +4,28 @@
   "description":"description1",
   "money":"-9.99",
   "date": "2021-05-19",
-  "productCode":"g323h23jk4h",
+  "productCode":"79",
   "pricePerUnit":"3.33",
   "quantity":"3",
   "status": "ISSUED"
-}]
+},
+  {
+    "sub":"sale",
+    "balanceId":"2",
+    "description":"description2",
+    "money":"+9.99",
+    "date": "2021-05-19",
+    "entries":
+    [
+      {
+        "ProductId": "4",
+        "quantity": 50
+      },
+      {
+        "ProductId": "2",
+        "quantity": 6
+      }
+    ],
+    "status": "CLOSED"
+  }
+]
