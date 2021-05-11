@@ -11,12 +11,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Random;
 
 
 public class EZShop implements EZShopInterface {
@@ -55,6 +51,7 @@ public class EZShop implements EZShopInterface {
         this.accountBook = new AccountBook();                                   //Account book object
         this.users_data = new HashMap<>();                         //Users
         this.customersMap = new HashMap<>();                   //Customers
+
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", users_data,"user"));
@@ -97,6 +94,19 @@ public class EZShop implements EZShopInterface {
         return jArray;
     }
 
+    /* Generate a random unique ID */
+    public Integer assignId(Set<Integer> ids){
+        boolean found = false;
+        Integer int_random = 0;
+        while(!found){
+            Random rand = new Random(); //instance of random class
+            int_random = rand.nextInt(9);
+            if(!ids.contains(int_random) && int_random != 0){
+                found = true;
+            }
+        }
+        return  int_random;
+    }
 
     public void parseObjectType(JSONObject obj, String type){
         switch (type) {
@@ -158,6 +168,7 @@ public class EZShop implements EZShopInterface {
 
                 Customer new_customer = new CustomerImplementation(name, id, points, card);
                 this.customersMap.put(id, new_customer);
+                System.out.println(customersMap.size());
                 break;
             }
         }
@@ -226,7 +237,7 @@ public class EZShop implements EZShopInterface {
         }
 
         //Creating new user
-        User user = new UserImplementation(users_data.size()+1, username, password, role);
+        User user = new UserImplementation(assignId(this.users_data.keySet()), username, password, role);
         //Adding to map
         this.users_data.put(user.getId(), user);
 
@@ -264,10 +275,15 @@ public class EZShop implements EZShopInterface {
         //Checking if user exists...
         if(users_data.get(id) != null){
             //Deleting from JSON Array...
-            jArrayUsers.remove(users_data.get(id));
+            JSONObject user_obj = null;
+            for(int i = 0; i< jArrayUsers.size(); i++){
+                user_obj  = (JSONObject) jArrayUsers.get(i);
+                if(user_obj.get("id").equals(id.toString())){
+                    jArrayUsers.remove(i);
+                }
+            }
             //Deleting from map
             users_data.remove(id);
-
             //Updating JSON File
             if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return false;
         }
@@ -323,7 +339,13 @@ public class EZShop implements EZShopInterface {
             user.setRole(role);
 
             //Updating JSON Object in the JSON Array
-            ((JSONObject) jArrayUsers.get(user.getId()-1)).put("role", user.getRole());
+            JSONObject user_obj = null;
+            for(int i = 0; i< jArrayUsers.size(); i++){
+                user_obj  = (JSONObject) jArrayUsers.get(i);
+                if(user_obj.get("id").equals(id.toString())){
+                    user_obj.put("role", user.getRole());
+                }
+            }
 
             //Updating JSON File
             return writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers);
@@ -654,7 +676,8 @@ public class EZShop implements EZShopInterface {
         }
 
         //Create customer
-        Customer c = new CustomerImplementation(customerName, customersMap.size(), 0, null);
+        System.out.println(customersMap.size());
+        Customer c = new CustomerImplementation(customerName, assignId(this.customersMap.keySet()), 0, null);
         //Add customer to map
         customersMap.put(c.getId(), c);
 
@@ -691,7 +714,7 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerNameException();
         }
 
-        if(newCustomerCard == null || newCustomerCard.matches("\\d{10}")){
+        if(newCustomerCard == null || newCustomerCard.matches("\\d{11}")){
             throw new InvalidCustomerCardException();
         }
 
@@ -699,24 +722,30 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerIdException();
         }
 
-
-
-
         //Checking if card code is already assigned to someone
         for(Customer c: customersMap.values()){
-            if(newCustomerCard.equals(c.getCustomerCard())){
-                return false;
+            if(c != customersMap.get(id)) {
+                if (c.getCustomerCard() != null) {
+                    if (newCustomerCard.equals(c.getCustomerCard())) {
+                        return false;
+                    }
+                }
             }
         }
-
 
         //Updating values
         customersMap.get(id).setCustomerCard(newCustomerCard);
         customersMap.get(id).setCustomerName(newCustomerName);
 
+        JSONObject customer_obj = null;
         //Updating JSON Object in the JSON Array
-        ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("name", customersMap.get(id).getCustomerName());
-        ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("card", customersMap.get(id).getCustomerCard());
+        for(int i = 0; i< jArrayCustomers.size(); i++){
+            customer_obj  = (JSONObject) jArrayCustomers.get(i);
+            if(customer_obj.get("id").equals(id.toString())){
+                customer_obj.put("name", customersMap.get(id).getCustomerName());
+                customer_obj.put("card", customersMap.get(id).getCustomerCard());
+            }
+        }
 
         //Updating JSON File
         return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
@@ -736,7 +765,13 @@ public class EZShop implements EZShopInterface {
         //Checking if customer exists...
         if(customersMap.get(id) != null){
             //Deleting from JSON Array...
-            jArrayUsers.remove(customersMap.get(id));
+            JSONObject customer_obj = null;
+            for(int i = 0; i< jArrayCustomers.size(); i++){
+                customer_obj  = (JSONObject) jArrayCustomers.get(i);
+                if(customer_obj.get("id").equals(id.toString())){
+                    jArrayCustomers.remove(i);
+                }
+            }
             //Deleting from map
             customersMap.remove(id);
 
@@ -781,21 +816,23 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        StringBuilder serialNumber = new StringBuilder();
+        String serialNumber = new String();
         //Generating card...
-        for(int i=0; i<11; i++){
+        for(int i=0; i<10; i++){
             Random rand = new Random(); //instance of random class
-            int int_random = rand.nextInt(9);
-            serialNumber.append(Integer.toString(int_random));
+            Integer int_random = rand.nextInt(9);
+            serialNumber += int_random.toString();
         }
         //Checking if it's already assigned
         for(Customer c: customersMap.values()){
-            if(c.getCustomerCard().equals(serialNumber.toString())){
-                System.out.println("Error");
+            if(c.getCustomerCard() != null) {
+                if (c.getCustomerCard().equals(serialNumber.toString())) {
+                    System.out.println("Error");
+                }
             }
         }
 
-        return serialNumber.toString();
+        return serialNumber;
     }
 
     @Override
@@ -807,21 +844,33 @@ public class EZShop implements EZShopInterface {
         if(customerId == null || customerId<=0 ){
             throw new InvalidCustomerIdException();
         }
-        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
         for (Customer c: customersMap.values()){
-            if(c.getCustomerCard().equals(customerCard)){
-                return false;
+            if(c != customersMap.get(customerId)) {
+                if (c.getCustomerCard().equals(customerCard)) {
+                    return false;
+                }
             }
         }
 
         //Checking if customer exists...
         if(customersMap.containsKey(customerId)){
-            customersMap.get(customerId).setCustomerName(customerCard);
-            return true;
+            Customer c= customersMap.get(customerId);
+            JSONObject customer_obj = null;
+            //Updating JSON Object in the JSON Array
+            for(int i = 0; i< jArrayCustomers.size(); i++){
+                customer_obj  = (JSONObject) jArrayCustomers.get(i);
+                if(customer_obj.get("id").equals(c.getId())){
+                    c.setCustomerCard(customerCard);
+                    customer_obj.put("card", c.getCustomerCard());
+                }
+            }
+            return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
         }
+
 
         return false;
     }
@@ -832,16 +881,29 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(customerCard == null || customerCard.matches("\\d{10}") || customerCard.equals("")){
+        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
         //Checking validity of data
         for(Customer c: customersMap.values()){
-            if(c.getCustomerCard().equals(customerCard)){
-                if(c.getPoints() + pointsToBeAdded > 0){
-                    c.setPoints(c.getPoints() + pointsToBeAdded);
-                    return true;
+            if(c.getCustomerCard() != null) {
+                if (c.getCustomerCard().equals(customerCard)) {
+                    if (c.getPoints() + pointsToBeAdded > 0) {
+                        c.setPoints(c.getPoints() + pointsToBeAdded);
+
+                        JSONObject customer_obj = null;
+                        //Updating JSON Object in the JSON Array
+                        for(int i = 0; i< jArrayCustomers.size(); i++){
+                            customer_obj  = (JSONObject) jArrayCustomers.get(i);
+                            if(customer_obj.get("card") != null) {
+                                if (customer_obj.get("card").equals(c.getCustomerCard())) {
+                                    customer_obj.put("points", new Integer(c.getPoints()).toString());
+                                }
+                            }
+                        }
+                        return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
+                    }
                 }
             }
         }
