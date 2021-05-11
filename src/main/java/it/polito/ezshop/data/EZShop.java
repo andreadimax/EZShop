@@ -322,7 +322,7 @@ public class EZShop implements EZShopInterface {
         if((user = users_data.get(id)) != null ){
             user.setRole(role);
 
-            //Updating JSON OBject in the JSON Array
+            //Updating JSON Object in the JSON Array
             ((JSONObject) jArrayUsers.get(user.getId())).put("role", user.getRole());
 
             //Updating JSON File
@@ -372,7 +372,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
 
-        //check privilegies
+        //check privileges
         if(userLogged!=null && !("ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
         Integer productID;
 
@@ -499,7 +499,7 @@ public class EZShop implements EZShopInterface {
         if(newPos==null || !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
 
 
-        //if position is not unique, or productid has no match return false
+        //if position is not unique, or productId has no match return false
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
         if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(newPos))))return false;
         //(?) qui dovrei aggiungere la posizione alla lista di posizioni etc ma sono dell'idea di eliminare la classe posizione
@@ -577,7 +577,7 @@ public class EZShop implements EZShopInterface {
         //making sure the order exists, has an existing location assigned and is in
         if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
         OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
-        ProductType product = this.productMap.get(order.getProductCode());
+        ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(order.getProductCode())).findFirst().get();
         if(product.getLocation() == null || null!=product.getLocation()){ throw new InvalidLocationException(); }
 
         //registering the order arrival and updating the product quantity (unless it was already completed)
@@ -603,7 +603,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer defineCustomer(String customerName) throws InvalidCustomerNameException, UnauthorizedException {
-        // verifying user privilegies
+        // verifying user privileges
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager") && !this.userLogged.getRole().equals("Cashier")))
         {
             throw new UnauthorizedException();
@@ -680,7 +680,7 @@ public class EZShop implements EZShopInterface {
         customersMap.get(id).setCustomerCard(newCustomerCard);
         customersMap.get(id).setCustomerName(newCustomerName);
 
-        //Updating JSON OBject in the JSON Array
+        //Updating JSON Object in the JSON Array
         ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("name", customersMap.get(id).getCustomerName());
         ((JSONObject) jArrayCustomers.get(customersMap.get(id).getId())).put("card", customersMap.get(id).getCustomerCard());
 

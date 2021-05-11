@@ -4,7 +4,7 @@
   "description":"description1",
   "money":"-9.99",
   "date": "2021-05-19",
-  "productCode":"79",
+  "productCode":"1",
   "pricePerUnit":"3.33",
   "quantity":"3",
   "status": "ISSUED"
@@ -15,7 +15,6 @@
     "description":"A saleTransaction description",
     "money":"11.36",
     "date": "2021-05-19",
-    "paymentType": "cash",
     "discountRate": "0.3",
     "entries":
     [

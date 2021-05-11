@@ -16,8 +16,8 @@ import java.util.List;
 //@todo implement json/file update for all methods
 public class AccountBook {
 
-    private HashMap <Integer,BalanceOperation> operationsMap;
-    private JSONArray jArrayOperations;
+    private final HashMap <Integer,BalanceOperation> operationsMap;
+    private final JSONArray jArrayOperations;
     //net balance of all the BalanceOperations performed (payed)
     private double balance;
 
@@ -25,17 +25,17 @@ public class AccountBook {
         this.balance = 0;
         this.operationsMap = new HashMap<>();
 
-        this.jArrayOperations=initializeMap("src/main/persistent_data/operations.json", this.operationsMap);
+        this.jArrayOperations=initializeMap();
 
     }
 
-    private JSONArray initializeMap( String filepath, HashMap<Integer,BalanceOperation> map ){
+    private JSONArray initializeMap(){
 
         JSONParser parser = new JSONParser();
         JSONArray jArray = null;
         FileReader file = null;
         try {
-            file = new FileReader(filepath);
+            file = new FileReader("src/main/persistent_data/operations.json");
         }
         catch (FileNotFoundException f){
             f.printStackTrace();
@@ -88,7 +88,6 @@ public class AccountBook {
         }
         else if(sub.equals("sale")){
 
-            String paymentType = (String) x.get("paymentType");
             double discountRate = Double.parseDouble((String) x.get("discountRate"));
             String status = (String) x.get("status");
             //JSON array to iterate over TicketEntries "entries"
@@ -98,7 +97,7 @@ public class AccountBook {
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
             //building saleTransaction with the full constructor
-            SaleTransactionImplementation Sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,paymentType,entries);
+            SaleTransactionImplementation Sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
             //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId, Sale);
@@ -114,7 +113,7 @@ public class AccountBook {
 
     /**
      * used to simplify entries load of sales transactions,
-     * parses the Ticket entry fields and adds it to the listo of entries
+     * parses the Ticket entry fields and adds it to the list of entries
      */
     private void addEntry( List<TicketEntry> entries, JSONObject entry){
         //parsing the entry fields and building it
@@ -136,7 +135,7 @@ public class AccountBook {
             return false;
         }
         this.operationsMap.put(NewOp.getBalanceId(), NewOp);
-        //Updating JSON OBject in the JSON Array
+        //Updating JSON Object in the JSON Array
         jArrayOperations.add(NewOp);
 
         //Updating JSON File
