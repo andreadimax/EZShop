@@ -9,13 +9,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 //@todo implement json/file update for all methods
 public class AccountBook {
 
-    private HashMap <Integer,BalanceOperation> operationsMap=null;
-    private JSONArray jArrayOperations=null;
+    private HashMap <Integer,BalanceOperation> operationsMap;
+    private JSONArray jArrayOperations;
     //net balance of all the BalanceOperations performed (payed)
     private double balance;
 
@@ -80,33 +82,48 @@ public class AccountBook {
             OrderImpl order = new OrderImpl(balanceId, description, money, date, productCode, quantity, pricePerUnit, status);
             //adding the loaded order back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
-                this.operationsMap.put(order.getBalanceId(), order);
+                this.operationsMap.put(balanceId, order);
                 if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
         }
         else if(sub.equals("sale")){
-            /* TO MODIFY
-            String productCode = (String) x.get("productCode");
-            double pricePerUnit = Double.parseDouble((String) x.get("pricePerUnit"));
-            int quantity = Integer.parseInt((String) x.get("quantity"));
+
+            String paymentType = (String) x.get("paymentType");
+            double discountRate = Double.parseDouble((String) x.get("discountRate"));
             String status = (String) x.get("status");
+            //JSON array to iterate over TicketEntries "entries"
+            JSONArray jEntries = (JSONArray) x.get("entries");
+            //loading TicketEntries list of the sale transaction
+            List<TicketEntry> entries = new ArrayList<>();
+            jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
-            //building order with the full constructor
-            OrderImpl order = new OrderImpl(balanceId, description, money, date, productCode, quantity, pricePerUnit, status);
-            //adding the loaded order back into the operationsMap checking for duplicates
+            //building saleTransaction with the full constructor
+            SaleTransactionImplementation Sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,paymentType,entries);
+            //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
-                this.operationsMap.put(order.getBalanceId(), order);
-                if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
-
-
+                this.operationsMap.put(balanceId, Sale);
+                if( status.equals("CLOSED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
-            */
         }
         else if(sub.equals("ReturnTrans")){
             //@todo implement ReturnTrans subclass loading
         }
 
 
+    }
+
+    /**
+     * used to simplify entries load of sales transactions,
+     * parses the Ticket entry fields and adds it to the listo of entries
+     */
+    private void addEntry( List<TicketEntry> entries, JSONObject entry){
+        //parsing the entry fields and building it
+        String barcode = (String) entry.get("barcode");
+        String desc = (String) entry.get("description");
+        int amount = Integer.parseInt((String) entry.get("amount"));
+        double PPU = Double.parseDouble((String) entry.get("PPU"));
+        double discountRate = Double.parseDouble((String) entry.get("PPU"));
+        entries.add(new TicketEntryImpl(barcode,desc,amount,PPU,discountRate));
     }
 
     /**

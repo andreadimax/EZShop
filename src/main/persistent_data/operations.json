@@ -12,18 +12,26 @@
   {
     "sub":"sale",
     "balanceId":"2",
-    "description":"description2",
-    "money":"+9.99",
+    "description":"A saleTransaction description",
+    "money":"11.36",
     "date": "2021-05-19",
+    "paymentType": "cash",
+    "discountRate": "0.3",
     "entries":
     [
       {
-        "ProductId": "4",
-        "quantity": 50
+        "barcode": "1",
+        "description": "blue mallet",
+        "amount": "2",
+        "PPU" : "9.99",
+        "discountRate": "0.5"
       },
       {
-        "ProductId": "2",
-        "quantity": 6
+        "barcode": "2",
+        "description": "red ball",
+        "amount": "1",
+        "PPU" : "7.79",
+        "discountRate": "0.2"
       }
     ],
     "status": "CLOSED"
