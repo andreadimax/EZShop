@@ -18,15 +18,17 @@ public class ProductTypeImplementation implements ProductType {
         this.discountRate = discountRate;
         this.note = note;
         this.id=id;
+        this.availableQty=0;
     }
 
     //Methods
     public boolean changeQuantity(Integer amount){
+        System.out.println("updating quantity in implementation: " + amount);
         //if i am subtracting and the available quantity is not enough
-        if(amount<0 && this.availableQty<amount){
+        if(amount<0 && this.availableQty<-amount){
             return false;
         }
-        this.availableQty+=amount;
+        this.availableQty = this.availableQty + amount;
         return true;
     }
     // getters and setters

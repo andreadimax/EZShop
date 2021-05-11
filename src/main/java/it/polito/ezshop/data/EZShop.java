@@ -113,7 +113,7 @@ public class EZShop implements EZShopInterface {
                 // Get discountRate
                 double discountRate = Double.parseDouble((String) obj.get("discountRate"));
                 // Get notes
-                String notes = (String) obj.get("notes");
+                String notes = (String) obj.get("note");
                 // Get availableQty
                 Integer availableQty = Integer.parseInt((String) obj.get("availableQty"));
                 // Get position
@@ -168,17 +168,21 @@ public class EZShop implements EZShopInterface {
     private JSONObject initializeJsonProductObject(ProductTypeImplementation p){
         //initialize jsonObject
         JSONObject pDetails = new JSONObject();
-        pDetails.put("id", p.getId());
-        pDetails.put("avaliableQty", p.getQuantity());
+        pDetails.put("id", p.getId().toString());
+        Object qty=p.getQuantity();
+        pDetails.put("availableQty", (qty==null)?"0":qty.toString());
         pDetails.put("barCode", p.getBarCode());
         pDetails.put("description", p.getProductDescription());
-        pDetails.put("discountRate", p.getDiscountRate());
-        pDetails.put("Note", p.getNote());
-        pDetails.put("sellPrice", p.getPricePerUnit());
+        Object dr = p.getDiscountRate();
+        pDetails.put("discountRate", (dr==null)?"0":dr.toString());
+        pDetails.put("note", p.getNote());
+        Object sp = p.getDiscountRate();
+        pDetails.put("sellPrice", (sp==null)?"0": sp.toString());
         return pDetails;
     }
 
     private boolean writejArrayToFile(String filepath, JSONArray jArr){
+        System.out.println("writing jarray to file");
         try
         {
             FileWriter fOut = new FileWriter(filepath);
@@ -367,6 +371,7 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
+
         //check privilegies
         if(userLogged!=null && !("ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
         Integer productID;
@@ -384,7 +389,7 @@ public class EZShop implements EZShopInterface {
 
 
         ProductTypeImplementation p = new ProductTypeImplementation(id,productCode, description,pricePerUnit,note);
-        p.changeQuantity(1);
+
         this.productMap.put(id,p);
         JSONObject pDetails = initializeJsonProductObject(p);
 
@@ -399,11 +404,14 @@ public class EZShop implements EZShopInterface {
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
+
         //check for invalid product id
         if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
 
         //needs to remove object from memory array and commit to disk
-        if(!jArrayProduct.remove(productMap.get(id)))return false;
+        if(productMap.get(id)==null)return false;
+        jArrayProduct.remove(productMap.get(id));
+
         //update object in map
         ProductTypeImplementation p =(ProductTypeImplementation) productMap.get(id);
         p.setId(id);
@@ -412,13 +420,13 @@ public class EZShop implements EZShopInterface {
         p.setPricePerUnit(newPrice);
         p.setNote(newNote);
 
+
+
         JSONObject pDetails=null;
         pDetails = initializeJsonProductObject(p);
         jArrayProduct.add(pDetails);
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
-
-        return false;
+        return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
     }
 
 
@@ -467,10 +475,12 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean updateQuantity(Integer productId, int toBeAdded) throws InvalidProductIdException, UnauthorizedException {
+
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))
         {
             throw new UnauthorizedException();
         }
+        System.out.println("updating quantity: " + toBeAdded);
         if(productId==null || productId<=0)throw new InvalidProductIdException();
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
         return p != null && p.changeQuantity(toBeAdded);
@@ -482,9 +492,11 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
+
         if( productId==null || productId<=0)throw new InvalidProductIdException();
+
         //if position is not null, check if it satisfies <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber> format
-        if(newPos!=null && !newPos.matches("[0-9]*-[^0-9]-[0-9]*"))throw new InvalidLocationException();
+        if(newPos==null || !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
 
 
         //if position is not unique, or productid has no match return false
