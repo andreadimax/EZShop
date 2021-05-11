@@ -1,38 +1,5 @@
-[{
-  "sub":"order",
-  "balanceId":"1",
-  "description":"description1",
-  "money":"-9.99",
-  "date": "2021-05-19",
-  "productCode":"1",
-  "pricePerUnit":"3.33",
-  "quantity":"3",
-  "status": "ISSUED"
-},
-  {
-    "sub":"sale",
-    "balanceId":"2",
-    "description":"A saleTransaction description",
-    "money":"11.36",
-    "date": "2021-05-19",
-    "discountRate": "0.3",
-    "entries":
-    [
-      {
-        "barcode": "1",
-        "description": "blue mallet",
-        "amount": "2",
-        "PPU" : "9.99",
-        "discountRate": "0.5"
-      },
-      {
-        "barcode": "2",
-        "description": "red ball",
-        "amount": "1",
-        "PPU" : "7.79",
-        "discountRate": "0.2"
-      }
-    ],
-    "status": "CLOSED"
-  }
-]
+[{"date":"2021-05-19","sub":"order","productCode":"1","quantity":"3","money":"-9.99","description":"description1","balanceId":"1","pricePerUnit":"3.33","status":"COMPLETED"},
+  {"date":"2021-05-19","sub":"sale","discountRate":"0.3",
+    "entries":[{"discountRate":"0.5","amount":"2","PPU":"9.99","description":"blue mallet","barcode":"1"},
+               {"discountRate":"0.2","amount":"1","PPU":"7.79","description":"red ball","barcode":"2"}],"money":"11.36","description":"A saleTransaction description","balanceId":"2","status":"CLOSED"},
+  {"date":"2021-06-19","sub":"order","productCode":"4","quantity":"11","money":"-22","description":"secondordine","balanceId":"3","pricePerUnit":"2","status":"ISSUED"}]

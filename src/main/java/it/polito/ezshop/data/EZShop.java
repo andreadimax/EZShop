@@ -308,7 +308,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean updateUserRights(Integer id, String role) throws InvalidUserIdException, InvalidRoleException, UnauthorizedException {
 
-        if(userLogged == null || userLogged.getRole().equals("Administrator")){
+        if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
 
@@ -323,7 +323,7 @@ public class EZShop implements EZShopInterface {
             user.setRole(role);
 
             //Updating JSON Object in the JSON Array
-            ((JSONObject) jArrayUsers.get(user.getId())).put("role", user.getRole());
+            ((JSONObject) jArrayUsers.get(user.getId()-1)).put("role", user.getRole());
 
             //Updating JSON File
             return writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers);
@@ -523,6 +523,7 @@ public class EZShop implements EZShopInterface {
         //otherwise finally generates the order in "issued" state
         OrderImpl order = new OrderImpl(productCode,quantity,pricePerUnit);
         this.accountBook.addOperation(order);
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
         return order.getOrderId();
     }
 
@@ -542,6 +543,11 @@ public class EZShop implements EZShopInterface {
         //if it is enough, change status and change balance
         accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        ((JSONObject) accountBook.getjArrayOperations().get(orderId)).put("status","PAYED");
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+
         return orderId;
     }
 
@@ -564,6 +570,18 @@ public class EZShop implements EZShopInterface {
         //if it is enough, change status and change balance
         accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(orderId.toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
         return true;
     }
 
@@ -577,8 +595,11 @@ public class EZShop implements EZShopInterface {
         //making sure the order exists, has an existing location assigned and is in
         if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
         OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
+        if(order == null){
+            System.out.println("RETRIEVED ORDER IS NULL");
+        }
         ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(order.getProductCode())).findFirst().get();
-        if(product.getLocation() == null || null!=product.getLocation()){ throw new InvalidLocationException(); }
+        if(product.getLocation() == null){ throw new InvalidLocationException(); }
 
         //registering the order arrival and updating the product quantity (unless it was already completed)
         if(order.getStatus().equals("COMPLETED")){
@@ -586,6 +607,19 @@ public class EZShop implements EZShopInterface {
         }
         product.setQuantity( product.getQuantity() + order.getQuantity() );
         order.setStatus("COMPLETED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(orderId.toString()) ){
+                    tmp.put("status","COMPLETED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+
         return true;
     }
 
@@ -912,6 +946,6 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public double computeBalance() throws UnauthorizedException {
-        return 0;
+        return accountBook.getBalance();
     }
 }

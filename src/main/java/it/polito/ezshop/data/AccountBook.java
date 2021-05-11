@@ -16,8 +16,9 @@ import java.util.List;
 //@todo implement json/file update for all methods
 public class AccountBook {
 
-    private final HashMap <Integer,BalanceOperation> operationsMap;
-    private final JSONArray jArrayOperations;
+    private HashMap <Integer,BalanceOperation> operationsMap;
+    private JSONArray jArrayOperations;
+    private final String filepath = "src/main/persistent_data/operations.json";
     //net balance of all the BalanceOperations performed (payed)
     private double balance;
 
@@ -35,7 +36,7 @@ public class AccountBook {
         JSONArray jArray = null;
         FileReader file = null;
         try {
-            file = new FileReader("src/main/persistent_data/operations.json");
+            file = new FileReader(this.filepath);
         }
         catch (FileNotFoundException f){
             f.printStackTrace();
@@ -126,7 +127,7 @@ public class AccountBook {
     }
 
     /**
-     *
+     *  this method also updates the Json array but not the file!
      * @param NewOp The balanceOperation object to add to the map of operations
      * @return false if operation was already present, true if it's added.
      */
@@ -138,18 +139,6 @@ public class AccountBook {
         //Updating JSON Object in the JSON Array
         jArrayOperations.add(NewOp);
 
-        //Updating JSON File
-        try
-        {
-            FileWriter fout = new FileWriter("src/main/persistent_data/operations.json");
-            fout.write(jArrayOperations.toJSONString());
-            fout.flush();
-            fout.close();
-
-        }
-        catch(IOException f) {
-            f.printStackTrace();
-        }
         return true;
     }
 
@@ -183,4 +172,11 @@ public class AccountBook {
         return this.operationsMap;
     }
 
+    public String getFilepath() {
+        return filepath;
+    }
+
+    public JSONArray getjArrayOperations() {
+        return jArrayOperations;
+    }
 }
