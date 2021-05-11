@@ -84,7 +84,7 @@ public class AccountBook {
             //adding the loaded order back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId, order);
-                //if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
+                if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
         }
         else if(description.equals("SaleTransaction")){
@@ -131,7 +131,7 @@ public class AccountBook {
         String desc = (String) entry.get("description");
         int amount = Integer.parseInt((String) entry.get("amount"));
         double PPU = Double.parseDouble((String) entry.get("PPU"));
-        double discountRate = Double.parseDouble((String) entry.get("PPU"));
+        double discountRate = Double.parseDouble((String) entry.get("discountRate"));
         entries.add(new TicketEntryImpl(barcode,desc,amount,PPU,discountRate));
     }
 
@@ -165,8 +165,22 @@ public class AccountBook {
         }
         else if(NewOp instanceof SaleTransactionImplementation){
             SaleTransactionImplementation sale = (SaleTransactionImplementation) NewOp;
-            //joperation.put("sub","order");
-            //@todo implement encoding of sale transaction to JSON object as the ParseObjectSubclass method expects it
+            joperation.put("discountRate", ((Double)sale.getDiscountRate()).toString());
+            joperation.put("status", sale.getStatus());
+            //section to load the JSONArray entries
+            JSONArray jEntries = new JSONArray();
+            JSONObject jEntry;
+            for (int i = 0; i < sale.entries.size(); i++) {
+                jEntry = new JSONObject();
+                TicketEntry entry = sale.entries.get(i);
+                jEntry.put("barcode",entry.getBarCode());
+                jEntry.put("description",entry.getProductDescription());
+                jEntry.put("amount",entry.getAmount());
+                jEntry.put("PPU",entry.getPricePerUnit());
+                jEntry.put("discountRate",entry.getDiscountRate());
+                jEntries.add(jEntry);
+            }
+            joperation.put("entries",jEntries);
         }
         else{
             //case where it's either a simple Debit or Credit operation
