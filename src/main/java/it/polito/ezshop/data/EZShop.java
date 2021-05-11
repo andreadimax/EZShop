@@ -891,7 +891,6 @@ public class EZShop implements EZShopInterface {
                 if (c.getCustomerCard().equals(customerCard)) {
                     if (c.getPoints() + pointsToBeAdded > 0) {
                         c.setPoints(c.getPoints() + pointsToBeAdded);
-
                         JSONObject customer_obj = null;
                         //Updating JSON Object in the JSON Array
                         for(int i = 0; i< jArrayCustomers.size(); i++){
