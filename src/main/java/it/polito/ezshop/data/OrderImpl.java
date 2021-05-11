@@ -17,7 +17,7 @@ public class OrderImpl extends BalanceOperationImpl {
 
 
     public OrderImpl(String productCode, int quantity, double pricePerUnit){
-        super();
+        super("Order");
         //setting proper of this class
         this.productCode = productCode;
         this.quantity = quantity;

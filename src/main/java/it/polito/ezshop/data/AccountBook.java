@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+//@todo remove sub parameter and use description
 //@todo implement json/file update for all methods
 public class AccountBook {
 
@@ -70,9 +70,9 @@ public class AccountBook {
         //Get date
         LocalDate date = LocalDate.parse((String) x.get("date"));
 
-        //based on the "sub" field, present only in JSON version of the object, instantiates different subclasses
-        String sub = (String) x.get("sub");
-        if(sub.equals("order")){
+        /*//based on the "sub" field, present only in JSON version of the object, instantiates different subclasses
+        String sub = (String) x.get("sub");*/
+        if(description.equals("Order")){
 
             String productCode = (String) x.get("productCode");
             double pricePerUnit = Double.parseDouble((String) x.get("pricePerUnit"));
@@ -84,10 +84,10 @@ public class AccountBook {
             //adding the loaded order back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId, order);
-                if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
+                //if( status.equals("PAYED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
         }
-        else if(sub.equals("sale")){
+        else if(description.equals("SaleTransaction")){
 
             double discountRate = Double.parseDouble((String) x.get("discountRate"));
             String status = (String) x.get("status");
@@ -105,8 +105,17 @@ public class AccountBook {
                 if( status.equals("CLOSED") || status.equals("COMPLETED")){this.changeBalance(money);}
             }
         }
-        else if(sub.equals("ReturnTrans")){
+        else if(description.equals("ReturnTransaction")){
             //@todo implement ReturnTrans subclass loading
+        }
+        else if(description.equals("Credit") || description.equals("Debit")){
+            //Simple Balance Update Operation (credit or debit)
+            BalanceOperation operation = new BalanceOperationImpl(balanceId,description,money,date);
+            //adding the operation (credit or debit) back into the operationsMap checking for duplicates
+            if(!this.operationsMap.containsKey(balanceId)){
+                this.operationsMap.put(balanceId, operation);
+                this.changeBalance(money);
+            }
         }
 
 
@@ -136,8 +145,41 @@ public class AccountBook {
             return false;
         }
         this.operationsMap.put(NewOp.getBalanceId(), NewOp);
+
         //Updating JSON Object in the JSON Array
-        jArrayOperations.add(NewOp);
+        //encoding basic BalanceOperation properties
+        JSONObject joperation = new JSONObject();
+        joperation.put("balanceId", ((Integer)NewOp.getBalanceId()).toString());
+        joperation.put("description", NewOp.getType());
+        joperation.put("money", ((Double)NewOp.getMoney()).toString());
+        joperation.put("date", NewOp.getDate().toString());
+
+        //encoding subclass specific properties
+        if(NewOp instanceof OrderImpl){
+            OrderImpl order = (OrderImpl) NewOp;
+            //joperation.put("sub","order");
+            joperation.put("productCode", order.getProductCode());
+            joperation.put("pricePerUnit",((Double) order.getPricePerUnit()).toString());
+            joperation.put("quantity", ((Integer) order.getQuantity()).toString());
+            joperation.put("status", order.getStatus());
+        }
+        else if(NewOp instanceof SaleTransactionImplementation){
+            SaleTransactionImplementation sale = (SaleTransactionImplementation) NewOp;
+            //joperation.put("sub","order");
+            //@todo implement encoding of sale transaction to JSON object as the ParseObjectSubclass method expects it
+        }
+        else{
+            //case where it's either a simple Debit or Credit operation
+            if(NewOp.getMoney() > 0){
+                //joperation.put("sub","credit");
+            }
+            else{
+                //joperation.put("sub","debit");
+            }
+        }
+        //@todo implement subclass ReturnTransaction extending BalanceOperationImpl
+        //actually adding the encoded operation into the jArray
+        jArrayOperations.add(joperation);
 
         return true;
     }

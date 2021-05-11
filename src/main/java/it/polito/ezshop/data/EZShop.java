@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Random;
@@ -22,16 +21,16 @@ import java.util.Random;
 public class EZShop implements EZShopInterface {
     //users
     private User userLogged = null;
-    private HashMap<Integer, User> users_data=null;
+    private HashMap<Integer, User> users_data;
     private JSONArray jArrayUsers;
     //products
-    private HashMap<Integer, ProductType> productMap=null;
-    private JSONArray jArrayProduct=null;
+    private HashMap<Integer, ProductType> productMap;
+    private JSONArray jArrayProduct;
     private FileReader productsFile;
-    private AccountBook accountBook=null;
+    private AccountBook accountBook;
     //Customers
-    private HashMap<Integer, Customer>  customersMap=null;
-    private JSONArray jArrayCustomers=null;
+    private HashMap<Integer, Customer>  customersMap;
+    private JSONArray jArrayCustomers;
 
 
 
@@ -422,7 +421,7 @@ public class EZShop implements EZShopInterface {
 
 
 
-        JSONObject pDetails=null;
+        JSONObject pDetails;
         pDetails = initializeJsonProductObject(p);
         jArrayProduct.add(pDetails);
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
@@ -936,16 +935,81 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean recordBalanceUpdate(double toBeAdded) throws UnauthorizedException {
-        return false;
+        //exceptions
+        if(userLogged == null){
+            throw new UnauthorizedException();
+        }
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager"))){
+            throw new UnauthorizedException();
+        }
+        //checking if balance is enough in cas of DEBIT operation
+        if(accountBook.getBalance() + toBeAdded < 0){return false;}
+
+        //if i have enough money i do the operation.
+        BalanceOperation operation = new BalanceOperationImpl(toBeAdded);
+        this.accountBook.addOperation(operation);
+        accountBook.changeBalance(toBeAdded);
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        return true;
     }
 
     @Override
     public List<BalanceOperation> getCreditsAndDebits(LocalDate from, LocalDate to) throws UnauthorizedException {
-        return new ArrayList<>();
+        //exceptions
+        if(userLogged == null){
+            throw new UnauthorizedException();
+        }
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager"))){
+            throw new UnauthorizedException();
+        }
+        //control if dates are exchanged and eventually correct them
+        final LocalDate myTo;
+        final LocalDate myFrom;
+        if((from != null && to != null) && from.compareTo(to) > 0){
+             myTo = from;
+             myFrom = to;
+        }
+        else {
+             myTo = to;
+             myFrom = from;
+        }
+
+        //looking for missing temporal constraints
+        if(from == null && to == null){
+            //if dates are not defined, return all operations
+            return new ArrayList<>(accountBook.getOperationsMap().values());
+        }
+        else if(from == null){
+            //if only from is missing
+            return accountBook.getOperationsMap().values()
+                    .stream().filter( op -> (myTo.compareTo(op.getDate())>=0) )
+                    .collect(Collectors.toList());
+        }
+        else if(to == null){
+            return accountBook.getOperationsMap().values()
+                    .stream().filter( op -> (myFrom.compareTo(op.getDate()) <= 0) )
+                    .collect(Collectors.toList());
+        }
+        else{
+            //if both dates are defined
+            return accountBook.getOperationsMap().values()
+                    .stream().filter( op -> ((myFrom.compareTo(op.getDate()) <= 0 && myTo.compareTo(op.getDate())>=0)) )
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
     public double computeBalance() throws UnauthorizedException {
+        //exceptions
+        if(userLogged == null){
+            throw new UnauthorizedException();
+        }
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager"))){
+            throw new UnauthorizedException();
+        }
         return accountBook.getBalance();
     }
 }

@@ -27,7 +27,7 @@ public class SaleTransactionImplementation extends BalanceOperationImpl {
      * constructor with no params, used to start a new sale transaction, only auto-generates the balanceId as every BalanceOperations does
      */
     public SaleTransactionImplementation(){
-        super();
+        super("Sale Transaction");
         //setting proper of this class
         this.discountRate = 0.0;
         this.status = "OPEN";
