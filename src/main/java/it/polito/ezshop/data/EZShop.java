@@ -123,8 +123,6 @@ public class EZShop implements EZShopInterface {
                 String description = (String) obj.get("description");
                 //Get sellPrice
                 double sellPrice = Double.parseDouble((String) obj.get("sellPrice"));
-                // Get discountRate
-                double discountRate = Double.parseDouble((String) obj.get("discountRate"));
                 // Get notes
                 String notes = (String) obj.get("note");
                 // Get availableQty
@@ -134,7 +132,6 @@ public class EZShop implements EZShopInterface {
 
                 ProductTypeImplementation newProduct = new ProductTypeImplementation(id, barCode, description, sellPrice, notes);
                 newProduct.setQuantity(availableQty);
-                newProduct.setDiscountRate(discountRate);
                 newProduct.setLocation(position);
                 this.productMap.put(id, newProduct);
                 break;
@@ -187,11 +184,10 @@ public class EZShop implements EZShopInterface {
         pDetails.put("availableQty", (qty==null)?"0":qty.toString());
         pDetails.put("barCode", p.getBarCode());
         pDetails.put("description", p.getProductDescription());
-        Object dr = p.getDiscountRate();
-        pDetails.put("discountRate", (dr==null)?"0":dr.toString());
         pDetails.put("note", p.getNote());
-        Object sp = p.getDiscountRate();
+        Object sp = p.getPricePerUnit();
         pDetails.put("sellPrice", (sp==null)?"0": sp.toString());
+        pDetails.put("position", p.getLocation());
         return pDetails;
     }
 
@@ -415,6 +411,8 @@ public class EZShop implements EZShopInterface {
 
         ProductTypeImplementation p = new ProductTypeImplementation(id,productCode, description,pricePerUnit,note);
 
+        System.out.println(p.getId() + " " + p.getBarCode() + " " + p.getProductDescription() + " " + p.getPricePerUnit() + " " + p.getNote());
+
         this.productMap.put(id,p);
         JSONObject pDetails = initializeJsonProductObject(p);
 
@@ -463,7 +461,13 @@ public class EZShop implements EZShopInterface {
         if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
 
         //needs to remove object from memory array and commit to disk
-        if(!jArrayProduct.remove(productMap.get(id)))return false;
+        JSONObject pr = null;
+        for(int i = 0; i< jArrayProduct.size(); i++){
+            pr  = (JSONObject) jArrayProduct.get(i);
+            if(pr.get("id").equals(id.toString())){
+                jArrayProduct.remove(i);
+            }
+        }
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
         if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
         //remove object from map
@@ -505,10 +509,34 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
+
+
         System.out.println("updating quantity: " + toBeAdded);
         if(productId==null || productId<=0)throw new InvalidProductIdException();
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
-        return p != null && p.changeQuantity(toBeAdded);
+        System.out.println("removing old product from jarray");
+
+        // if the product doesn't exist or quantity couldn't be changed, return false
+        // but before doing so, restore the jarray
+        if(p == null || !p.changeQuantity(toBeAdded))return false;
+
+        System.out.println("quantity changed");
+
+        //needs to remove object from memory array
+        JSONObject pr = null;
+        for(int i = 0; i< jArrayProduct.size(); i++){
+            pr  = (JSONObject) jArrayProduct.get(i);
+            if(pr.get("id").equals(productId.toString())){
+                jArrayProduct.remove(i);
+            }
+        }
+
+        JSONObject pDetails;
+        pDetails = initializeJsonProductObject(p);
+        jArrayProduct.add(pDetails);
+
+        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+        return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
     }
 
     @Override
@@ -527,9 +555,27 @@ public class EZShop implements EZShopInterface {
         //if position is not unique, or productId has no match return false
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
         if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(newPos))))return false;
-        //(?) qui dovrei aggiungere la posizione alla lista di posizioni etc ma sono dell'idea di eliminare la classe posizione
+
+        // updating location
         p.setLocation(newPos);
-        return true;
+
+        JSONObject pDetails;
+        pDetails = initializeJsonProductObject(p);
+
+        // removing the old instance from the jarray
+        //needs to remove object from memory array
+        JSONObject pr = null;
+        for(int i = 0; i< jArrayProduct.size(); i++){
+            pr  = (JSONObject) jArrayProduct.get(i);
+            if(pr.get("id").equals(productId.toString())){
+                jArrayProduct.remove(i);
+            }
+        }
+        // adding the product to the jarray
+        jArrayProduct.add(pDetails);
+
+        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+        return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
     }
 
     @Override

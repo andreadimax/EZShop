@@ -4,7 +4,6 @@ public class ProductTypeImplementation implements ProductType {
     private String barCode;
     private String description;
     private double sellPrice;
-    private double discountRate;
     private String note;
     private Integer availableQty;
     private String location;
@@ -15,7 +14,6 @@ public class ProductTypeImplementation implements ProductType {
         this.barCode = barCode;
         this.description = description;
         this.sellPrice = sellPrice;
-        this.discountRate = discountRate;
         this.note = note;
         this.id=id;
         this.availableQty=0;
@@ -100,13 +98,5 @@ public class ProductTypeImplementation implements ProductType {
     @Override
     public void setId(Integer id) {
 
-    }
-
-    public double getDiscountRate() {
-        return discountRate;
-    }
-
-    public void setDiscountRate(double discountRate) {
-        this.discountRate=discountRate;
     }
 }
