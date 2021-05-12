@@ -629,8 +629,20 @@ public class EZShop implements EZShopInterface {
         }
         product.setQuantity( product.getQuantity() + order.getQuantity() );
         order.setStatus("COMPLETED");
-        //Updating JSON Object in the JSON Array
+        //Updating JSON Object in the ProductType JSON Array
         JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("barCode")).equals(order.getProductCode()) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
+
+        //Updating JSON Object in the operations JSON Array
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
                 tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
