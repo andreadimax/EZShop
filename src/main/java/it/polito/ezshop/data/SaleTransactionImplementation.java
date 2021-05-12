@@ -1,6 +1,7 @@
 package it.polito.ezshop.data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SaleTransactionImplementation extends BalanceOperationImpl {
@@ -31,6 +32,7 @@ public class SaleTransactionImplementation extends BalanceOperationImpl {
         //setting proper of this class
         this.discountRate = 0.0;
         this.status = "OPEN";
+        this.entries = new ArrayList<>();
     }
 
 

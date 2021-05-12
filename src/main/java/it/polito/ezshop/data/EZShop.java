@@ -29,6 +29,9 @@ public class EZShop implements EZShopInterface {
     private HashMap<Integer, Customer>  customersMap;
     private JSONArray jArrayCustomers;
 
+    //Opened sale transaction
+    private SaleTransactionImplementation ongoingSale;
+
 
 
     //Inner Class
@@ -924,12 +927,53 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer startSaleTransaction() throws UnauthorizedException {
-        return null;
+        //exceptions
+        if(userLogged == null){
+            throw new UnauthorizedException();
+        }
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        //initialize the ongoing sale with a new instance
+        this.ongoingSale = new SaleTransactionImplementation();
+        return ongoingSale.getBalanceId();
     }
 
     @Override
     public boolean addProductToSale(Integer transactionId, String productCode, int amount) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidQuantityException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
+        if(productCode==null || productCode.equals("")){throw new InvalidProductCodeException();}// TODO: 12/05/2021 implement the barcode validation function
+        if(amount < 0){throw  new InvalidQuantityException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //false returns
+        if(transactionId != this.ongoingSale.getBalanceId()){return false;}
+        if(productMap.values().stream().noneMatch(p -> p.getBarCode() == productCode)){return false;}
+        ProductType product = productMap.values().stream().filter(p -> p.getBarCode() == productCode).findFirst().get();
+        if(product.getQuantity() < amount){return false;}
+
+        TicketEntry entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
+        ongoingSale.entries.add(entry);
+
+        //updating the quantity available of the product on the shelves
+        product.setQuantity(product.getQuantity() - amount);
+        //Updating JSON Object in the ProductType JSON Array
+        JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("barCode")).equals(productCode) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
+        return true;
     }
 
     @Override
