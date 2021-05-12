@@ -1041,7 +1041,44 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean deleteProductFromSale(Integer transactionId, String productCode, int amount) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidQuantityException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
+        if(productCode==null || productCode.equals("") || !barcodeIsValid(productCode)){throw new InvalidProductCodeException();}
+        if(amount < 0){throw  new InvalidQuantityException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //false returns
+        if(transactionId != this.ongoingSale.getBalanceId()){return false;}
+        //false for non existent product code
+        if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
+        ProductType product = productMap.values().stream().filter(p -> p.getBarCode().equals(productCode)).findFirst().get();
+        //false for insufficient quantity
+        if(ongoingSale.getEntries().stream().noneMatch(e -> e.getBarCode().equals(productCode))){return false;}
+        TicketEntry entry = ongoingSale.getEntries().stream().filter(e -> e.getBarCode().equals(productCode)).findFirst().get();
+        if(entry.getAmount() < amount){return false;}
+
+        //updating the product quantity of the relative entry
+        entry.setAmount(entry.getAmount() - amount);
+        //eventually deleting the entry if product quantity reached 0
+        if(entry.getAmount() == 0){ongoingSale.entries.remove(entry);}
+
+        //updating the quantity available of the product on the shelves
+        product.setQuantity(product.getQuantity() + amount);
+        //Updating JSON Object in the ProductType JSON Array
+        JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("barCode")).equals(productCode) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
+        return true;
     }
 
     @Override
