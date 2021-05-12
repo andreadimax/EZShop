@@ -518,7 +518,7 @@ public class EZShop implements EZShopInterface {
 
         // if the product doesn't exist or quantity couldn't be changed, return false
         // but before doing so, restore the jarray
-        if(p == null || !p.changeQuantity(toBeAdded))return false;
+        /*if(p == null || !p.changeQuantity(toBeAdded))return false;
 
         System.out.println("quantity changed");
 
@@ -534,6 +534,23 @@ public class EZShop implements EZShopInterface {
         JSONObject pDetails;
         pDetails = initializeJsonProductObject(p);
         jArrayProduct.add(pDetails);
+        */
+
+        if(!productMap.containsKey(productId)){return false;}
+
+        ProductType product = productMap.get(productId);
+
+        product.setQuantity( product.getQuantity() + toBeAdded );
+        //Updating JSON Object in the ProductType JSON Array
+        JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("id")).equals(productId.toString()) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
 
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
         return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
