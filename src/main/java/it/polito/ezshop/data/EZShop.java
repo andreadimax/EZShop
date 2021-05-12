@@ -1007,7 +1007,7 @@ public class EZShop implements EZShopInterface {
     public boolean addProductToSale(Integer transactionId, String productCode, int amount) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidQuantityException, UnauthorizedException {
         //exceptions
         if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
-        if(productCode==null || productCode.equals("")){throw new InvalidProductCodeException();}// TODO: 12/05/2021 implement the barcode validation function
+        if(productCode==null || productCode.equals("") || !barcodeIsValid(productCode)){throw new InvalidProductCodeException();}
         if(amount < 0){throw  new InvalidQuantityException();}
         if(userLogged == null){throw new UnauthorizedException();}
         String role = userLogged.getRole();
@@ -1192,5 +1192,36 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         return accountBook.getBalance();
+    }
+
+    /**
+     * checks barcode validity according to the algorithm specified
+     * at: https://www.gs1.org/services/how-calculate-check-digit-manually
+     * @param barcode the barcode to check, must be 12, 13 or 14 char
+     * @return
+     */
+    private boolean barcodeIsValid(String barcode){
+        if(barcode == null || barcode.isEmpty()){return false;}
+        int len = barcode.length();
+        if(len<12 || len>14){return false;}
+
+        //mul will switch between x3 and x1 for every digit, res accumulates the result
+        //nearestDec will be the nearest multiple of 10 rounded Up
+        char[] bcode = barcode.toCharArray();
+        int mul, nearestDec;
+        Integer res=0;
+        if(len==12 || len==14){mul = 3;}
+        else{mul = 1;}
+        //iterating as described in: https://www.gs1.org/services/how-calculate-check-digit-manually
+        for(int i=0; i<len-1; i++){
+            res += Character.getNumericValue(bcode[i])*mul;
+            if(mul==1){mul=3;}
+            else{mul=1;}
+        }
+        //getting the nearest multiple of 10 >= res and calculating the Check Digit
+        nearestDec = (int) Math.ceil(res.doubleValue() / 10)*10;
+        int checkDigit = nearestDec - res;
+        //if the Check Digit is the same, return true, else return false
+        return checkDigit == Character.getNumericValue(bcode[len-1]);
     }
 }
