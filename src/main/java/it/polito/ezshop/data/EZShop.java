@@ -1019,7 +1019,23 @@ public class EZShop implements EZShopInterface {
         ProductType product = productMap.values().stream().filter(p -> p.getBarCode() == productCode).findFirst().get();
         if(product.getQuantity() < amount){return false;}
 
-        TicketEntry entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
+        TicketEntry entry;
+        //if product already in sale, update quantity, otherwise, create the new Ticket Entry
+        /*TicketEntry entry;
+        if(ongoingSale.getEntries().stream().anyMatch( e -> e.getBarCode() == productCode)){
+            entry = ongoingSale.getEntries().stream()
+                    .filter( e-> e.getBarCode().equals(productCode))
+                    .findFirst().get();
+            entry.setAmount( entry.getAmount()+amount);
+            System.out.println("Adding "+amount+" to already existing entry");
+        }
+        else{
+            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
+            ongoingSale.entries.add(entry);
+            System.out.println("Generated a new entry");
+        }*/
+
+        entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
         ongoingSale.entries.add(entry);
 
         //updating the quantity available of the product on the shelves
