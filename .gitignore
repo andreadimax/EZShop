@@ -16,7 +16,7 @@ local.properties
 data/*
 .idea
 ezshop.iml
-
+test.json
 
 # External tool builders
 .externalToolBuilders/
