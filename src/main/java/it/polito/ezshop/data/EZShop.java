@@ -1120,7 +1120,51 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean applyDiscountRateToSale(Integer transactionId, double discountRate) throws InvalidTransactionIdException, InvalidDiscountRateException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw new InvalidTransactionIdException();}
+        if(discountRate < 0 || discountRate >=1){throw new InvalidDiscountRateException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //if the transaction is the ongoing sale transaction,
+        // set it's discount rate, otherwise look for a matching closed sale transaction
+        if(transactionId == this.ongoingSale.getBalanceId()){
+            ongoingSale.setDiscountRate(discountRate);
+        }
+        else{
+            //if it doesn't match any close (but not payed) sale, return false,
+            // else update the sale disocuntRate of the matched sale saved in the persistent json file
+            if(accountBook.getOperationsMap().values().stream()
+                    .filter( o -> o instanceof SaleTransactionImplementation)
+                    .noneMatch( o -> o.getBalanceId() == transactionId))
+            {
+                return false;
+            }
+            else {
+                SaleTransactionImplementation sale = accountBook.getOperationsMap().values().stream()
+                        .filter( o -> o instanceof SaleTransactionImplementation)
+                        .filter( o -> o.getBalanceId() == transactionId)
+                        .map( o -> (SaleTransactionImplementation) o)
+                        .filter( o -> o.getStatus().equals("CLOSED"))
+                        .findFirst().get();
+                sale.setDiscountRate(discountRate);
+
+                //Updating JSON Object in the JSON Array
+                JSONObject tmp;
+                if (accountBook.getjArrayOperations() != null) {
+                    for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                        tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                        if( ((String)tmp.get("balanceId")).equals(transactionId.toString()) ){
+                            tmp.put("discountRate",Double.toString(discountRate));
+                        }
+                    }
+                }
+                //Updating JSON File
+                writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+            }
+        }
+        return true;
     }
 
     @Override
