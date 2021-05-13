@@ -1019,9 +1019,8 @@ public class EZShop implements EZShopInterface {
         ProductType product = productMap.values().stream().filter(p -> p.getBarCode() == productCode).findFirst().get();
         if(product.getQuantity() < amount){return false;}
 
-        TicketEntry entry;
         //if product already in sale, update quantity, otherwise, create the new Ticket Entry
-        /*TicketEntry entry;
+        TicketEntry entry;
         if(ongoingSale.getEntries().stream().anyMatch( e -> e.getBarCode() == productCode)){
             entry = ongoingSale.getEntries().stream()
                     .filter( e-> e.getBarCode().equals(productCode))
@@ -1033,10 +1032,7 @@ public class EZShop implements EZShopInterface {
             entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
             ongoingSale.entries.add(entry);
             System.out.println("Generated a new entry");
-        }*/
-
-        entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
-        ongoingSale.entries.add(entry);
+        }
 
         //updating the quantity available of the product on the shelves
         product.setQuantity(product.getQuantity() - amount);
@@ -1099,7 +1095,27 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean applyDiscountRateToProduct(Integer transactionId, String productCode, double discountRate) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidDiscountRateException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw new InvalidTransactionIdException();}
+        if(productCode==null || productCode.equals("") || !barcodeIsValid(productCode)){throw new InvalidProductCodeException();}
+        if(discountRate < 0 || discountRate >=1){throw new InvalidDiscountRateException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //false returns
+        if(transactionId != this.ongoingSale.getBalanceId()){return false;}
+        //false for non existent product code
+        if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
+        //false for non existent product code in the ongoing sale transaction
+        if(ongoingSale.getEntries().stream().noneMatch(e -> e.getBarCode().equals(productCode))){return false;}
+
+        //get the entry relative to the product code and set the discount rate
+        TicketEntry entry = ongoingSale.getEntries().stream().filter(e -> e.getBarCode().equals(productCode))
+                            .findFirst().get();
+        entry.setDiscountRate(discountRate);
+
+        return true;
     }
 
     @Override
