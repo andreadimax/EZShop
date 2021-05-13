@@ -1137,6 +1137,9 @@ public class EZShop implements EZShopInterface {
             // else update the sale disocuntRate of the matched sale saved in the persistent json file
             if(accountBook.getOperationsMap().values().stream()
                     .filter( o -> o instanceof SaleTransactionImplementation)
+                    .filter( o -> o.getBalanceId() == transactionId)
+                    .map( o -> (SaleTransactionImplementation) o)
+                    .filter( o -> o.getStatus().equals("CLOSED"))
                     .noneMatch( o -> o.getBalanceId() == transactionId))
             {
                 return false;
@@ -1169,7 +1172,40 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public int computePointsForSale(Integer transactionId) throws InvalidTransactionIdException, UnauthorizedException {
-        return 0;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        SaleTransactionImplementation sale;
+        //if it's a reference to the (open) ongoing sale, reference it;
+        //else search for it between the closed and payed sales
+        if(ongoingSale.getBalanceId() == transactionId){
+            sale = ongoingSale;
+        }
+        else{
+            //if it doesn't match any CLOSED or PAYED sale, return false,
+            // else update the sale disocuntRate of the matched sale saved in the persistent json file
+            if(accountBook.getOperationsMap().values().stream()
+                    .filter( o -> o instanceof SaleTransactionImplementation)
+                    .filter( o -> o.getBalanceId() == transactionId)
+                    .map( o -> (SaleTransactionImplementation) o)
+                    .noneMatch( o -> o.getBalanceId() == transactionId))
+            {
+                return -1;
+            }
+            else {
+                sale = accountBook.getOperationsMap().values().stream()
+                        .filter( o -> o instanceof SaleTransactionImplementation)
+                        .filter( o -> o.getBalanceId() == transactionId)
+                        .map( o -> (SaleTransactionImplementation) o)
+                        .findFirst().get();
+            }
+        }
+
+        //compute, truncate by typecasting and return points
+        return (int) sale.getMoney()/10;
     }
 
     @Override
