@@ -1210,7 +1210,20 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean endSaleTransaction(Integer transactionId) throws InvalidTransactionIdException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //false return in case of nonexisting open sale with matching transactionId
+        if(ongoingSale==null || ongoingSale.getBalanceId() != transactionId){return  false;}
+
+        //closing the transaction and adding it to the persistent data
+        ongoingSale.setStatus("CLOSED");
+        this.accountBook.addOperation(ongoingSale);
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        return true;
     }
 
     @Override
