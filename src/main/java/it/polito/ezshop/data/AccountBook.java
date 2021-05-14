@@ -53,6 +53,12 @@ public class AccountBook {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
+
+        //setting the counter generating balanceId's to the greater id present;
+        Integer maxBalanceId = operationsMap.values().stream()
+                .max((o1,o2) -> o1.getBalanceId() > o2.getBalanceId() ? 1 : -1).get().getBalanceId();
+        if(maxBalanceId!=null && maxBalanceId!=0) { BalanceOperationImpl.setBalanceCounter(maxBalanceId); }
+
         return jArray;
     }
 

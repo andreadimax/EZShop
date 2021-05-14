@@ -38,6 +38,10 @@ public class BalanceOperationImpl implements BalanceOperation {
         this.date = date;
     }
 
+    public static void setBalanceCounter(int balanceCounter) {
+        BalanceOperationImpl.balanceCounter = balanceCounter;
+    }
+
     @Override
     public int getBalanceId() {
         return this.balanceId;

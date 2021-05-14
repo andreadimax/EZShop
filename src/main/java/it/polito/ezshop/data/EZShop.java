@@ -1228,6 +1228,48 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean deleteSaleTransaction(Integer saleNumber) throws InvalidTransactionIdException, UnauthorizedException {
+        //exceptions
+        if(saleNumber == null || saleNumber <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+
+        //if it doesn't match any close (but not payed) sale, return false,
+        // else update the sale disocuntRate of the matched sale saved in the persistent json file
+        if(accountBook.getOperationsMap().values().stream()
+                .filter( o -> o instanceof SaleTransactionImplementation)
+                .filter( o -> o.getBalanceId() == saleNumber)
+                .map( o -> (SaleTransactionImplementation) o)
+                .filter( o -> o.getStatus().equals("CLOSED"))
+                .noneMatch( o -> o.getBalanceId() == saleNumber))
+        {
+            return false;
+        }
+        else {
+            SaleTransactionImplementation sale = accountBook.getOperationsMap().values().stream()
+                    .filter( o -> o instanceof SaleTransactionImplementation)
+                    .filter( o -> o.getBalanceId() == saleNumber)
+                    .map( o -> (SaleTransactionImplementation) o)
+                    .filter( o -> o.getStatus().equals("CLOSED"))
+                    .findFirst().get();
+            accountBook.getOperationsMap().remove(saleNumber);
+
+            //Removing JSON Object in the JSON Array
+            JSONObject tmp;
+            if (accountBook.getjArrayOperations() != null) {
+                for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                    tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                    if( ((String)tmp.get("balanceId")).equals(saleNumber.toString()) ){
+                        accountBook.getjArrayOperations().remove(tmp);
+                    }
+                }
+            }
+            //Updating JSON File
+            writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        }
+
+
         return false;
     }
 
