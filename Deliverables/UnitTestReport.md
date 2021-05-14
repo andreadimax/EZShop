@@ -136,14 +136,39 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 | ""         | *           | *           | Invalid         | writejArrayToFile(null, array)                       | ""                      |
 | valid path | null        | *           | Invalid         | writejArrayToFile("src/data/file.txt", null)         | ""                      |
 | valid path | valid array | JSON Object | Valid           | writing {"name":"test","value":"2"}<br>B: writing {} | ""                      |
-|            |             |             |                 |                                                      |                         |
-|            |             |             |                 |                                                      |                         |
-|            |             |             |                 |                                                      |                         |
+
+ ### **Class *ProductTypeImplementation* - method *changeQuantity()***
+
+**Criteria for method *name*:**
+
+ - Type of the argument
+
+**Predicates for method *name*:**
+
+| Criteria             | Predicate                  |
+| -------------------- | -------------------------- |
+| Sign of the argument | Integer >= 0 \| <0 *valid* |
+|                      | null *not valid*           |
+
+
+
+**Boundaries**:
+
+| Criteria             | Boundary values |
+| -------------------- | --------------- |
+| Sign of the argument | null            |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1         | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ------------------ | --------------- | ------------------------------------------------------------ | --------------- |
+| null               | Invalid         | B: changeQuantity(null)                                      | testProduct()   |
+| Integer >= 0 \| <0 | Valid           | changeQuantity(10)<br>changeQuantity(0)<br>changeQuantity(-5) | ""              |
 
  ### 
-
-
-# 
 
 
 # White Box Unit Tests
@@ -157,9 +182,9 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 | Unit name | JUnit test case |
 |--|--|
+|ProductTypeImplementation - changeQuantity|testProduct()|
 |||
 |||
-||||
 
 ### Code coverage report
 
