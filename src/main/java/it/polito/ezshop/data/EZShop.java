@@ -98,12 +98,14 @@ public class EZShop implements EZShopInterface {
     }
 
     /* Generate a random unique ID */
-    public Integer assignId(Set<Integer> ids){
+    public static Integer assignId(Set<Integer> ids){
+        if(ids == null) return -1;
+        if(ids.size() == 100) return -1;    //Full Set
         boolean found = false;
         Integer int_random = 0;
         while(!found){
             Random rand = new Random(); //instance of random class
-            int_random = rand.nextInt(9);
+            int_random = rand.nextInt(100);
             if(!ids.contains(int_random) && int_random != 0){
                 found = true;
             }
@@ -191,8 +193,9 @@ public class EZShop implements EZShopInterface {
         return pDetails;
     }
 
-    private boolean writejArrayToFile(String filepath, JSONArray jArr){
+    public static boolean writejArrayToFile(String filepath, JSONArray jArr){
         System.out.println("writing jarray to file");
+        if(filepath == null || jArr == null) return false;
         try
         {
             FileWriter fOut = new FileWriter(filepath);
@@ -792,7 +795,7 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerNameException();
         }
 
-        if(newCustomerCard == null || newCustomerCard.matches("\\d{11}")){
+        if(newCustomerCard.matches("\\d{11}")){
             throw new InvalidCustomerCardException();
         }
 
@@ -800,33 +803,38 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerIdException();
         }
 
-        //Checking if card code is already assigned to someone
-        for(Customer c: customersMap.values()){
-            if(c != customersMap.get(id)) {
-                if (c.getCustomerCard() != null) {
-                    if (newCustomerCard.equals(c.getCustomerCard())) {
-                        return false;
+        if(newCustomerCard != null) {
+            //Checking if card code is already assigned to someone
+            for (Customer c : customersMap.values()) {
+                if (c != customersMap.get(id)) {
+                    if (c.getCustomerCard() != null) {
+                        if (newCustomerCard.equals(c.getCustomerCard())) {
+                            return false;
+                        }
                     }
                 }
             }
-        }
 
-        //Updating values
-        customersMap.get(id).setCustomerCard(newCustomerCard);
-        customersMap.get(id).setCustomerName(newCustomerName);
+            //Updating values
+            customersMap.get(id).setCustomerCard(newCustomerCard);
+            customersMap.get(id).setCustomerName(newCustomerName);
 
-        JSONObject customer_obj = null;
-        //Updating JSON Object in the JSON Array
-        for(int i = 0; i< jArrayCustomers.size(); i++){
-            customer_obj  = (JSONObject) jArrayCustomers.get(i);
-            if(customer_obj.get("id").equals(id.toString())){
-                customer_obj.put("name", customersMap.get(id).getCustomerName());
-                customer_obj.put("card", customersMap.get(id).getCustomerCard());
+            JSONObject customer_obj = null;
+            //Updating JSON Object in the JSON Array
+            for (int i = 0; i < jArrayCustomers.size(); i++) {
+                customer_obj = (JSONObject) jArrayCustomers.get(i);
+                if (customer_obj.get("id").equals(id.toString())) {
+                    customer_obj.put("name", customersMap.get(id).getCustomerName());
+                    customer_obj.put("card", customersMap.get(id).getCustomerCard());
+                }
             }
-        }
 
-        //Updating JSON File
-        return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
+            //Updating JSON File
+            return writejArrayToFile("src/main/persistent_data/customers.json", jArrayCustomers);
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
@@ -967,8 +975,8 @@ public class EZShop implements EZShopInterface {
         for(Customer c: customersMap.values()){
             if(c.getCustomerCard() != null) {
                 if (c.getCustomerCard().equals(customerCard)) {
-                    if (c.getPoints() + pointsToBeAdded > 0) {
-                        c.setPoints(c.getPoints() + pointsToBeAdded);
+                    if (c.getPoints() + pointsToBeAdded > 0) {                  //In case points are negative -> enough points on card?
+                        c.setPoints(c.getPoints() + pointsToBeAdded);           //Updating points
                         JSONObject customer_obj = null;
                         //Updating JSON Object in the JSON Array
                         for(int i = 0; i< jArrayCustomers.size(); i++){
@@ -1404,7 +1412,7 @@ public class EZShop implements EZShopInterface {
      * @param barcode the barcode to check, must be 12, 13 or 14 char
      * @return
      */
-    private boolean barcodeIsValid(String barcode){
+    public static boolean barcodeIsValid(String barcode){
         if(barcode == null || barcode.isEmpty()){return false;}
         int len = barcode.length();
         if(len<12 || len>14){return false;}
