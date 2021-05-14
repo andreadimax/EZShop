@@ -10,9 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.math.*;
 
 
 public class EZShop implements EZShopInterface {
@@ -1037,7 +1039,7 @@ public class EZShop implements EZShopInterface {
             System.out.println("Adding "+amount+" to already existing entry");
         }
         else{
-            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),product.getQuantity(),product.getPricePerUnit(),0.0);
+            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),amount,product.getPricePerUnit(),0.0);
             ongoingSale.entries.add(entry);
             System.out.println("Generated a new entry");
         }
@@ -1226,11 +1228,23 @@ public class EZShop implements EZShopInterface {
 
         //false return in case of nonexisting open sale with matching transactionId
         if(ongoingSale==null || ongoingSale.getBalanceId() != transactionId){return  false;}
+        //false return if transaction was already closed
+        if(ongoingSale.getStatus().equals("CLOSED")){return false;}
+
+        //computing the money of the transaction
+        Double totalMoney = ongoingSale.getEntries().stream()
+                .map( e -> (e.getPricePerUnit() * e.getAmount() * (1.0 - e.getDiscountRate())) )
+                .reduce(0.0,(e1,e2) -> e1 + e2);
+        totalMoney = totalMoney * (1.0 - ongoingSale.getDiscountRate());
+        //rounding it to 2 decimal places
+        totalMoney = new BigDecimal(Double.toString(totalMoney)).setScale(2,RoundingMode.HALF_UP).doubleValue();
+        ongoingSale.setMoney(totalMoney);
 
         //closing the transaction and adding it to the persistent data
         ongoingSale.setStatus("CLOSED");
         this.accountBook.addOperation(ongoingSale);
         writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        ongoingSale = null;
         return true;
     }
 
@@ -1255,12 +1269,7 @@ public class EZShop implements EZShopInterface {
             return false;
         }
         else {
-            SaleTransactionImplementation sale = accountBook.getOperationsMap().values().stream()
-                    .filter( o -> o instanceof SaleTransactionImplementation)
-                    .filter( o -> o.getBalanceId() == saleNumber)
-                    .map( o -> (SaleTransactionImplementation) o)
-                    .filter( o -> o.getStatus().equals("CLOSED"))
-                    .findFirst().get();
+            SaleTransactionImplementation sale = ((SaleTransactionImplementation) accountBook.getOperationsMap().get(saleNumber));
             accountBook.getOperationsMap().remove(saleNumber);
 
             //Removing JSON Object in the JSON Array

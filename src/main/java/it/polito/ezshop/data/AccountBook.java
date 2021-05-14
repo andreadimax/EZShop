@@ -181,9 +181,9 @@ public class AccountBook {
                 TicketEntry entry = sale.entries.get(i);
                 jEntry.put("barcode",entry.getBarCode());
                 jEntry.put("description",entry.getProductDescription());
-                jEntry.put("amount",entry.getAmount());
-                jEntry.put("PPU",entry.getPricePerUnit());
-                jEntry.put("discountRate",entry.getDiscountRate());
+                jEntry.put("amount",((Integer)entry.getAmount()).toString());
+                jEntry.put("PPU",((Double)entry.getPricePerUnit()).toString());
+                jEntry.put("discountRate",((Double)entry.getDiscountRate()).toString());
                 jEntries.add(jEntry);
             }
             joperation.put("entries",jEntries);
