@@ -486,7 +486,9 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return (List<ProductType>) new ArrayList<>(productMap.values());
+        //return (List<ProductType>) new ArrayList<>(productMap.values());
+        List<ProductType> copyList = productMap.values().stream().map( p -> new ProductTypeImplementation(p)).collect(Collectors.toList());
+        return copyList;
     }
 
     @Override
@@ -495,7 +497,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().get();
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
     }
 
     @Override
@@ -504,7 +506,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().equals(description)).collect(Collectors.toList());
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().equals(description)).map( p -> (ProductType)new ProductTypeImplementation(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -515,11 +517,9 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-
-        System.out.println("updating quantity: " + toBeAdded);
         if(productId==null || productId<=0)throw new InvalidProductIdException();
-        ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
-        System.out.println("removing old product from jarray");
+
+        //System.out.println("removing old product from jarray");
 
         // if the product doesn't exist or quantity couldn't be changed, return false
         // but before doing so, restore the jarray
@@ -544,6 +544,9 @@ public class EZShop implements EZShopInterface {
         if(!productMap.containsKey(productId)){return false;}
 
         ProductType product = productMap.get(productId);
+        System.out.println("Updating quantity of product: ("+ productId.toString()+")\n");
+        System.out.println("Starting quantity: "+ product.getQuantity().toString() + "\n");
+        System.out.println("Adding quantity: " + toBeAdded +"\n");
 
         product.setQuantity( product.getQuantity() + toBeAdded );
         //Updating JSON Object in the ProductType JSON Array
@@ -556,6 +559,7 @@ public class EZShop implements EZShopInterface {
                 }
             }
         }
+        System.out.println("Quantity added, new value: "+ product.getQuantity().toString()+"\n");
 
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
         return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
@@ -1269,7 +1273,8 @@ public class EZShop implements EZShopInterface {
             return false;
         }
         else {
-            SaleTransactionImplementation sale = ((SaleTransactionImplementation) accountBook.getOperationsMap().get(saleNumber));
+            //SaleTransactionImplementation sale = ((SaleTransactionImplementation) accountBook.getOperationsMap().get(saleNumber));
+            //removing the operation from the map
             accountBook.getOperationsMap().remove(saleNumber);
 
             //Removing JSON Object in the JSON Array

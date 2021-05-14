@@ -19,6 +19,24 @@ public class ProductTypeImplementation implements ProductType {
         this.availableQty=0;
     }
 
+    //serviceConstructor
+    public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note, Integer availableQty, String location) {
+        this.barCode = barCode;
+        this.description = description;
+        this.sellPrice = sellPrice;
+        this.note = note;
+        this.id=id;
+        this.availableQty=availableQty;
+        this.location=location;
+    }
+
+    //CopyConstructor
+    public ProductTypeImplementation(ProductType p){
+        this(Integer.valueOf(p.getId()),p.getBarCode(),p.getProductDescription(),
+                Double.valueOf(p.getPricePerUnit()),p.getNote(),Integer.valueOf(p.getQuantity()),p.getLocation());
+
+    }
+
     //Methods
     public boolean changeQuantity(Integer amount){
         if(amount == null){ return false;}
@@ -33,12 +51,17 @@ public class ProductTypeImplementation implements ProductType {
     // getters and setters
     @Override
     public Integer getQuantity() {
+        System.out.println("getQuantity of product: "+ this.barCode +"\n");
+        System.out.println("availableQty: " + this.availableQty.toString() +"\n");
         return availableQty;
     }
 
     @Override
     public void setQuantity(Integer quantity) {
+        System.out.println("setQuantity of product: "+ this.barCode +"\n");
+        System.out.println("availableQty BEFORE SET: " + this.availableQty.toString() +"\n");
         this.availableQty=quantity;
+        System.out.println("availableQty AFTER SET: "+ this.availableQty.toString() + "\n");
     }
 
     @Override
