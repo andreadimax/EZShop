@@ -21,6 +21,7 @@ public class ProductTypeImplementation implements ProductType {
 
     //Methods
     public boolean changeQuantity(Integer amount){
+        if(amount == null){ return false;}
         System.out.println("updating quantity in implementation: " + amount);
         //if i am subtracting and the available quantity is not enough
         if(amount<0 && this.availableQty<-amount){
@@ -97,6 +98,6 @@ public class ProductTypeImplementation implements ProductType {
 
     @Override
     public void setId(Integer id) {
-
+        this.id = id;
     }
 }
