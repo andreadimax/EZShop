@@ -198,5 +198,6 @@ public class EZShopTests {
         ((ProductTypeImplementation) product).changeQuantity(-5);   //Change quantity to 0
         assertFalse(((ProductTypeImplementation) product).changeQuantity(-5));
 
+
     }
 }
