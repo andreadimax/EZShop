@@ -1277,13 +1277,22 @@ public class EZShop implements EZShopInterface {
             writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
         }
 
-
-        return false;
+        return true;
     }
 
     @Override
     public SaleTransaction getSaleTransaction(Integer transactionId) throws InvalidTransactionIdException, UnauthorizedException {
-        return null;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        if(!accountBook.getOperationsMap().containsKey(transactionId)
+            || !(accountBook.getOperation(transactionId) instanceof SaleTransactionImplementation) ){return null;}
+
+        SaleTransaction sale = new SaleTransactionAdapter( (SaleTransactionImplementation) accountBook.getOperation(transactionId));
+        return sale;
     }
 
     @Override
