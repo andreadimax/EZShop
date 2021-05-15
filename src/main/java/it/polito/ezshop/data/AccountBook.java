@@ -57,7 +57,10 @@ public class AccountBook {
         //setting the counter generating balanceId's to the greater id present;
         Integer maxBalanceId = operationsMap.values().stream()
                 .max((o1,o2) -> o1.getBalanceId() > o2.getBalanceId() ? 1 : -1).get().getBalanceId();
-        if(maxBalanceId!=null && maxBalanceId!=0) { BalanceOperationImpl.setBalanceCounter(maxBalanceId); }
+        if(maxBalanceId!=null && maxBalanceId!=0) {
+            BalanceOperationImpl.setBalanceCounter(maxBalanceId);
+            System.out.println("Setted BalanceCounter to: "+maxBalanceId.toString());
+        }
 
         return jArray;
     }
@@ -108,7 +111,7 @@ public class AccountBook {
             //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId, Sale);
-                if( status.equals("CLOSED") || status.equals("COMPLETED")){this.changeBalance(money);}
+                if( status.equals("PAYED") ){this.changeBalance(money);}
             }
         }
         else if(description.equals("ReturnTransaction")){

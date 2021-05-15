@@ -39,7 +39,7 @@ public class BalanceOperationImpl implements BalanceOperation {
     }
 
     public static void setBalanceCounter(int balanceCounter) {
-        BalanceOperationImpl.balanceCounter = balanceCounter;
+        BalanceOperationImpl.balanceCounter = Integer.valueOf(balanceCounter);
     }
 
     @Override

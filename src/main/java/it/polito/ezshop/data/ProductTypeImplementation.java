@@ -40,7 +40,6 @@ public class ProductTypeImplementation implements ProductType {
     //Methods
     public boolean changeQuantity(Integer amount){
         if(amount == null){ return false;}
-        System.out.println("updating quantity in implementation: " + amount);
         //if i am subtracting and the available quantity is not enough
         if(amount<0 && this.availableQty<-amount){
             return false;
@@ -51,17 +50,12 @@ public class ProductTypeImplementation implements ProductType {
     // getters and setters
     @Override
     public Integer getQuantity() {
-        System.out.println("getQuantity of product: "+ this.barCode +"\n");
-        System.out.println("availableQty: " + this.availableQty.toString() +"\n");
         return availableQty;
     }
 
     @Override
     public void setQuantity(Integer quantity) {
-        System.out.println("setQuantity of product: "+ this.barCode +"\n");
-        System.out.println("availableQty BEFORE SET: " + this.availableQty.toString() +"\n");
         this.availableQty=quantity;
-        System.out.println("availableQty AFTER SET: "+ this.availableQty.toString() + "\n");
     }
 
     @Override
