@@ -33,6 +33,8 @@ public class EZShop implements EZShopInterface {
 
     //Opened sale transaction
     private SaleTransactionImplementation ongoingSale;
+    //Opened return transaction
+    private ReturnTransaction ongoingReturn;
 
 
 
@@ -1311,12 +1313,66 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public Integer startReturnTransaction(Integer saleNumber) throws /*InvalidTicketNumberException,*/InvalidTransactionIdException, UnauthorizedException {
-        return null;
+        //exceptions
+        if(userLogged == null){
+            throw new UnauthorizedException();
+        }
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        if(saleNumber == null || saleNumber <= 0){throw new InvalidTransactionIdException();}
+
+        //get the operation and verify it's a sale transaction and it has been already payed otherwise return -1
+        BalanceOperation operation = accountBook.getOperation(saleNumber);
+        if(operation == null || !(operation instanceof SaleTransactionImplementation)){return -1;}
+        SaleTransactionImplementation sale = (SaleTransactionImplementation) operation;
+        if (!sale.getStatus().equals("PAYED")){return -1;}
+
+        //initialize the ongoing return with a new instance
+        this.ongoingReturn = new ReturnTransaction(sale);
+        return ongoingReturn.getBalanceId();
     }
 
     @Override
     public boolean returnProduct(Integer returnId, String productCode, int amount) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidQuantityException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(returnId == null || returnId <= 0){throw  new InvalidTransactionIdException();}
+        if(productCode==null || productCode.equals("") || !barcodeIsValid(productCode)){throw new InvalidProductCodeException();}
+        if(amount <= 0){throw  new InvalidQuantityException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //false returns
+        //return transaction does not exist
+        if(returnId != this.ongoingReturn.getBalanceId()){return false;}
+        //case were the product does not exist
+        ProductType product = getProductTypeByBarCode(productCode);
+        if(product == null ){return false;}
+        SaleTransactionImplementation sale = ongoingReturn.getSale();
+        //case where the product returned was not part of the referenced sale entries
+        if(sale.getEntries().stream().noneMatch(e -> e.getBarCode().equals(productCode))){return false;}
+        //the amount is higher than the one sold in the referenced sale
+        if(amount > sale.getEntries().stream().filter(e ->e.getBarCode().equals(productCode)).findFirst().get().getAmount()){return false;}
+
+
+        //if product already in returnTransaction, update quantity, otherwise, create the new Ticket Entry
+        TicketEntry entry;
+        if(ongoingReturn.getReturnEntries().stream().anyMatch( e -> e.getBarCode().equals(productCode))){
+            entry = ongoingReturn.getReturnEntries().stream()
+                    .filter( e-> e.getBarCode().equals(productCode))
+                    .findFirst().get();
+            entry.setAmount( entry.getAmount()+amount);
+            System.out.println("Adding "+amount+" to already existing RETURN entry");
+        }
+        else{
+            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),amount,product.getPricePerUnit(),0.0);
+            ongoingReturn.getReturnEntries().add(entry);
+            System.out.println("Generated a new RETURN entry");
+        }
+
+        return true;
     }
 
     @Override
