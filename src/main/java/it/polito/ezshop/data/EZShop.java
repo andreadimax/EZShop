@@ -16,6 +16,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.math.*;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 public class EZShop implements EZShopInterface {
     //users
@@ -76,6 +85,69 @@ public class EZShop implements EZShopInterface {
                  initialize, file to read, and
                  type of data
      */
+
+    private static boolean validateCard(String cardNumber) {
+        if (cardNumber == null)
+            return false;
+
+        // taking last digit
+        char lastDigit = cardNumber.charAt(cardNumber.length() - 1);
+
+        //if the number inserted is too long, crop it
+        String card = cardNumber.substring(0, cardNumber.length() - 1);
+
+        /* convert String to array of int */
+        int[] num = new int[card.length()];
+        for (int i = 0; i < card.length(); i++) {
+            num[i] = Character.getNumericValue(card.charAt(i));
+        }
+
+        /*  STEP 1: double every other digit starting from right - jumping from 2 in 2 */
+        for (int i = num.length - 1; i >= 0; i -= 2)	{
+            num[i] += num[i];
+
+            /* summing the digits > 10 -> subtracting 9 has the same result */
+            if (num[i] >= 10) {
+                num[i] = num[i] - 9;
+            }
+        }
+
+        // STEP 2: summing the array values
+        int sum = 0;
+        for (int i = 0; i < num.length; i++) {
+            sum += num[i];
+        }
+        // STEP 3: if the sum is exactly multiple of 10, the card is valid
+        if(sum%10==0) return true;
+        else return false;
+    }
+
+
+    private static ArrayList<String> readCards() {
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream("src/main/persistent_data/creditcards.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String strLine;
+        ArrayList<String> lines = new ArrayList<String>();
+        try {
+            while ((strLine = reader.readLine()) != null) {
+                String lastWord = strLine.substring(strLine.lastIndexOf(" ") + 1);
+                lines.add(lastWord);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
+    }
     private JSONArray initializeMap(Init i){
         // Loading Products
         JSONParser parser = new JSONParser();
@@ -1454,16 +1526,66 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public double receiveCashPayment(Integer ticketNumber, double cash) throws InvalidTransactionIdException, InvalidPaymentException, UnauthorizedException {
-        return 0;
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        if(ticketNumber==null || ticketNumber<=0)throw new InvalidTransactionIdException();
+        if(cash<=0) throw new InvalidPaymentException();
+        ArrayList <String> cards = readCards();
+
+        SaleTransaction s = getSaleTransaction(ticketNumber);
+        if(s==null)return -1;
+        double difference = cash-s.getPrice();
+        if(difference<0)return -1;
+
+        // il prezzo della transaction è price e basta? o bisogna fare il calcolo con discountrate
+        // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
+        return difference;
     }
 
     @Override
     public boolean receiveCreditCardPayment(Integer ticketNumber, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
-        return false;
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        if(ticketNumber==null || ticketNumber<=0)throw new InvalidTransactionIdException();
+        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+        ArrayList <String> cards = readCards();
+
+        //checking if card is inside the list
+        Optional<String> line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst();
+
+        if(!line.isPresent())return false;
+        double money = Double.parseDouble(line.get().split(";")[1]);
+        double costTransaction = getSaleTransaction(ticketNumber).getPrice();
+        if (money< costTransaction)return false;
+        money=money-costTransaction;
+        // proceed to recording the payment
+        String updatedEntry = creditCard.concat(";").concat(""+money);
+        cards.add(updatedEntry);
+        try{
+            Files.write(Paths.get("src/main/persistent_data/creditcards.txt"),
+                    (Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
+        }
+//Handing Exception
+        catch (Exception e) {
+            System.out.println("something went wrong when writing to file\n");
+            e.printStackTrace();
+        }
+
+        // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
+        return true;
     }
 
     @Override
     public double returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException {
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        // (?) Don't know how to get a return transaction from a returnid
         return 0;
     }
 
