@@ -1449,7 +1449,79 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean deleteReturnTransaction(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(returnId == null || returnId <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //return false if not existing return transaction with given returnId
+        BalanceOperationImpl operation = ((BalanceOperationImpl) accountBook.getOperation(returnId));
+        if(operation==null || !(operation instanceof ReturnTransaction)){return false;}
+        ReturnTransaction retTran = ((ReturnTransaction) operation);
+
+        operation = ((BalanceOperationImpl) accountBook.getOperation(retTran.getSaleId()));
+        if(operation==null || !(operation instanceof SaleTransactionImplementation)){return false;}
+        SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(retTran.getSaleId());
+        //return false for non available sale Transaction (db problems)
+        if(sale == null){return false;}
+
+        List<TicketEntry> saleEntries = sale.getEntries();
+        List<TicketEntry> returnEntries = retTran.getReturnEntries();
+        ProductType product;
+
+        for(TicketEntry returnE : returnEntries){
+            for(TicketEntry saleE : saleEntries){
+                if(saleE.getBarCode().equals(returnE.getBarCode())){
+                    try {
+                        product = getProductTypeByBarCode(returnE.getBarCode());
+                    }catch (InvalidProductCodeException e){
+                        return false;
+                    }
+                    //Add back product to sale and decrease quantity in shelves
+                    saleE.setAmount(saleE.getAmount()+returnE.getAmount());
+                    product.setQuantity(product.getQuantity()-returnE.getAmount());
+                }
+            }
+        }
+
+        //computing the money of the transaction
+        Double totalMoney = saleEntries.stream()
+                .map( e -> (e.getPricePerUnit() * e.getAmount() * (1.0 - e.getDiscountRate())) )
+                .reduce(0.0,(e1,e2) -> e1 + e2);
+        totalMoney = totalMoney * (1.0 - sale.getDiscountRate());
+        //rounding it to 2 decimal places
+        totalMoney = new BigDecimal(Double.toString(totalMoney)).setScale(2,RoundingMode.HALF_UP).doubleValue();
+        sale.setMoney(totalMoney);
+
+        //removing old instance in jArray of operations
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ongoingReturn.getSaleId().toString()) ){
+                    accountBook.getjArrayOperations().remove(tmp);
+                }
+            }
+        }
+        //replacing it with the updated sale
+        accountBook.addOperation(sale);
+
+        //deleting the transaction and removing it from the persistent data
+        accountBook.getOperationsMap().remove(retTran);
+        //removing old instance in jArray of operations
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(returnId) ){
+                    accountBook.getjArrayOperations().remove(tmp);
+                }
+            }
+        }
+
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        ongoingReturn = null;
+        return true;
     }
 
     @Override

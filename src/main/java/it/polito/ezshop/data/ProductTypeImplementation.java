@@ -41,7 +41,7 @@ public class ProductTypeImplementation implements ProductType {
     public boolean changeQuantity(Integer amount){
         if(amount == null){ return false;}
         //if i am subtracting and the available quantity is not enough
-        if(amount<0 && this.availableQty<-amount){
+        if(this.availableQty + amount< 0){
             return false;
         }
         this.availableQty = this.availableQty + amount;
