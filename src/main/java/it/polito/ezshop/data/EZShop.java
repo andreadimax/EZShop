@@ -1610,9 +1610,7 @@ public class EZShop implements EZShopInterface {
         if(s==null)return -1;
         double difference = cash-s.getPrice();
         if(difference<0)return -1;
-
-        // il prezzo della transaction è price e basta? o bisogna fare il calcolo con discountrate
-        // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
+        accountBook.changeBalance(s.getPrice());
         return difference;
     }
 
@@ -1634,6 +1632,7 @@ public class EZShop implements EZShopInterface {
         double costTransaction = getSaleTransaction(ticketNumber).getPrice();
         if (money< costTransaction)return false;
         money=money-costTransaction;
+        accountBook.changeBalance(+costTransaction);
         // proceed to recording the payment
         String updatedEntry = creditCard.concat(";").concat(""+money);
         cards.add(updatedEntry);
@@ -1647,6 +1646,7 @@ public class EZShop implements EZShopInterface {
             e.printStackTrace();
         }
 
+
         // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
         return true;
     }
@@ -1657,13 +1657,58 @@ public class EZShop implements EZShopInterface {
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
         }
-        // (?) Don't know how to get a return transaction from a returnid
-        return 0;
+        BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
+        if(! (op instanceof ReturnTransaction))return -1;
+        ReturnTransaction ret = (ReturnTransaction) op;
+        if(!ret.getStatus().equals("CLOSED")) return -1;
+
+        accountBook.changeBalance(-ret.getMoney());
+
+        return ret.getMoney();
     }
 
     @Override
     public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
-        return 0;
+        // checking privilegies
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
+            throw new UnauthorizedException();
+        }
+        // checking returnId validity
+        if(returnId<=0)throw new InvalidTransactionIdException();
+        BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
+        if(! (op instanceof ReturnTransaction))return -1;
+        ReturnTransaction ret = (ReturnTransaction) op;
+        if(!ret.getStatus().equals("CLOSED")) return -1;
+        // checking credit card validity
+        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+
+        // checking if credit card is stored
+        ArrayList <String> cards = readCards();
+        Optional<String> line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst();
+        if(!line.isPresent())return -1;
+
+
+        double money = Double.parseDouble(line.get().split(";")[1]);
+        double refund = ret.getMoney();
+        money=money+refund;
+        accountBook.changeBalance(-refund);
+        // proceed to recording the payment
+        String updatedEntry = creditCard.concat(";").concat(""+money);
+        cards.add(updatedEntry);
+        try{
+            Files.write(Paths.get("src/main/persistent_data/creditcards.txt"),
+                    (Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
+        }
+//Handing Exception
+        catch (Exception e) {
+            System.out.println("something went wrong when writing to file\n");
+            e.printStackTrace();
+        }
+
+
+        accountBook.changeBalance(-ret.getMoney());
+        return ret.getMoney();
     }
 
     @Override
