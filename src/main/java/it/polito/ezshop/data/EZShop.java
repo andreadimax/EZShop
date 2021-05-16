@@ -1330,7 +1330,7 @@ public class EZShop implements EZShopInterface {
         if (!sale.getStatus().equals("PAYED")){return -1;}
 
         //initialize the ongoing return with a new instance
-        this.ongoingReturn = new ReturnTransaction(sale);
+        this.ongoingReturn = new ReturnTransaction(saleNumber);
         return ongoingReturn.getBalanceId();
     }
 
@@ -1350,7 +1350,7 @@ public class EZShop implements EZShopInterface {
         //case were the product does not exist
         ProductType product = getProductTypeByBarCode(productCode);
         if(product == null ){return false;}
-        SaleTransactionImplementation sale = ongoingReturn.getSale();
+        SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
         //case where the product returned was not part of the referenced sale entries
         if(sale.getEntries().stream().noneMatch(e -> e.getBarCode().equals(productCode))){return false;}
         //the amount is higher than the one sold in the referenced sale
@@ -1377,7 +1377,74 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean endReturnTransaction(Integer returnId, boolean commit) throws InvalidTransactionIdException, UnauthorizedException {
-        return false;
+        //exceptions
+        if(returnId == null || returnId <= 0){throw new InvalidTransactionIdException();}
+        if(userLogged == null){throw new UnauthorizedException();}
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //return false for returnId not being the id of the active return transaction
+        if(ongoingReturn.getBalanceId() != returnId){return false;}
+
+        SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
+        //return false for non available sale Transaction (db problems)
+        if(sale == null){return false;}
+
+        //undoing (by de-referencing) the return transaction if commit == false
+        if(commit==false){
+            ongoingReturn = null;
+            return true;
+        }
+
+        //if commit==true
+        List<TicketEntry> saleEntries = sale.getEntries();
+        List<TicketEntry> returnEntries = ongoingReturn.getReturnEntries();
+        ProductType product;
+
+        for(TicketEntry returnE : returnEntries){
+            for(TicketEntry saleE : saleEntries){
+                if(saleE.getBarCode().equals(returnE.getBarCode())){
+                    //decrease quantity in sale and add back product to shelves
+                    saleE.setAmount(saleE.getAmount()-returnE.getAmount());
+                    try {
+                        product = getProductTypeByBarCode(returnE.getBarCode());
+                        product.setQuantity(product.getQuantity()+returnE.getAmount());
+                    }catch (InvalidProductCodeException e){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        //computing the money of the transaction
+        Double totalMoney = saleEntries.stream()
+                .map( e -> (e.getPricePerUnit() * e.getAmount() * (1.0 - e.getDiscountRate())) )
+                .reduce(0.0,(e1,e2) -> e1 + e2);
+        totalMoney = totalMoney * (1.0 - sale.getDiscountRate());
+        //rounding it to 2 decimal places
+        totalMoney = new BigDecimal(Double.toString(totalMoney)).setScale(2,RoundingMode.HALF_UP).doubleValue();
+        sale.setMoney(totalMoney);
+
+        //removing old instance in jArray of operations
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ongoingReturn.getSaleId().toString()) ){
+                    accountBook.getjArrayOperations().remove(tmp);
+                }
+            }
+        }
+        //replacing it with the updated sale
+        accountBook.addOperation(sale);
+
+        //closing the transaction and adding it to the persistent data
+        ongoingReturn.setStatus("CLOSED");
+        accountBook.addOperation(ongoingReturn);
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        ongoingReturn = null;
+
+        return true;
     }
 
     @Override

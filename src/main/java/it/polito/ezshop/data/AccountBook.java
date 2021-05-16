@@ -116,6 +116,20 @@ public class AccountBook {
         }
         else if(description.equals("ReturnTransaction")){
             //@todo implement ReturnTrans subclass loading
+            String status = (String) x.get("status");
+            Integer saleId = Integer.parseInt((String) x.get("status"));
+            //JSON array to iterate over TicketEntries "entries"
+            JSONArray jEntries = (JSONArray) x.get("entries");
+            //loading TicketEntries list of the sale transaction
+            List<TicketEntry> entries = new ArrayList<>();
+            jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
+
+            //building returnTransaction with the full constructor
+            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries);
+            //adding the Return Transaction back into the operationsMap checking for duplicates
+            if(!this.operationsMap.containsKey(balanceId)){
+                this.operationsMap.put(balanceId,retTrans);
+            }
         }
         else if(description.equals("Credit") || description.equals("Debit")){
             //Simple Balance Update Operation (credit or debit)
@@ -191,7 +205,26 @@ public class AccountBook {
             }
             joperation.put("entries",jEntries);
         }
-        else{
+        else if(NewOp instanceof ReturnTransaction){
+            ReturnTransaction retTrans = (ReturnTransaction) NewOp;
+            joperation.put("saleId",retTrans.getSaleId().toString());
+            joperation.put("status",retTrans.getStatus());
+            //section to load the JSONArray entries
+            JSONArray jEntries = new JSONArray();
+            JSONObject jEntry;
+            for (int i = 0; i < retTrans.getReturnEntries().size(); i++) {
+                jEntry = new JSONObject();
+                TicketEntry entry = retTrans.getReturnEntries().get(i);
+                jEntry.put("barcode",entry.getBarCode());
+                jEntry.put("description",entry.getProductDescription());
+                jEntry.put("amount",((Integer)entry.getAmount()).toString());
+                jEntry.put("PPU",((Double)entry.getPricePerUnit()).toString());
+                jEntry.put("discountRate",((Double)entry.getDiscountRate()).toString());
+                jEntries.add(jEntry);
+            }
+            joperation.put("entries",jEntries);
+        }
+        else {
             //case where it's either a simple Debit or Credit operation
             if(NewOp.getMoney() > 0){
                 //joperation.put("sub","credit");
@@ -200,7 +233,6 @@ public class AccountBook {
                 //joperation.put("sub","debit");
             }
         }
-        //@todo implement subclass ReturnTransaction extending BalanceOperationImpl
         //actually adding the encoded operation into the jArray
         jArrayOperations.add(joperation);
 
