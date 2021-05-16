@@ -1513,7 +1513,7 @@ public class EZShop implements EZShopInterface {
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
                 tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
-                if( ((String)tmp.get("balanceId")).equals(returnId) ){
+                if( ((String)tmp.get("balanceId")).equals(returnId.toString()) ){
                     accountBook.getjArrayOperations().remove(tmp);
                 }
             }
