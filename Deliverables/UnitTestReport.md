@@ -237,7 +237,7 @@ ___________________________
 | Criteria 1         | Valid / Invalid | Description of the test case                                 | JUnit test case |
 | ------------------ | --------------- | ------------------------------------------------------------ | --------------- |
 | null               | Invalid         | changeQuantity(null)                                         | testProduct()   |
-| Integer >= 0 \| <0 | Valid           | changeQuantity(10)<br>changeQuantity(0)<br>changeQuantity(-5) | ""              |
+| Integer >= 0 \| <0 | Valid           | changeQuantity(7)<br>changeQuantity(0)<br>changeQuantity(-5)  | ""              |
 ### **Class *ProductTypeImplementationTest* - method *setQuantity()***
 
 **Criteria for method *setAmount***:
@@ -257,7 +257,7 @@ ___________________________
 
 | Criteria 1 | Valid / Invalid | Description of the test case                                                                       | JUnit test case |
 | ---------- | --------------- | ------------------------------------------------------------                                       | --------------- |
-| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setQuantity(-3);<br>value is checked through the getter | testProduct()   |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setQuantity(3);<br>value is checked through the getter  | testProduct()   |
 ### **Class *ProductTypeImplementationTest* - method *setLocation()***
 
 **Criteria for method *setLocation***:

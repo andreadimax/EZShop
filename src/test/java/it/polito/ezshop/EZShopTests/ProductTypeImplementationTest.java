@@ -38,8 +38,11 @@ public class ProductTypeImplementationTest {
         product.setLocation("location5");
         assertEquals( "location5", product.getLocation());
 
+        product.setQuantity(3);
+        assertEquals(3, (int) product.getQuantity());
+
         assertFalse(((ProductTypeImplementation) product).changeQuantity(null));
-        assertTrue(((ProductTypeImplementation) product).changeQuantity(10));
+        assertTrue(((ProductTypeImplementation) product).changeQuantity(7));
         assertTrue(((ProductTypeImplementation) product).changeQuantity(-5));
 
         /* ---------- WHITE BOX TESTS ---------- */
