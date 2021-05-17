@@ -11,12 +11,19 @@ ___________________________
 # Contents
 
 - [Black Box Unit Tests](#black-box-unit-tests)
-
-
-
-
-
-- [White Box Unit Tests](#white-box-unit-tests)
+  - [Customer Implementation](#customerimplementation)
+  - [ProductTypeImplementation](#producttypeimplementation)
+  - [User](#user)
+  - [TicketEntry](#ticketentry)
+  - [EZShop](#ezshop)
+  - [AccountBook](#accountbook)
+- [White box unit tests](#white-box-unit-tests)
+  - [Customer Implementation](#customerimplementation)
+  - [ProductTypeImplementation](#producttypeimplementation)
+  - [User](#user)
+  - [TicketEntry](#ticketentry)
+  - [EZShop](#ezshop)
+  - [AccountBook](#accountbook)
 
 
 # Black Box Unit Tests
@@ -28,8 +35,8 @@ ___________________________
     <JUnit test classes must be in src/test/java/it/polito/ezshop   You find here, and you can use,  class TestEzShops.java that is executed  
     to start tests
     >
-
- ### **Class *CustomerImplementationTest* - method *setCustomerName()***
+## CustomerImplementation
+### **Class *CustomerImplementationTest* - method *setCustomerName()***
 
 **Criteria for method *setCustomerName***:
 
@@ -46,11 +53,11 @@ ___________________________
 **Combination of predicates**:
 
 
-| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| Criteria 1 | Valid / Invalid | Description of the test case                                                                                   | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------                                                   | --------------- |
 | *          | Valid           | Object Customer is instantiated<br>customer.setCustomerName("alessio");<br>value is checked through the getter | testCustomer()  |
 
- ### **Class *CustomerImplementationTest* - method *setId()***
+### **Class *CustomerImplementationTest* - method *setId()***
 
 **Criteria for method *setCustomerId***:
 
@@ -71,7 +78,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Customer is instantiated<br>customer.setId(10);<br>value is checked through the getter | testCustomer()  |
 
- ### **Class *CustomerImplementationTest* - method *setCustomerCard()***
+### **Class *CustomerImplementationTest* - method *setCustomerCard()***
 
 **Criteria for method *setCustomerCard***:
 
@@ -92,7 +99,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Customer is instantiated<br>customer.setCustomerCard("9000648221");<br>value is checked through the getter | testCustomer()  |
 
- ### **Class *CustomerImplementationTest* - method *setPoints()***
+### **Class *CustomerImplementationTest* - method *setPoints()***
 
 **Criteria for method *setPoints***:
 
@@ -113,7 +120,8 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Customer is instantiated<br>customer.setPoints(-3);<br>value is checked through the getter | testCustomer()  |
 
- ### **Class *ProductTypeImplementationTest* - method *setId()***
+## ProductTypeImplementation
+### **Class *ProductTypeImplementationTest* - method *setId()***
 
 **Criteria for method *setId***:
 
@@ -134,7 +142,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setId(10);<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setBarCode()***
+### **Class *ProductTypeImplementationTest* - method *setBarCode()***
 
 **Criteria for method *setBarCode***:
 
@@ -155,7 +163,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setBarCode("800123739455");<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
+### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
 
 **Criteria for method *setProductDescription***:
 
@@ -176,7 +184,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setProductDescription("pere");<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
+### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
 
 **Criteria for method *setPricePerUnit***:
 
@@ -197,7 +205,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setPricePerUnit(5.0);<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setNote()***
+### **Class *ProductTypeImplementationTest* - method *setNote()***
 
 **Criteria for method *setNote***:
 
@@ -218,7 +226,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setNote("test");<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setLocation()***
+### **Class *ProductTypeImplementationTest* - method *setLocation()***
 
 **Criteria for method *setLocation***:
 
@@ -239,7 +247,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object Product is instantiated<br>product.setLocation("location5");<br>value is checked through the getter | testProduct()   |
 
- ### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
+### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
 
 **Criteria for method *setPricePerUnit***:
 
@@ -260,7 +268,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setPricePerUnit(10.0);<br>value is checked through the getter | testTicket()    |
 
- ### **Class *ProductTypeImplementationTest* - method *setBarCode()***
+### **Class *ProductTypeImplementationTest* - method *setBarCode()***
 
 **Criteria for method *setBarCode***:
 
@@ -281,7 +289,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setBarCode("00012452");<br>value is checked through the getter | testTicket()    |
 
- ### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
+### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
 
 **Criteria for method *setProductDescription***:
 
@@ -302,7 +310,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setProductDescription("pere");<br>value is checked through the getter | testTicket()    |
 
- ### **Class *ProductTypeImplementationTest* - method *setAmount()***
+### **Class *ProductTypeImplementationTest* - method *setAmount()***
 
 **Criteria for method *setAmount***:
 
@@ -323,7 +331,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setAmount(-3);<br>value is checked through the getter | testTicket()    |
 
- ### **Class *ProductTypeImplementationTest* - method *setDiscountRate()***
+### **Class *ProductTypeImplementationTest* - method *setDiscountRate()***
 
 **Criteria for method *setDiscountRate***:
 
@@ -344,7 +352,8 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setDiscountRate(0.5);<br>value is checked through the getter | testTicket()    |
 
- ### **Class *UserImplementationTest* - method *setRole()***
+## User
+### **Class *UserImplementationTest* - method *setRole()***
 
 **Criteria for method *setRole***:
 
@@ -365,7 +374,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object User is instantiated<br>user.setRole("Administrator");<br>value is checked through the getter | testUser()      |
 
- ### **Class *UserImplementationTest* - method *setPassword()***
+### **Class *UserImplementationTest* - method *setPassword()***
 
 **Criteria for method *setPassword***:
 
@@ -386,7 +395,7 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object User is instantiated<br>user.setPassword("456");<br>value is checked through the getter | testUser()      |
 
- ### **Class *UserImplementationTest* - method *setUsername()***
+### **Class *UserImplementationTest* - method *setUsername()***
 
 **Criteria for method *setUsername***:
 
@@ -409,7 +418,7 @@ ___________________________
 
 
 
- ### **Class *UserImplementationTest* - method *setId()***
+### **Class *UserImplementationTest* - method *setId()***
 
 **Criteria for method *setId***:
 
@@ -430,7 +439,74 @@ ___________________________
 | ---------- | --------------- | ------------------------------------------------------------ | --------------- |
 | *          | Valid           | Object User is instantiated<br>user.setId(20);<br>value is checked through the getter | testUser()      |
 
- ### **Class *EZShop* - method *assignId***
+### **Class *ProductTypeImplementation* - method *changeQuantity()***
+
+**Criteria for method *name*:**
+
+ - Type of the argument
+
+**Predicates for method *name*:**
+
+| Criteria             | Predicate                  |
+| -------------------- | -------------------------- |
+| Sign of the argument | Integer >= 0 \| <0 *valid* |
+|                      | null *not valid*           |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1         | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ------------------ | --------------- | ------------------------------------------------------------ | --------------- |
+| null               | Invalid         | changeQuantity(null)                                         | testProduct()   |
+| Integer >= 0 \| <0 | Valid           | changeQuantity(10)<br>changeQuantity(0)<br>changeQuantity(-5) | ""              |
+## TicketEntry
+### **Class *class_name* - method *name***
+
+**Criteria for method *name*:**
+
+ - 
+ - 
+
+**Predicates for method *name*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+|          |           |
+|          |           |
+|          |           |
+|          |           |
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+|          |                 |
+|          |                 |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Criteria 2 | ... | Valid / Invalid | Description of the test case | JUnit test case |
+|-------|-------|-------|-------|-------|-------|
+|||||||
+|||||||
+|||||||
+|||||||
+|||||||
+
+
+## EZShop
+### **Class *EZShop* - method *assignId***
 
 This method returns unique IDs that are not contained in the Set passed. IDs are generated between 1 and 100
 
@@ -464,7 +540,7 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 |null|Invalid|Passing a null Set|""|
 |B: Set with [1-100]|Invalid|Passing a full Set|""|
 
- ### **Class *EZShop* - method *barcodeIsValid()***
+### **Class *EZShop* - method *barcodeIsValid()***
 
 **Criteria for method *name*:**
 
@@ -500,7 +576,7 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 | length == 12 \| 13 \| 14   | match      | Valid           | B: barcodeIsValid("000000000000")<br>B: barcodeIsValid("0000000000000")<br>B: barcodeIsValid("00000000000000")<br> barcodeIsValid("8004263697047") | ""                   |
 |                            | not match  | Invalid         | barcodeIsValid("000000000001")<br>barcodeIsValid("5554673697047") | ""                   |
 
- ### **Class *EZShop* - method *writejArrayToFile()***
+### **Class *EZShop* - method *writejArrayToFile()***
 
 **Criteria for method *name*:**
 
@@ -541,37 +617,9 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 | valid path | null        | *           | Invalid         | writejArrayToFile("src/data/file.txt", null)         | ""                      |
 | valid path | valid array | JSON Object | Valid           | writing {"name":"test","value":"2"}<br>B: writing {} | ""                      |
 
- ### **Class *ProductTypeImplementation* - method *changeQuantity()***
 
-**Criteria for method *name*:**
-
- - Type of the argument
-
-**Predicates for method *name*:**
-
-| Criteria             | Predicate                  |
-| -------------------- | -------------------------- |
-| Sign of the argument | Integer >= 0 \| <0 *valid* |
-|                      | null *not valid*           |
-
-
-
-**Boundaries**:
-
-| Criteria | Boundary values |
-| -------- | --------------- |
-
-
-
-**Combination of predicates**:
-
-
-| Criteria 1         | Valid / Invalid | Description of the test case                                 | JUnit test case |
-| ------------------ | --------------- | ------------------------------------------------------------ | --------------- |
-| null               | Invalid         | changeQuantity(null)                                         | testProduct()   |
-| Integer >= 0 \| <0 | Valid           | changeQuantity(10)<br>changeQuantity(0)<br>changeQuantity(-5) | ""              |
-
- ### **Class *AccountBook - method *addOperation***
+## AccountBook
+### **Class *AccountBook - method *addOperation***
 
 **Criteria for method *addOperation:***
 
@@ -597,11 +645,12 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 | Criteria 1       | Valid / Invalid | Description of the test case                  | JUnit test case |
 | ---------------- | --------------- | --------------------------------------------- | --------------- |
 | BalanceOperation | Valid           | Passing a valid and initialized set of values | testAssignId()  |
-| null             | Invalid         | Passing a null Set                            | ""              |
+| null             | Invalid         | Passing a null Set                            | "**              |
+
 
 
 # White Box Unit Tests
-
+## CustomerImplementation
 ### Test cases definition
 
     <JUnit test classes must be in src/test/java/it/polito/ezshop>
@@ -622,7 +671,6 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 
 ### Loop coverage analysis
-
     <Identify significant loops in the units and reports the test cases
     developed to cover zero, one or multiple iterations >
 
@@ -633,4 +681,129 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 ||||||
 
 
+
+
+## ProductTypeImplementation
+### Test cases definition
+
+    <JUnit test classes must be in src/test/java/it/polito/ezshop>
+    <Report here all the created JUnit test cases, and the units/classes under test >
+    <For traceability write the class and method name that contains the test case>
+
+
+| Unit name | JUnit test case |
+|--|--|
+|ProductTypeImplementation - changeQuantity|testProduct()|
+|||
+|||
+
+### Code coverage report
+
+    <Add here the screenshot report of the statement and branch coverage obtained using
+    the Eclemma tool. >
+
+
+### Loop coverage analysis
+    <Identify significant loops in the units and reports the test cases
+    developed to cover zero, one or multiple iterations >
+
+|Unit name | Loop rows | Number of iterations | JUnit test case |
+|---|---|---|---|
+|||||
+|||||
+||||||
+
+
+## User
+### Test cases definition
+
+    <JUnit test classes must be in src/test/java/it/polito/ezshop>
+    <Report here all the created JUnit test cases, and the units/classes under test >
+    <For traceability write the class and method name that contains the test case>
+
+
+| Unit name | JUnit test case |
+|--|--|
+|ProductTypeImplementation - changeQuantity|testProduct()|
+|||
+|||
+
+### Code coverage report
+
+    <Add here the screenshot report of the statement and branch coverage obtained using
+    the Eclemma tool. >
+
+
+### Loop coverage analysis
+    <Identify significant loops in the units and reports the test cases
+    developed to cover zero, one or multiple iterations >
+
+|Unit name | Loop rows | Number of iterations | JUnit test case |
+|---|---|---|---|
+|||||
+|||||
+||||||
+
+
+## TicketEntry
+## EZShop
+### Test cases definition
+
+    <JUnit test classes must be in src/test/java/it/polito/ezshop>
+    <Report here all the created JUnit test cases, and the units/classes under test >
+    <For traceability write the class and method name that contains the test case>
+
+
+| Unit name | JUnit test case |
+|--|--|
+|ProductTypeImplementation - changeQuantity|testProduct()|
+|||
+|||
+
+### Code coverage report
+
+    <Add here the screenshot report of the statement and branch coverage obtained using
+    the Eclemma tool. >
+
+
+### Loop coverage analysis
+    <Identify significant loops in the units and reports the test cases
+    developed to cover zero, one or multiple iterations >
+
+|Unit name | Loop rows | Number of iterations | JUnit test case |
+|---|---|---|---|
+|||||
+|||||
+||||||
+
+
+## AccountBook
+### Test cases definition
+
+    <JUnit test classes must be in src/test/java/it/polito/ezshop>
+    <Report here all the created JUnit test cases, and the units/classes under test >
+    <For traceability write the class and method name that contains the test case>
+
+
+| Unit name | JUnit test case |
+|--|--|
+|ProductTypeImplementation - changeQuantity|testProduct()|
+|||
+|||
+
+### Code coverage report
+
+    <Add here the screenshot report of the statement and branch coverage obtained using
+    the Eclemma tool. >
+
+
+### Loop coverage analysis
+    <Identify significant loops in the units and reports the test cases
+    developed to cover zero, one or multiple iterations >
+
+|Unit name | Loop rows | Number of iterations | JUnit test case |
+|---|---|---|---|
+|||||
+|||||
+||||||
 
