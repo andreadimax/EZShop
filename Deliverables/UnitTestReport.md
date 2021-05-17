@@ -29,11 +29,412 @@ ___________________________
     to start tests
     >
 
+ ### **Class *CustomerImplementationTest* - method *setCustomerName()***
+
+**Criteria for method *setCustomerName***:
+
+**Predicates for method *setCustomerName*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Customer is instantiated<br>customer.setCustomerName("alessio");<br>value is checked through the getter | testCustomer()  |
+
+ ### **Class *CustomerImplementationTest* - method *setId()***
+
+**Criteria for method *setCustomerId***:
+
+**Predicates for method *setCustomerId*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Customer is instantiated<br>customer.setId(10);<br>value is checked through the getter | testCustomer()  |
+
+ ### **Class *CustomerImplementationTest* - method *setCustomerCard()***
+
+**Criteria for method *setCustomerCard***:
+
+**Predicates for method *setCustomerCard*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Customer is instantiated<br>customer.setCustomerCard("9000648221");<br>value is checked through the getter | testCustomer()  |
+
+ ### **Class *CustomerImplementationTest* - method *setPoints()***
+
+**Criteria for method *setPoints***:
+
+**Predicates for method *setPoints*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Customer is instantiated<br>customer.setPoints(-3);<br>value is checked through the getter | testCustomer()  |
+
+ ### **Class *ProductTypeImplementationTest* - method *setId()***
+
+**Criteria for method *setId***:
+
+**Predicates for method *setId*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setId(10);<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setBarCode()***
+
+**Criteria for method *setBarCode***:
+
+**Predicates for method *setBarCode*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setBarCode("800123739455");<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
+
+**Criteria for method *setProductDescription***:
+
+**Predicates for method *setProductDescription*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setProductDescription("pere");<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
+
+**Criteria for method *setPricePerUnit***:
+
+**Predicates for method *setPricePerUnit*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setPricePerUnit(5.0);<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setNote()***
+
+**Criteria for method *setNote***:
+
+**Predicates for method *setNote*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setNote("test");<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setLocation()***
+
+**Criteria for method *setLocation***:
+
+**Predicates for method *setLocation*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object Product is instantiated<br>product.setLocation("location5");<br>value is checked through the getter | testProduct()   |
+
+ ### **Class *ProductTypeImplementationTest* - method *setPricePerUnit()***
+
+**Criteria for method *setPricePerUnit***:
+
+**Predicates for method *setPricePerUnit*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setPricePerUnit(10.0);<br>value is checked through the getter | testTicket()    |
+
+ ### **Class *ProductTypeImplementationTest* - method *setBarCode()***
+
+**Criteria for method *setBarCode***:
+
+**Predicates for method *setBarCode*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setBarCode("00012452");<br>value is checked through the getter | testTicket()    |
+
+ ### **Class *ProductTypeImplementationTest* - method *setProductDescription()***
+
+**Criteria for method *setProductDescription***:
+
+**Predicates for method *setProductDescription*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setProductDescription("pere");<br>value is checked through the getter | testTicket()    |
+
+ ### **Class *ProductTypeImplementationTest* - method *setAmount()***
+
+**Criteria for method *setAmount***:
+
+**Predicates for method *setAmount*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setAmount(-3);<br>value is checked through the getter | testTicket()    |
+
+ ### **Class *ProductTypeImplementationTest* - method *setDiscountRate()***
+
+**Criteria for method *setDiscountRate***:
+
+**Predicates for method *setDiscountRate*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object TicketEntry is instantiated<br>ticket.setDiscountRate(0.5);<br>value is checked through the getter | testTicket()    |
+
+ ### **Class *UserImplementationTest* - method *setRole()***
+
+**Criteria for method *setRole***:
+
+**Predicates for method *setRole*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object User is instantiated<br>user.setRole("Administrator");<br>value is checked through the getter | testUser()      |
+
+ ### **Class *UserImplementationTest* - method *setPassword()***
+
+**Criteria for method *setPassword***:
+
+**Predicates for method *setPassword*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object User is instantiated<br>user.setPassword("456");<br>value is checked through the getter | testUser()      |
+
+ ### **Class *UserImplementationTest* - method *setUsername()***
+
+**Criteria for method *setUsername***:
+
+**Predicates for method *setUsername*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object User is instantiated<br>user.setUsername("alessio");<br>value is checked through the getter | testUser()      |
+
+
+
+ ### **Class *UserImplementationTest* - method *setId()***
+
+**Criteria for method *setId***:
+
+**Predicates for method *setId*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------ | --------------- |
+| *          | Valid           | Object User is instantiated<br>user.setId(20);<br>value is checked through the getter | testUser()      |
+
  ### **Class *EZShop* - method *assignId***
 
 This method returns unique IDs that are not contained in the Set passed. IDs are generated between 1 and 100
 
-**Criteria for method *name*:**
+**Criteria for method *assignId:***
 
  - Type of the argument
 
@@ -157,9 +558,8 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 **Boundaries**:
 
-| Criteria             | Boundary values |
-| -------------------- | --------------- |
-| Sign of the argument | null            |
+| Criteria | Boundary values |
+| -------- | --------------- |
 
 
 
@@ -168,10 +568,36 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 | Criteria 1         | Valid / Invalid | Description of the test case                                 | JUnit test case |
 | ------------------ | --------------- | ------------------------------------------------------------ | --------------- |
-| null               | Invalid         | B: changeQuantity(null)                                      | testProduct()   |
+| null               | Invalid         | changeQuantity(null)                                         | testProduct()   |
 | Integer >= 0 \| <0 | Valid           | changeQuantity(10)<br>changeQuantity(0)<br>changeQuantity(-5) | ""              |
 
- ### 
+ ### **Class *AccountBook - method *addOperation***
+
+**Criteria for method *addOperation:***
+
+ - Type of the argument
+
+**Predicates for method *name*:**
+
+| Criteria             | Predicate                       |
+| -------------------- | ------------------------------- |
+| Type of the argument | BalanceOperation object *valid* |
+|                      | null *not valid*                |
+
+
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1       | Valid / Invalid | Description of the test case                  | JUnit test case |
+| ---------------- | --------------- | --------------------------------------------- | --------------- |
+| BalanceOperation | Valid           | Passing a valid and initialized set of values | testAssignId()  |
+| null             | Invalid         | Passing a null Set                            | ""              |
 
 
 # White Box Unit Tests
