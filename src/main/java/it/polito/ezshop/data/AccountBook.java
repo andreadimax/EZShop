@@ -276,4 +276,8 @@ public class AccountBook {
     public JSONArray getjArrayOperations() {
         return jArrayOperations;
     }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }

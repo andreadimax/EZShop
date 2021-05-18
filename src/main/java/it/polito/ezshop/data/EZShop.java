@@ -290,7 +290,16 @@ public class EZShop implements EZShopInterface {
 //---------- Start of Ezshop Interface functions -------------
     @Override
     public void reset() {
-
+        //setting balance to 0
+        accountBook.setBalance(0);
+        //clearing all operation history
+        accountBook.getOperationsMap().clear();
+        accountBook.getjArrayOperations().clear();
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+        //clearing all ProductTypes
+        this.productMap.clear();
+        this.jArrayProduct.clear();
+        writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct);
     }
 
     @Override
