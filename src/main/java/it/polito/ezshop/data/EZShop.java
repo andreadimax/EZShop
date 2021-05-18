@@ -86,8 +86,8 @@ public class EZShop implements EZShopInterface {
                  type of data
      */
 
-    private static boolean validateCard(String cardNumber) {
-        if (cardNumber == null)
+    public static boolean validateCard(String cardNumber) {
+        if (cardNumber == null || cardNumber.equals(""))
             return false;
 
         // taking last digit

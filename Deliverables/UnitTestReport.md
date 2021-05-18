@@ -36,37 +36,6 @@ ___________________________
     to start tests
     >
 ## CustomerImplementation
-
-### **Class *CustomerImplementation* - method *public CustomerImplementation(String name, Integer id, Integer points, String customerCard)***
-
-**Criteria for Constructor *CustomerImplementation(String name, Integer id, Integer points, String customerCard)*:**
-
-**Predicates for method **:**
-
-| Criteria             | Predicate                                                                      |
-| -------------------- | --------------------------                                                     |
-| type of name         | Any String                                                                     |
-| type of id           | Any Integer                                                                    |
-| type of points       | Any Integer                                                                    |
-| CustomerCard         | <valid> customerCard is a String containing an exactly 10 digit number or null |
-|                      |                                                                                |
-
-
-
-
-
-**Boundaries**:
-no boundaries for the first three criteria, since they only consist of 1 single equivalence class
-no boundaries for the fourth criteria, since the equivalence classes accept only one specific kind of argument
-
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid | Description of the test case                                                               | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------                               | --------------- |
-| *          | Valid           | T(5, "000000000000", "mele", 4.0, null)  Inserted arguments are then checked using getters | testProduct()   |
-
-
 ### **Class *CustomerImplementationTest* - method *setCustomerName()***
 
 **Criteria for method *setCustomerName***:
@@ -240,86 +209,6 @@ no boundaries for the fourth criteria, since the equivalence classes accept only
 
 
 ## ProductTypeImplementation
-
-### **Class *ProductTypeImplementation* - method *public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note)***
-
-**Criteria for method *ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note)*:**
-
-**Predicates for method *ProductTypeImplementation*:**
-
-| Criteria             | Predicate                  |
-| -------------------- | -------------------------- |
-| type of id           | Any Integer                |
-| type of barCode      | Any String                 |
-| type of description  | any String                 |
-| type of sellPrice    | any double                 |
-| type of note         | any String                 |
-
-
-
-**Boundaries**:
-
-No boundaries, we consider one single equivalent class for any of the input arguments.
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid | Description of the test case                                                               | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------                               | --------------- |
-| *          | Valid           | T(5, "000000000000", "mele", 4.0, null)  Inserted arguments are then checked using getters | testProduct()   |
-
-
-### **Class *ProductTypeImplementation* - method *public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note)***
-
-**Criteria for method *ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note, Integer availableQty, String location)*:**
-
-**Predicates for method *ProductTypeImplementation*:**
-
-| Criteria             | Predicate                  |
-| -------------------- | -------------------------- |
-| type of id           | Any Integer                |
-| type of barCode      | Any String                 |
-| type of description  | any String                 |
-| type of sellPrice    | any double                 |
-| type of note         | any String                 |
-| type of availableQty | any Integer                |
-| type of location     | any String                 |
-
-
-
-**Boundaries**:
-
-No boundaries, we consider one single equivalent class for any of the input arguments.
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid | Description of the test case                                                                                      | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------                                                      | --------------- |
-| *          | Valid           | T(10, "000000000001", "pere", 2.0, "note", 8, "afjkdsladfjls")  Inserted arguments are then checked using getters | testProduct1()  |
-
-
-### **Class *ProductTypeImplementation* - method *public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note)***
-
-**Criteria for method *ProductTypeImplementation(ProductType p)*:**
-
-**Predicates for method *ProductTypeImplementation*:**
-
-| Criteria             | Predicate                  |
-| -------------------- | -------------------------- |
-| p validity           | p is not null              |
-
-
-**Boundaries**:
-
-No boundaries, we consider one single equivalent class for any of the input arguments.
-
-**Combination of predicates**:
-
-| Criteria 1 | Valid / Invalid | Description of the test case                                                              | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------                              | --------------- |
-| p validity | invalid         | T(null)  expect NullPointerException                                                      | testProduct2()  |
-| p validity | valid           | T(ProductTypeImplementation(8, "000000000002", "banane", 1.0, "note1", 9, "djas-12-djs")) | testProduct2()  |
-
-
 ### **Class *ProductTypeImplementation* - method *changeQuantity()***
 
 **Criteria for method *name*:**
@@ -497,32 +386,6 @@ No boundaries, we consider one single equivalent class for any of the input argu
 
 
 ## TicketEntry
-### **Class *TicketEntryImplementationTest* - method *TicketEntryImpl(String barcode, String description, int amount, double pricePerUnit, double discountRate )***
-
-**Criteria for constructor *TicketEntry***:
-
-**Predicates for method *setBarCode*:**
-
-| Criteria          | Predicate  |
-|-------------------|------------|
-| barCode type      | Any String |
-| description type  | Any String |
-| amount type       | Any int    |
-| pricePerUnit type | Any double |
-| discountRate type | Any double |
-
-**Boundaries**:
-
-No boundaries, we consider one single equivalent class for any of the input arguments.
-
-
-**Combination of predicates**:
-
-
-| Criteria 1 | Valid / Invalid | Description of the test case                                                                | JUnit test case |
-| ---------- | --------------- | ------------------------------------------------------------                                | --------------- |
-| *          | Valid           | T("abcdef", "description", 5, 5.0, 0.2)  Inserted arguements are then checked using getters | testTicket()    |
-
 ### **Class *TicketEntryImplementationTest* - method *setBarCode()***
 
 **Criteria for method *setBarCode***:
@@ -630,6 +493,40 @@ No boundaries, we consider one single equivalent class for any of the input argu
 | *          | Valid           | Object TicketEntry is instantiated<br>ticket.setDiscountRate(0.5);<br>value is checked through the getter | testTicket()    |
 
 ## EZShop
+
+### **Class *EZShop* - method *validateCard***
+
+**Criteria for method *validateCard:***
+
+ - Type of the argument
+
+**Predicates for method *name*:**
+
+| Criteria             | Predicate               |
+| -------------------- | ----------------------- |
+| Type of the argument | String *valid*          |
+|                      | null String *not valid* |
+
+
+
+**Boundaries**:
+
+| Criteria             | Boundary values |
+| -------------------- | --------------- |
+| Type of the argument | ""              |
+
+
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case    |
+| ---------- | --------------- | ------------------------------------------------------------ | ------------------ |
+| String     | Valid           | B: validateCard("") -> false<br>validateCard("5333171033425866") -> false | testValidateCard() |
+| null       | Invalid         | validateCard(null) -> false                                  | ""                 |
+
+### 
+
 ### **Class *EZShop* - method *assignId***
 
 This method returns unique IDs that are not contained in the Set passed. IDs are generated between 1 and 100
@@ -774,7 +671,6 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 
 # White Box Unit Tests
-## CustomerImplementation
 ### Test cases definition
 
     <JUnit test classes must be in src/test/java/it/polito/ezshop>
@@ -803,131 +699,3 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 |||||
 |||||
 ||||||
-
-
-
-
-## ProductTypeImplementation
-### Test cases definition
-
-    <JUnit test classes must be in src/test/java/it/polito/ezshop>
-    <Report here all the created JUnit test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
-
-
-| Unit name | JUnit test case |
-|--|--|
-|ProductTypeImplementation - changeQuantity|testProduct()|
-|||
-|||
-
-### Code coverage report
-
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
-
-
-### Loop coverage analysis
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
-
-|Unit name | Loop rows | Number of iterations | JUnit test case |
-|---|---|---|---|
-|||||
-|||||
-||||||
-
-
-## User
-### Test cases definition
-
-    <JUnit test classes must be in src/test/java/it/polito/ezshop>
-    <Report here all the created JUnit test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
-
-
-| Unit name | JUnit test case |
-|--|--|
-|ProductTypeImplementation - changeQuantity|testProduct()|
-|||
-|||
-
-### Code coverage report
-
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
-
-
-### Loop coverage analysis
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
-
-|Unit name | Loop rows | Number of iterations | JUnit test case |
-|---|---|---|---|
-|||||
-|||||
-||||||
-
-
-## TicketEntry
-## EZShop
-### Test cases definition
-
-    <JUnit test classes must be in src/test/java/it/polito/ezshop>
-    <Report here all the created JUnit test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
-
-
-| Unit name | JUnit test case |
-|--|--|
-|ProductTypeImplementation - changeQuantity|testProduct()|
-|||
-|||
-
-### Code coverage report
-
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
-
-
-### Loop coverage analysis
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
-
-|Unit name | Loop rows | Number of iterations | JUnit test case |
-|---|---|---|---|
-|||||
-|||||
-||||||
-
-
-## AccountBook
-### Test cases definition
-
-    <JUnit test classes must be in src/test/java/it/polito/ezshop>
-    <Report here all the created JUnit test cases, and the units/classes under test >
-    <For traceability write the class and method name that contains the test case>
-
-
-| Unit name | JUnit test case |
-|--|--|
-|ProductTypeImplementation - changeQuantity|testProduct()|
-|||
-|||
-
-### Code coverage report
-
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
-
-
-### Loop coverage analysis
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
-
-|Unit name | Loop rows | Number of iterations | JUnit test case |
-|---|---|---|---|
-|||||
-|||||
-||||||
-
