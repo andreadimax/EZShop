@@ -5,6 +5,7 @@ import it.polito.ezshop.data.CustomerImplementation;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class CustomerImplementationTest {
 
@@ -16,10 +17,10 @@ public class CustomerImplementationTest {
         String name= c1.getCustomerName();
         String card = c1.getCustomerCard();
         int points = c1.getPoints();
-        assertEquals( 4, id);
-        assertEquals( "Rob Robinson", name);
-        assertEquals( 2, points);
-        assertEquals( "2383", card);
+        assertEquals( 3, id);
+        assertEquals( "marina blue", name);
+        assertEquals( 40, points);
+        assertEquals( "1038475839", card);
 
         Customer c2 = new CustomerImplementation("Rob Robinson", 4, 2, "2383");
 
@@ -31,7 +32,7 @@ public class CustomerImplementationTest {
         assertEquals( 4, id);
         assertEquals( "Rob Robinson", name);
         assertEquals( 2, points);
-        assertEquals( "2383", card);
+        assertNull(card);
     }
     @Test
     public void testCustomer(){

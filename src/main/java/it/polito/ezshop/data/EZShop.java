@@ -270,7 +270,7 @@ public class EZShop implements EZShopInterface {
     }
 
     public static boolean writejArrayToFile(String filepath, JSONArray jArr){
-        System.out.println("writing jarray to file");
+
         if(filepath == null || jArr == null) return false;
         try
         {
@@ -281,7 +281,6 @@ public class EZShop implements EZShopInterface {
 
         }
         catch(IOException f) {
-            f.printStackTrace();
             return false;
         }
         return true;
