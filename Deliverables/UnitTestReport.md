@@ -235,6 +235,29 @@ no boundaries for the fourth criteria, since boundaries cannot be stated for str
 
 
 ## ProductTypeImplementation
+### **Class *ProductTypeImplementation* - method *public ProductTypeImplementation(Integer id, String barCode, String description, double sellPrice, String note)***
+
+**Criteria for method *ProductTypeImplementation(ProductType p)*:**
+
+**Predicates for method *ProductTypeImplementation*:**
+
+| Criteria             | Predicate                  |
+| -------------------- | -------------------------- |
+| p validity           | p is not null              |
+
+
+**Boundaries**:
+
+No boundaries, we consider one single equivalent class for any of the input arguments.
+
+**Combination of predicates**:
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                                              | JUnit test case |
+| ---------- | --------------- | ------------------------------------------------------------                              | --------------- |
+| p validity | invalid         | T(null)  expect NullPointerException                                                      | testProduct2()  |
+| p validity | valid           | T(ProductTypeImplementation(8, "000000000002", "banane", 1.0, "note1", 9, "djas-12-djs")) | testProduct2()  |
+
+
 ### **Class *ProductTypeImplementation* - method *changeQuantity()***
 
 **Criteria for method *name*:**
