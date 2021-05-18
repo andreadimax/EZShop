@@ -31,7 +31,7 @@ public class ProductTypeImplementation implements ProductType {
     }
 
     //CopyConstructor
-    public ProductTypeImplementation(ProductType p){
+    public ProductTypeImplementation(ProductType p) throws NullPointerException{
         this(Integer.valueOf(p.getId()),p.getBarCode(),p.getProductDescription(),
                 Double.valueOf(p.getPricePerUnit()),p.getNote(),Integer.valueOf(p.getQuantity()),p.getLocation());
 

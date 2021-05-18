@@ -8,6 +8,49 @@ import static org.junit.Assert.*;
 
 public class ProductTypeImplementationTest {
 
+    @Test
+    public void testProduct2(){
+
+        assertThrows(NullPointerException.class, ()-> {new ProductTypeImplementation(null);});
+
+        ProductType p = new ProductTypeImplementation(8, "000000000002", "banane", 1.0, "note1", 9, "djas-12-djs");
+        ProductType product = new ProductTypeImplementation(p);
+        int id = product.getId();
+        String barCode = product.getBarCode();
+        String description = product.getProductDescription();
+        Double price = product.getPricePerUnit();
+        String note = product.getNote();
+        int qty = product.getQuantity();
+        String location = product.getLocation();
+
+        assertEquals( 8, id);
+        assertEquals( "000000000002", barCode);
+        assertEquals( "banane", description);
+        assertEquals( (Double) 1.0, price);
+        assertEquals("note1", note);
+        assertEquals( 9, qty);
+        assertEquals( "djas-12-djs", location);
+    }
+    @Test
+    public void testProduct1(){
+        ProductType product = new ProductTypeImplementation(10, "000000000001", "pere", 2.0, "note", 8, "afjkdsladfjls");
+
+        int id = product.getId();
+        String barCode = product.getBarCode();
+        String description = product.getProductDescription();
+        Double price = product.getPricePerUnit();
+        String note = product.getNote();
+        int qty = product.getQuantity();
+        String location = product.getLocation();
+
+        assertEquals( 10, id);
+        assertEquals( "000000000001", barCode);
+        assertEquals( "pere", description);
+        assertEquals( (Double) 2.0, price);
+        assertEquals("note", note);
+        assertEquals( 8, qty);
+        assertEquals( "afjkdsladfjls", location);
+    }
 
     @Test
     public void testProduct(){
@@ -18,12 +61,16 @@ public class ProductTypeImplementationTest {
         String description = product.getProductDescription();
         Double price = product.getPricePerUnit();
         String note = product.getNote();
+        int qty = product.getQuantity();
+        String location = product.getLocation();
 
         assertEquals( 5, id);
         assertEquals( "000000000000", barCode);
         assertEquals( "mele", description);
         assertEquals( (Double) 4.0, price);
-        assertEquals(null, note);
+        assertNull( note);
+        assertEquals( 0, qty);
+        assertNull( location);
 
         product.setId(10);
         assertEquals( 10, (int) product.getId());
