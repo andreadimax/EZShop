@@ -18,12 +18,6 @@ ___________________________
   - [EZShop](#ezshop)
   - [AccountBook](#accountbook)
 - [White box unit tests](#white-box-unit-tests)
-  - [Customer Implementation](#customerimplementation)
-  - [ProductTypeImplementation](#producttypeimplementation)
-  - [User](#user)
-  - [TicketEntry](#ticketentry)
-  - [EZShop](#ezshop)
-  - [AccountBook](#accountbook)
 
 
 # Black Box Unit Tests
@@ -36,6 +30,38 @@ ___________________________
     to start tests
     >
 ## CustomerImplementation
+### **Class *CustomerImplementation* - method *public CustomerImplementation(String name, Integer id, Integer points, String customerCard)***
+
+**Criteria for Constructor *CustomerImplementation(String name, Integer id, Integer points, String customerCard)*:**
+
+**Predicates for method **:**
+
+| Criteria             | Predicate                        |
+| -------------------- | --------------------------       |
+| type of name         | Any String                       |
+|                      |                                  |
+| type of id           | Any Integer                      |
+|                      |                                  |
+| type of points       | Any Integer                      |
+|                      |                                  |
+| CustomerCard value   | customerCard.matches("\\d{10}")  |
+|                      | customerCard is  null            |
+|                      | !customerCard.matches("\\d{10}") |
+
+
+**Boundaries**:
+no boundaries for the first three criteria, since they only consist of 1 single equivalence class
+no boundaries for the fourth criteria, since boundaries cannot be stated for string values
+
+
+**Combination of predicates**:
+
+| Criteria 4                      | Criteria 1 to 3 | Valid / Invalid | Description of the test case                                            | JUnit test case      |
+|---------------------------------|-----------------|-----------------|-------------------------------------------------------------------------|----------------------|
+| customercard is null            | *               | Valid           | T("andrea", 1, 5, null)  => customer with given attributes              | testCustomer()       |
+| customercard matches "\\d{10}"  | *               | "               | T("marina blue", 3, 40, "1038475839") => customer with given attributes | testCustomerConstr() |
+| customercard !matches "\\d{10}" | **              | "               | T("Rob Robinson", 4, 2, "2383") => customer with creditCard=null        | testCustomerConstr() |
+
 ### **Class *CustomerImplementationTest* - method *setCustomerName()***
 
 **Criteria for method *setCustomerName***:
