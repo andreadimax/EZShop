@@ -689,18 +689,18 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 
 ## AccountBook
-### **Class *AccountBook - method *addOperation***
+### **Class *AccountBook - method *getFilepath()***
 
-**Criteria for method *addOperation:***
+**Criteria for method *getFilepath:***
 
  - Type of the argument
 
-**Predicates for method *name*:**
+**Predicates for method *getFilepath*:**
 
-| Criteria             | Predicate                       |
-| -------------------- | ------------------------------- |
-| Type of the argument | BalanceOperation object *valid* |
-|                      | null *not valid*                |
+| Criteria                     | Predicate                                                    |
+| ---------------------------- | ------------------------------------------------------------ |
+| correctness of returned path | returned string is src/main/persistent_data/operations.json - valid |
+|                              | returned string is not src/main/persistent_data/operations.json - invalid |
 
 
 
@@ -714,12 +714,183 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 | Criteria 1       | Valid / Invalid | Description of the test case                  | JUnit test case |
 | ---------------- | --------------- | --------------------------------------------- | --------------- |
-| BalanceOperation | Valid           | Passing a valid and initialized set of values | testAssignId()  |
-| null             | Invalid         | Passing a null Set                            | "**              |
+| * | valid | Object AccountBook is instantiated | testGetFilepath |
+
+
+
+### **Class *AccountBook* - method *setBalance()***
+
+**Criteria for method *setBalance***:
+
+**Predicates for method *setBalance*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case  |
+| ---------- | --------------- | ------------------------------------------------------------ | ---------------- |
+| *          | Valid           | Object AccountBookis instantiated<br>accountBook.setBalance(5.0)<br />>value is checked through the getter | testSetBalance() |
+
+### 
+
+### **Class *AccountBook* - method *changeBalance()***
+
+**Criteria for method *setBalance***:
+
+**Predicates for method *setBalance*:**
+
+| Criteria                   | Predicate                               |
+| -------------------------- | --------------------------------------- |
+| new balance value validity | balance = balance + amount  --> vaild   |
+|                            | balance != balance + amount --> invalid |
+
+**Boundaries**:
+
+| Criteria                 | Boundary values      |
+| ------------------------ | -------------------- |
+| validity of input amount | [-inf, -1] [0, +inf] |
+|                          |                      |
+
+**Combination of predicates**:
+
+
+| Criteria 1                 | Valid / Invalid | Description of the test case                                 | JUnit test case     |
+| -------------------------- | --------------- | ------------------------------------------------------------ | ------------------- |
+| new balance value validity | Valid           | Object AccountBookis instantiated<br>oldbalance = accountBook.getBalance();<br />accountBook.changeBalance(1);<br />>value is checked through getBalance | testChangeBalance() |
+| new balance value validity | Valid           | Object AccountBookis instantiated<br>oldbalance = accountBook.getBalance();<br />accountBook.changeBalance(-1);<br />>value is checked through getBalance | testChangeBalance   |
+
+### 
+
+## BalanceOperationImpl
+
+### **Class *BalanceOperationImpl* - method *setBalanceId()***
+
+**Criteria for method *setBalance***:
+
+**Predicates for method *setBalance*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case      |
+| ---------- | --------------- | ------------------------------------------------------------ | -------------------- |
+| *          | Valid           | Object BalanceOperation is instantiated<br>op.setBalanceId(1)<br />>value is checked through the getter | testBalanceSetters() |
+
+### **Class *BalanceOperationImpl* - method *setDate()***
+
+**Criteria for method *setDate***:
+
+**Predicates for method *setDate*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case      |
+| ---------- | --------------- | ------------------------------------------------------------ | -------------------- |
+| *          | Valid           | Object BalanceOperation is instantiated<br />Object LocalDate is instantiated<br>op.setDate(1)<br />>value is checked through the getter | testBalanceSetters() |
+
+### **Class *BalanceOperationImpl* - method *setMoney()***
+
+**Criteria for method *setMoney***:
+
+**Predicates for method *setMoney*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case      |
+| ---------- | --------------- | ------------------------------------------------------------ | -------------------- |
+| *          | Valid           | Object BalanceOperation is instantiated<br /><br>op.setMoney(1)<br />>value is checked through the getter | testBalanceSetters() |
+
+### **Class *BalanceOperationImpl* - method *setType()***
+
+**Criteria for method *setType***:
+
+**Predicates for method *setType*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                 | JUnit test case      |
+| ---------- | --------------- | ------------------------------------------------------------ | -------------------- |
+| *          | Valid           | Object BalanceOperation is instantiated<br /><br>op.setType(1)<br />>value is checked through the getter | testBalanceSetters() |
+
+### 
+
+### **Class *BalanceOperationImpl* - method *BalanceOperationImpl(double money)***
+
+**Criteria for method *setBalance***:
+
+**Predicates for method *setBalance*:**
+
+| Criteria            | Predicate                                                    |
+| ------------------- | ------------------------------------------------------------ |
+| sign of money input | if( ( money >=0 \|\| money==null) && type="Credit") --> valid |
+|                     | if (money <0 && type="Debit") --> valid                      |
+
+**Boundaries**:
+
+| Criteria                | Boundary values            |
+| ----------------------- | -------------------------- |
+| validity of input money | [-inf, -1] [0, +inf], null |
+|                         |                            |
+
+**Combination of predicates**:
+
+
+| Criteria 1   | Valid / Invalid | Description of the test case                                 | JUnit test case   |
+| ------------ | --------------- | ------------------------------------------------------------ | ----------------- |
+| money > 0    | Valid           | BalanceOperationImpl op1 = new BalanceOperation(10.0);<br><br />>check if op1.getType() is equal to "Credit" | testCreditDebit() |
+| money = 0    | Valid           | BalanceOperationImpl op2 = new BalanceOperation(-10.0);<br/><br />>check if op2.getType() is equal to "Debit" | testCreditDebit() |
+| money <0     | Valid           | BalanceOperationImpl op3 = new BalanceOperation(0.0);<br/><br />>check if op3.getType() is equal to "Credit" | testCreditDebit() |
+| money = null | Valid           | BalanceOperationImpl op4 = new BalanceOperation(null);<br/><br />>check if op4.getType() is equal to "Credit" | testCreditDebit() |
+
+
 
 
 
 # White Box Unit Tests
+
 ### Test cases definition
 
     <JUnit test classes must be in src/test/java/it/polito/ezshop>
@@ -729,7 +900,7 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 | Unit name | JUnit test case |
 |--|--|
-|ProductTypeImplementation - changeQuantity|testProduct()|
+|AccountBook|testProduct()|
 |||
 |||
 
