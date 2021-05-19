@@ -679,17 +679,10 @@ No boundaries, we consider one single equivalent class for any of the input argu
 |||
 
 ### Code coverage report
-
-    <Add here the screenshot report of the statement and branch coverage obtained using
-    the Eclemma tool. >
+[UnitTestCoverageReport](./../pictures/UnitTestCoverageReport.jpg)
 
 
 ### Loop coverage analysis
-    <Identify significant loops in the units and reports the test cases
-    developed to cover zero, one or multiple iterations >
 
-|Unit name | Loop rows | Number of iterations | JUnit test case |
-|---|---|---|---|
-|||||
-|||||
-||||||
+We haven't found any loops in the units tested so we were not able to write a loop coverage analysis. Nonetheless we were able to reach 100% coverage in all of the unit tests.
+
