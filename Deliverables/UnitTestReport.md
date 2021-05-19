@@ -679,7 +679,7 @@ No boundaries, we consider one single equivalent class for any of the input argu
 |||
 
 ### Code coverage report
-[UnitTestCoverageReport](./../pictures/UnitTestCoverageReport.jpg)
+<img src='./../pictures/CoverageAnalysisUnitTest.png'>
 
 
 ### Loop coverage analysis
