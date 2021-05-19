@@ -16,9 +16,10 @@ public class BalanceOperationImpl implements BalanceOperation {
     public BalanceOperationImpl(double money){
         balanceCounter++;
         this.balanceId = balanceCounter;
-        this.money = money;
         this.date = LocalDate.now();
-        this.description = (money > 0) ? "Credit" : "Debit";
+        this.money = money;
+        this.description = (money >= 0) ? "Credit" : "Debit";
+
     }
 
     public BalanceOperationImpl(String description){

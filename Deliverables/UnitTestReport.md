@@ -612,7 +612,7 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 ### **Class *EZShop* - method *barcodeIsValid()***
 
-**Criteria for method *name*:**
+**Criteria for method *barcodeIsValid*:**
 
  - Validity of string
  - GS1 Standard
@@ -648,7 +648,7 @@ This method returns unique IDs that are not contained in the Set passed. IDs are
 
 ### **Class *EZShop* - method *writejArrayToFile()***
 
-**Criteria for method *name*:**
+**Criteria for method *writejArrayToFile*:**
 
  - Validity of string
  - Validity of JSON Array

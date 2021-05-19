@@ -6,14 +6,13 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-//@todo remove sub parameter and use description
-//@todo implement json/file update for all methods
+import java.util.NoSuchElementException;
+
 public class AccountBook {
 
     private HashMap <Integer,BalanceOperation> operationsMap;
@@ -55,9 +54,14 @@ public class AccountBook {
         }
 
         //setting the counter generating balanceId's to the greater id present;
-        Integer maxBalanceId = operationsMap.values().stream()
-                .max((o1,o2) -> o1.getBalanceId() > o2.getBalanceId() ? 1 : -1).get().getBalanceId();
-        if(maxBalanceId!=null && maxBalanceId!=0) {
+        Integer maxBalanceId;
+        try {
+             maxBalanceId = operationsMap.values().stream()
+                    .max((o1, o2) -> o1.getBalanceId() > o2.getBalanceId() ? 1 : -1).get().getBalanceId();
+        } catch (NoSuchElementException e){
+            maxBalanceId = 0;
+        }
+        if(maxBalanceId!=0) {
             BalanceOperationImpl.setBalanceCounter(maxBalanceId);
             System.out.println("Setted BalanceCounter to: "+maxBalanceId.toString());
         }
@@ -164,6 +168,7 @@ public class AccountBook {
      * @return false if operation was already present, true if it's added.
      */
     public boolean addOperation(BalanceOperation NewOp){
+        if(NewOp == null){return false;}
         if(this.operationsMap.containsKey(NewOp.getBalanceId())){
             return false;
         }
@@ -239,14 +244,6 @@ public class AccountBook {
         return true;
     }
 
-    /**
-     * Removes operation with an operationId == index from the operationsMap
-     * @return true if finds and removes the operation,
-     *         false if can't find the operation to remove.
-     */
-    public boolean removeOperation(Integer index){
-        return this.operationsMap.remove(index) != null;
-    }
 
     /**
      *

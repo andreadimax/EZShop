@@ -118,7 +118,7 @@ public class EZShop implements EZShopInterface {
     }
 
 
-    private static boolean validateCard(String cardNumber) {
+    public static boolean validateCard(String cardNumber) {
         if (cardNumber == null || cardNumber.equals(""))
             return false;
 
