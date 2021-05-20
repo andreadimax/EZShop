@@ -9,8 +9,70 @@ Version:
 # Contents
 
 - [Dependency graph](#dependency graph)
+ ```plantuml
+@startuml
 
-- [Integration approach](#integration)
+title Dependency Graph
+
+class GUI
+class "EZShop (API)" as api
+class "OrderAdapter" as ordad
+class "OrderImpl" as ordimpl
+class "AccountBook" as accbook
+class "SaleTransactionAdapter" as stadapt
+class "SaleTransactionImpl" as stimpl
+class "ReturnTransaction" as rettrans
+class "ProductTypeImpl" as ptimpl
+class "BalanceOperation" as balop
+class "TicketEntryImpl" as teimpl
+class "UserImpl" as user
+class "CustomerImpl" as customer
+
+GUI --> api
+
+api --> ordad
+api --> accbook
+api --> stadapt
+api --> user
+api --> customer
+
+ordad --> ordimpl
+
+accbook --> ordimpl
+accbook --> rettrans
+accbook --> stimpl
+
+stadapt --> stimpl
+
+ordimpl --> ptimpl
+ordimpl --> balop
+
+rettrans --> stimpl
+rettrans --> ptimpl
+rettrans --> balop
+rettrans --> teimpl
+
+stimpl --> ptimpl
+stimpl --> balop
+stimpl --> teimpl
+
+
+@enduml
+```
+
+- [Integration and API Test Documentation](#integration-and-api-test-documentation)
+- [Contents](#contents)
+- [Dependency graph](#dependency-graph)
+- [Integration approach](#integration-approach)
+- [Tests](#tests)
+  - [Step 1](#step-1)
+  - [Step 2](#step-2)
+  - [Step n](#step-n)
+- [Scenarios](#scenarios)
+  - [Scenario UCx.y](#scenario-ucxy)
+- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
+- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
+    - [](#)
 
 - [Tests](#tests)
 
