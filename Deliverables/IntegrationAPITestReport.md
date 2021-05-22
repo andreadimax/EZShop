@@ -33,7 +33,7 @@ Version:
 
 # Dependency graph 
 
-      ```plantuml
+```plantuml
 @startuml
 
 title Dependency Graph
