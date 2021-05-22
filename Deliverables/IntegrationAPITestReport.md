@@ -8,8 +8,32 @@ Version:
 
 # Contents
 
-- [Dependency graph](#dependency graph)
- ```plantuml
+- [Integration and API Test Documentation](#integration-and-api-test-documentation)
+- [Contents](#contents)
+- [Dependency graph](#dependency-graph)
+- [Integration approach](#integration-approach)
+- [Tests](#tests)
+  - [Step 1](#step-1)
+  - [Step 2](#step-2)
+  - [Step n](#step-n)
+- [Scenarios](#scenarios)
+  - [Scenario UCx.y](#scenario-ucxy)
+- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
+- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
+    - [](#)
+
+- [Tests](#tests)
+
+- [Scenarios](#scenarios)
+
+- [Coverage of scenarios and FR](#scenario-coverage)
+- [Coverage of non-functional requirements](#nfr-coverage)
+
+
+
+# Dependency graph 
+
+      ```plantuml
 @startuml
 
 title Dependency Graph
@@ -40,7 +64,6 @@ ordad --> ordimpl
 
 accbook --> ordimpl
 accbook --> rettrans
-accbook --> stimpl
 
 stadapt --> stimpl
 
@@ -48,9 +71,6 @@ ordimpl --> ptimpl
 ordimpl --> balop
 
 rettrans --> stimpl
-rettrans --> ptimpl
-rettrans --> balop
-rettrans --> teimpl
 
 stimpl --> ptimpl
 stimpl --> balop
@@ -59,33 +79,6 @@ stimpl --> teimpl
 
 @enduml
 ```
-
-- [Integration and API Test Documentation](#integration-and-api-test-documentation)
-- [Contents](#contents)
-- [Dependency graph](#dependency-graph)
-- [Integration approach](#integration-approach)
-- [Tests](#tests)
-  - [Step 1](#step-1)
-  - [Step 2](#step-2)
-  - [Step n](#step-n)
-- [Scenarios](#scenarios)
-  - [Scenario UCx.y](#scenario-ucxy)
-- [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
-- [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
-    - [](#)
-
-- [Tests](#tests)
-
-- [Scenarios](#scenarios)
-
-- [Coverage of scenarios and FR](#scenario-coverage)
-- [Coverage of non-functional requirements](#nfr-coverage)
-
-
-
-# Dependency graph 
-
-     <report the here the dependency graph of the classes in EzShop, using plantuml>
      
 # Integration approach
 
