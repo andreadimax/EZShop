@@ -515,9 +515,10 @@ public class EZShop implements EZShopInterface {
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
 
         //check privileges
-        if(userLogged!=null && !("ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
+        if(userLogged==null || (!"ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
         Integer productID;
-
+        // check pricePerUnit
+        if(pricePerUnit<=0) throw new InvalidPricePerUnitException();
         // check description
         if(description == null || description.isEmpty()) throw new InvalidProductDescriptionException();
 
@@ -525,7 +526,9 @@ public class EZShop implements EZShopInterface {
         if(!barcodeIsValid(productCode)) {
             throw new InvalidProductCodeException();
         }
-        Integer id=Integer.parseInt(productCode);
+        // return -1 if there already exists a product with the same barcode
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(productCode)))return -1;
+        Integer id=assignId(this.productMap.keySet());
         // check if product code is positive and if it already present in map
         if(id<0 || this.productMap.get(id)!=null) throw new InvalidProductCodeException();
 
@@ -549,8 +552,11 @@ public class EZShop implements EZShopInterface {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
 
+        // return false if another product already has the same barcode
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode)))return false;
         //check for invalid product id
-        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
+        if(id== null || id<0) throw new InvalidProductIdException();
+        if(productMap.get(id)==null)return false;
 
         //needs to remove object from memory array and commit to disk
         if(productMap.get(id)==null)return false;
@@ -579,8 +585,8 @@ public class EZShop implements EZShopInterface {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
         //check for invalid product id
-        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
-
+        if(id== null || id<=0) throw new InvalidProductIdException();
+        if(productMap.get(id)==null)return false;
         //needs to remove object from memory array and commit to disk
         JSONObject pr = null;
         for(int i = 0; i< jArrayProduct.size(); i++){
