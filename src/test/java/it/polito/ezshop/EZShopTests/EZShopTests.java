@@ -115,4 +115,11 @@ public class EZShopTests {
         assertFalse(EZShop.validateCard(""));
         assertFalse(EZShop.validateCard(null));
     }
+
+    @Test
+    public void createProductTypeTest(){
+        assertFalse(EZShop.validateCard("5333171033425866"));
+        assertFalse(EZShop.validateCard(""));
+        assertFalse(EZShop.validateCard(null));
+    }
 }

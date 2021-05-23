@@ -87,6 +87,10 @@ stimpl --> teimpl
     <Some steps may  correspond to unit testing (ex step1 in ex above), presented in other document UnitTestReport.md>
     <One step will  correspond to API testing>
 
+- Integration sequence = Bottom up
+
+
+
 
 
 #  Tests
@@ -95,16 +99,24 @@ stimpl --> teimpl
      JUnit test cases applied to them> JUnit test classes should be here src/test/java/it/polito/ezshop
 
 ## Step 1
-| Classes  | JUnit test cases |
-|--|--|
-|SaleTransactionImplementation|EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl|
-|OrderImplementation| EZShopTests/OrderImplementationTests - testOrderImpl         |
+| Classes                                         | JUnit test cases                                                         |
+|-------------------------------------------------|--------------------------------------------------------------------------|
+| SaleTransactionImplementation + TicketEntryImpl | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
+| OrderImplementation + BalanceOperation          | EZShopTests/OrderImplementationTests - testOrderImpl                     |
 
 
 ## Step 2
-| Classes  | JUnit test cases |
-|--|--|
-|ReturnTransaction|EZShopTests/SaleTransactionImplementationTests -testReturnTransaction|
+| Classes                                                                  | JUnit test cases                                                      |
+|--------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| ReturnTransaction + TicketEntryImpl + BalanceOperation                   | EZShopTests/SaleTransactionImplementationTests -testReturnTransaction |
+| SaleTransactionAdapter + SaleTransactionImplementation + TicketEntryImpl | EZShopTests/SaleTransactionAdapterTests - testOrderAdapter            |
+
+
+## Step 3
+| Classes                                               | JUnit test cases                              |
+|-------------------------------------------------------|-----------------------------------------------|
+| OrderAdapter + OrderImplementation + BalanceOperation | EZShopTests/OrderAdapterTests - testOrderImpl |
+|                                                       |                                               |
 
 
 ## Step n 
