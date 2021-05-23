@@ -1,6 +1,7 @@
 package it.polito.ezshop.EZShopTests;
 
 import it.polito.ezshop.data.*;
+import it.polito.ezshop.exceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -117,9 +119,130 @@ public class EZShopTests {
     }
 
     @Test
-    public void createProductTypeTest(){
-        assertFalse(EZShop.validateCard("5333171033425866"));
-        assertFalse(EZShop.validateCard(""));
-        assertFalse(EZShop.validateCard(null));
+    public void TestCreateUser(){
+
+        EZShop ez = new EZShop();
+
+        //invalid role exception
+        assertThrows( InvalidRoleException.class, ()->{ez.createUser("john doe", "abc", null);});
+        assertThrows( InvalidRoleException.class, ()->{ez.createUser("john doe", "abc", "x");});
+        // invalid username exception
+        assertThrows( InvalidUsernameException.class, ()->{ez.createUser("", "abc", "Cashier");});
+        assertThrows( InvalidUsernameException.class, ()->{ez.createUser(null, "abc", "ShopDirector");});
+        // InvalidPasswordException
+        assertThrows( InvalidPasswordException.class, ()->{ez.createUser("john doe", null, "Cashier");});
+        assertThrows( InvalidPasswordException.class, ()->{ez.createUser("john doe", "", "ShopDirector");});
+
+        // testing scenario: user already present
+        Integer id=null;
+        try{
+            id = ez.createUser("alessio", "abc", "Administrator");
+            assertEquals(-1, (int) id);
+        }catch(Exception e){
+            fail("Exception thrown when not expected");
+        }
+
+
+        // Creation Successful
+        try{
+            id = ez.createUser("marina blue", "abc", "Cashier");
+            assertNotEquals(-1, (int) id);
+        }catch(Exception e){
+            fail("Exception thrown when not expected");
+        }
+
+        // User login failed, wrong username
+        assertThrows(InvalidUsernameException.class, ()->{ ez.login("dniele", "789");});
+        //User Login Failed, wrong Password
+        assertThrows(InvalidPasswordException.class, ()->{ ez.login("alessio", "wrongPwd");});
+
+        //User Login Successful
+        try {
+            ez.login("daniele", "789");
+        }catch(Exception e){
+            fail("User Should be able to login");
+        }
+
+        // updating User Rights, success
+        try{
+            assertTrue(ez.updateUserRights(id, "ShopDirector"));
+        }catch(Exception e){
+            fail("rights should have been updated");
+        }
+
+        // update user rights failed, invalid Role exception
+        Integer finalId = id;
+        assertThrows(InvalidUsernameException.class, () -> {ez.updateUserRights(finalId, "x");});
+
+        // gettingUserList, successful
+        try{
+            List<User> list = ez.getAllUsers();
+            Integer finalId1 = id;
+            // userList should cointain the just added user
+            assertTrue(list.stream().anyMatch((x)-> x.getId().equals(finalId1)));
+        }catch (Exception e){
+            fail("should have been able to retrieve all users");
+        }
+
+        //get user, success
+        try{
+            ez.getUser(id);
+        }catch(Exception e){
+            fail("Should have been able to retrieve the user");
+        }
+
+        // still missing: unauthorized exception both null and "alessio" for getUser
+
+
+        //User Logout successful
+        assertTrue(ez.logout());
+        // user logout failed
+        assertFalse(ez.logout());
+
+        // getting User list failure because loggeduser==null
+        assertThrows(InvalidUsernameException.class, ez::getAllUsers);
+
+        // getting user list, failure because logged user's role!=administrator
+        try{
+            ez.login("alessio", "456");
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+        assertThrows(InvalidRoleException.class, ez::getAllUsers);
+
+        // deleting user, failed because of invalid permissions
+        Integer finalId2 = id;
+        assertThrows(UnauthorizedException.class, ()-> ez.deleteUser(finalId2) );
+
+        // delete user, failed because id is invalid
+        try{
+            ez.login("daniele", "789");
+            assertFalse(ez.deleteUser(0));
+            assertFalse(ez.deleteUser(null));
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+
+        // delete user, success
+        try{
+            ez.deleteUser(id);
+        }catch(Exception e){
+            fail("should have been able to delete the selected user");
+        }
+
+        // get user id fails since user doesn't exist anymore
+        Integer finalId3 = id;
+        assertThrows(InvalidUserIdException.class, ()->{ez.getUser(finalId3);});
+
+        // delete user, invalid user id, no user associated to it
+        Integer finalId4 = id;
+        assertThrows(InvalidUserIdException.class, ()-> ez.deleteUser(finalId4));
+
+        // updating user Rights failed, invalid id
+        assertThrows(InvalidUsernameException.class, () -> {ez.updateUserRights(finalId, "ShopDirector");});
+
+
+
+
     }
 }
