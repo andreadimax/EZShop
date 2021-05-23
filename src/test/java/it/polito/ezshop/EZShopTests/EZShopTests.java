@@ -120,6 +120,10 @@ public class EZShopTests {
     }
 
     @Test
+    public void TestProductTypeAPIs(){
+
+    }
+    @Test
     public void TestUserAPIs(){
 
         EZShop ez = new EZShop();
@@ -231,7 +235,7 @@ public class EZShopTests {
 
         // getting user list, failure because logged user's role!=administrator
         try{
-            ez.login("alessio", "456");
+            ez.login("marina blue", "456");
         }catch(Exception e){
             fail("Should have been able to login");
         }
