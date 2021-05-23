@@ -54,4 +54,8 @@ public class ReturnTransaction extends BalanceOperationImpl {
     public String getStatus(){
         return this.status;
     }
+
+    public void setReturnEntries(List<TicketEntry> returnEntries) {
+        this.returnEntries = returnEntries;
+    }
 }

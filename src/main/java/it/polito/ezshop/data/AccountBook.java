@@ -119,9 +119,8 @@ public class AccountBook {
             }
         }
         else if(description.equals("ReturnTransaction")){
-            //@todo implement ReturnTrans subclass loading
             String status = (String) x.get("status");
-            Integer saleId = Integer.parseInt((String) x.get("status"));
+            Integer saleId = Integer.parseInt((String) x.get("saleId"));
             //JSON array to iterate over TicketEntries "entries"
             JSONArray jEntries = (JSONArray) x.get("entries");
             //loading TicketEntries list of the sale transaction
@@ -149,7 +148,7 @@ public class AccountBook {
     }
 
     /**
-     * used to simplify entries load of sales transactions,
+     * used to simplify entries load of sale and return transactions,
      * parses the Ticket entry fields and adds it to the list of entries
      */
     private void addEntry( List<TicketEntry> entries, JSONObject entry){
@@ -266,6 +265,10 @@ public class AccountBook {
         return this.operationsMap;
     }
 
+    public void setOperationsMap(HashMap<Integer, BalanceOperation> operationsMap) {
+        this.operationsMap = operationsMap;
+    }
+
     public String getFilepath() {
         return filepath;
     }
@@ -274,7 +277,12 @@ public class AccountBook {
         return jArrayOperations;
     }
 
+    public void setjArrayOperations(JSONArray jArrayOperations) {
+        this.jArrayOperations = jArrayOperations;
+    }
+
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
 }

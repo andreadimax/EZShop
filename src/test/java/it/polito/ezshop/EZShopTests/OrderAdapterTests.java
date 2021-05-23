@@ -1,5 +1,6 @@
 package it.polito.ezshop.EZShopTests;
 
+import it.polito.ezshop.data.BalanceOperationImpl;
 import it.polito.ezshop.data.OrderAdapter;
 import it.polito.ezshop.data.OrderImpl;
 import org.junit.Assert;
@@ -11,6 +12,7 @@ public class OrderAdapterTests {
 
     @Test
     public void testOrderAdapter() {
+        BalanceOperationImpl.setBalanceCounter(0);
         OrderImpl order = new OrderImpl("0110345", 2, 3.0);
 
         order.setBalanceId(6);

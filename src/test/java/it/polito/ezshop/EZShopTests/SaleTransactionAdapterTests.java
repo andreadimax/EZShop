@@ -1,9 +1,6 @@
 package it.polito.ezshop.EZShopTests;
 
-import it.polito.ezshop.data.SaleTransactionAdapter;
-import it.polito.ezshop.data.SaleTransactionImplementation;
-import it.polito.ezshop.data.TicketEntry;
-import it.polito.ezshop.data.TicketEntryImpl;
+import it.polito.ezshop.data.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,6 +13,7 @@ public class SaleTransactionAdapterTests {
 
         @Test
         public void testSaleTransactionAdapter() {
+            BalanceOperationImpl.setBalanceCounter(0);
             TicketEntry t1 = new TicketEntryImpl("00012452", "descr", 12, 2.0, 0.5);
             TicketEntry t2 = new TicketEntryImpl("00012453", "descr1", 13, 3.0, 0.6);
             TicketEntry t3 = new TicketEntryImpl("00012454", "descr2", 14, 4.0, 0.7);

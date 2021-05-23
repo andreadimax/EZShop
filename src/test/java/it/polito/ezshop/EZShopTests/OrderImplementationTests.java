@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class OrderImplementationTests {
     @Test
     public void testOrderImpl(){
+        BalanceOperationImpl.setBalanceCounter(0);
         OrderImpl order = new OrderImpl("0110345", 2, 3.0);
         OrderImpl order1 = new OrderImpl(5, "descr", 2.0, LocalDate.parse("2021-05-22"), "0110346", 6,3.0,"PAYED");
 
@@ -29,7 +30,7 @@ public class OrderImplementationTests {
         Assert.assertEquals((Double) 3.0, (Double) order.getPricePerUnit());
         Assert.assertEquals(2,  order.getQuantity());
         Assert.assertEquals("0110345", order.getProductCode());
-        Assert.assertEquals(17, order.getBalanceId());
-        Assert.assertEquals(17, (int) order.getOrderId());
+        Assert.assertEquals(1, order.getBalanceId());
+        Assert.assertEquals(1, (int) order.getOrderId());
     }
 }
