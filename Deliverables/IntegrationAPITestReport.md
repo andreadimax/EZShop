@@ -15,6 +15,7 @@ Version:
 - [Tests](#tests)
   - [Step 1](#step-1)
   - [Step 2](#step-2)
+  - [Step 3](#step-3)
   - [Step n](#step-n)
 - [Scenarios](#scenarios)
   - [Scenario UCx.y](#scenario-ucxy)
@@ -59,6 +60,7 @@ api --> accbook
 api --> stadapt
 api --> user
 api --> customer
+api --> ptimpl
 
 ordad --> ordimpl
 
@@ -67,12 +69,10 @@ accbook --> rettrans
 
 stadapt --> stimpl
 
-ordimpl --> ptimpl
 ordimpl --> balop
 
 rettrans --> stimpl
 
-stimpl --> ptimpl
 stimpl --> balop
 stimpl --> teimpl
 
