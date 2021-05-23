@@ -121,7 +121,75 @@ public class EZShopTests {
 
     @Test
     public void TestProductTypeAPIs(){
+        //Tests CreateProductType
+        EZShop ez = new EZShop();
+        // successful => returns product identifier "corresponds to barcode but parsed"
+        try{
+            assertEquals("038678561125", ez.createProductType("description productype", "038678561125", 2.99, "simple note").toString());
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
 
+
+        // no products with given product id return false
+        //  another product already has the same barcode => return false
+        // throws InvalidProductIdException if the product id is less than or equal to 0
+        // throws InvalidProductIdException if the product id is null
+        // throws InvalidProductDescriptionException if the product description is null
+        // throws InvalidProductDescriptionException if the product description is empty
+        // throws InvalidProductCodeException if the product code is null or empty
+        // throws InvalidProductCodeException if it is not a number or if it is not a valid barcode
+        // throws InvalidPricePerUnitException if the price per unit is less than or equal to 0
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+
+        //update Product
+        // return  true if the update is successful
+        // false if the update is not successful (no products with given product id or another product already hasthe same barcode)
+        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+        // throws InvalidProductDescriptionException if the product description is null or empty
+        // throws InvalidProductCodeException if the product code is null or empty, if it is not a number or if it is not a valid barcode
+        // throws InvalidPricePerUnitException if the price per unit si less than or equal to 0
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // delete ProductType
+        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+        // return true if the product was deleted, false otherwise
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // getAllProductTypes
+        // return a list containing all saved product types
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // getProductTypeByBarCode
+        // return the product type with given barCode if present, null otherwise
+        // throws InvalidProductCodeException if barCode is not a valid bar code, if is it empty or if it is null
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // getProductTypesByDescription
+        // description the description (or part of it) of the products we are searching for.
+        // Null should be considered as the empty string
+        // return a list of products containing the requested string in their description
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // This method updates the quantity of product available in store. <toBeAdded> can be negative but the final updated
+        // quantity cannot be negative. The product should have a location assigned to it.
+        // return  true if the update was successful
+        // false if the product does not exists, if <toBeAdded> is negative and the resulting amount would be
+        // negative too or if the product type has not an assigned location.
+        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        //updatePosition
+        // The position has the following format : <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber>
+        // The position should be unique null or empty
+        // If is null or empty it should reset the position of given product type.
+        // return true if the update was successful
+        // false if the product does not exists or if <newPos> is already assigned to another product
+        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+        // throws InvalidLocationException if the product location is in an invalid format (not <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber>)
+        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
     }
     @Test
     public void TestUserAPIs(){

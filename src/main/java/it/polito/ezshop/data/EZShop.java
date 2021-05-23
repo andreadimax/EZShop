@@ -93,7 +93,7 @@ public class EZShop implements EZShopInterface {
      * @return
      */
     public static boolean barcodeIsValid(String barcode){
-        if(barcode == null || barcode.isEmpty()){return false;}
+        if(barcode == null || barcode.isEmpty() || !barcode.matches("-?\\d+")){return false;}
         int len = barcode.length();
         if(len<12 || len>14){return false;}
 
@@ -521,8 +521,8 @@ public class EZShop implements EZShopInterface {
         // check description
         if(description == null || description.isEmpty()) throw new InvalidProductDescriptionException();
 
-        //check if productCode is null or empty and if it is a number
-        if((productCode==null || productCode.isEmpty() || !productCode.matches("-?\\d+"))) {
+        //check if productCode is valid and it is a number
+        if(!barcodeIsValid(productCode)) {
             throw new InvalidProductCodeException();
         }
         Integer id=Integer.parseInt(productCode);
