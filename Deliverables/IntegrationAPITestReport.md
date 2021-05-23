@@ -99,23 +99,24 @@ stimpl --> teimpl
      JUnit test cases applied to them> JUnit test classes should be here src/test/java/it/polito/ezshop
 
 ## Step 1
-| Classes                                         | JUnit test cases                                                         |
-|-------------------------------------------------|--------------------------------------------------------------------------|
-| SaleTransactionImplementation + TicketEntryImpl | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
-| OrderImplementation + BalanceOperation          | EZShopTests/OrderImplementationTests - testOrderImpl                     |
+| Classes                                                            | JUnit test cases                                                         |
+|--------------------------------------------------------------------|--------------------------------------------------------------------------|
+| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
+| OrderImplementation + BalanceOperation                             | EZShopTests/OrderImplementationTests - testOrderImpl                     |
+
 
 
 ## Step 2
-| Classes                                                                  | JUnit test cases                                                      |
-|--------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| ReturnTransaction + TicketEntryImpl + BalanceOperation                   | EZShopTests/SaleTransactionImplementationTests -testReturnTransaction |
-| SaleTransactionAdapter + SaleTransactionImplementation + TicketEntryImpl | EZShopTests/SaleTransactionAdapterTests - testOrderAdapter            |
+| Classes                                                                                     | JUnit test cases                                                      |
+|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| TicketEntryImpl + BalanceOperation + ReturnTransaction                                      | EZShopTests/SaleTransactionImplementationTests -testReturnTransaction |
+| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation + SaleTransactionAdapter | EZShopTests/SaleTransactionAdapterTests - testOrderAdapter            |
 
 
 ## Step 3
 | Classes                                               | JUnit test cases                              |
 |-------------------------------------------------------|-----------------------------------------------|
-| OrderAdapter + OrderImplementation + BalanceOperation | EZShopTests/OrderAdapterTests - testOrderImpl |
+| BalanceOperation + OrderImplementation + OrderAdapter | EZShopTests/OrderAdapterTests - testOrderImpl |
 |                                                       |                                               |
 
 
