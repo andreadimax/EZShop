@@ -120,13 +120,14 @@ stimpl --> teimpl
 |                                                       |                                               |
 
 
-## Step n 
+## Step 4 (API Testing)
 
    
 
-| Classes  | JUnit test cases |
-|--|--|
-|||
+| Classes                     | JUnit test cases                       |
+|-----------------------------|----------------------------------------|
+| UserImplementation + EZShop | EZShopTests/EZShopTests - TestUserAPIs |
+|                             |                                        |
 
 
 
@@ -139,13 +140,13 @@ stimpl --> teimpl
 
 ## Scenario UCx.y
 
-| Scenario |  name |
-| ------------- |:-------------:|
-|  Precondition     |  |
-|  Post condition     |   |
-| Step#        | Description  |
-|  1     |  ... |
-|  2     |  ... |
+| Scenario       | name            |
+| -------------  | :-------------: |
+| Precondition   |                 |
+| Post condition |                 |
+| Step#          | Description     |
+| 1              | ...             |
+| 2              | ...             |
 
 
 
@@ -158,14 +159,12 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 
 
-| Scenario ID | Functional Requirements covered | JUnit  Test(s) |
-| ----------- | ------------------------------- | ----------- |
-|  ..         | FRx                             |             |
-|  ..         | FRy                             |             |
-| ...         |                                 |             |
-| ...         |                                 |             |
-| ...         |                                 |             |
-| ...         |                                 |             |
+| Scenario ID     | Functional Requirements covered | JUnit  Test(s) |
+| -----------     | ------------------------------- | -----------    |
+| From 2.1 to 2.3 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs               |
+| ...             |                                 |                |
+| ...             |                                 |                |
+| ...             |                                 |                |
 
 
 

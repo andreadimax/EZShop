@@ -389,6 +389,9 @@ public class EZShop implements EZShopInterface {
         if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
+        if(id==null || id <=0){
+            throw new InvalidUserIdException();
+        }
 
         //Checking if user exists...
         if(users_data.get(id) != null){
@@ -406,7 +409,7 @@ public class EZShop implements EZShopInterface {
             if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return false;
         }
         else {
-            throw new InvalidUserIdException("User not present!");
+            return false;
         }
         return true;
     }
@@ -426,7 +429,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        if(id == null || id==0){
+        if(id == null || id<=0){
             throw new InvalidUserIdException();
         }
 
@@ -445,11 +448,10 @@ public class EZShop implements EZShopInterface {
         if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
-
-        if(role == null ||( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
+        if(role == null ||( !role.equals("Administrator") && !role.equals("Cashier") && !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
-        if(id == null || id==0){
+        if(id == null || id<=0){
             throw new InvalidUserIdException();
         }
         User user;
