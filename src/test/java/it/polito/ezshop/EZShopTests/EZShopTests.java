@@ -1,5 +1,6 @@
 package it.polito.ezshop.EZShopTests;
 
+
 import it.polito.ezshop.data.*;
 import it.polito.ezshop.exceptions.*;
 import org.json.simple.JSONArray;
@@ -119,7 +120,7 @@ public class EZShopTests {
     }
 
     @Test
-    public void TestCreateUser(){
+    public void TestUserAPIs(){
 
         EZShop ez = new EZShop();
 
@@ -145,16 +146,26 @@ public class EZShopTests {
 
         // Creation Successful
         try{
-            id = ez.createUser("marina blue", "abc", "Cashier");
+            id = ez.createUser("Sandy Brown", "abc", "Cashier");
             assertNotEquals(-1, (int) id);
         }catch(Exception e){
             fail("Exception thrown when not expected");
         }
 
-        // User login failed, wrong username
-        assertThrows(InvalidUsernameException.class, ()->{ ez.login("dniele", "789");});
-        //User Login Failed, wrong Password
-        assertThrows(InvalidPasswordException.class, ()->{ ez.login("alessio", "wrongPwd");});
+        // User login failed, username empty or null
+        assertThrows(InvalidUsernameException.class, ()->{ ez.login("", "789");});
+        assertThrows(InvalidUsernameException.class, ()->{ ez.login(null, "789");});
+        // User login failed, username empty or null
+        try{
+            assertNull(ez.login("dniele", "789"));
+        }catch(Exception e){
+            fail("should have not thrown any exception, but simply returned null");
+        }
+
+        //User Login Failed, password null or empty
+        assertThrows(InvalidPasswordException.class, ()->{ ez.login("alessio", "");});
+        assertThrows(InvalidPasswordException.class, ()->{ ez.login("alessio", null);});
+
 
         //User Login Successful
         try {
@@ -165,14 +176,30 @@ public class EZShopTests {
 
         // updating User Rights, success
         try{
-            assertTrue(ez.updateUserRights(id, "ShopDirector"));
+            assertTrue(ez.updateUserRights(id, "ShopManager"));
         }catch(Exception e){
+            System.out.println("Exception catched:"+ e);
             fail("rights should have been updated");
+        }
+
+        //User Login Failed, wrong Password
+        try{
+            assertNull(ez.login(ez.getUser(id).getUsername(), "wrongPassword"));
+        }catch(Exception e){
+
+            fail("should have not thrown any exception, but simply returned null");
+        }
+
+        //User Login Failed, wrong Password
+        try{
+            assertNull(ez.login(ez.getUser(id).getUsername(), "wrongPassword"));
+        }catch(Exception e){
+            fail("should have not thrown any exception, but simply returned null");
         }
 
         // update user rights failed, invalid Role exception
         Integer finalId = id;
-        assertThrows(InvalidUsernameException.class, () -> {ez.updateUserRights(finalId, "x");});
+        assertThrows(InvalidRoleException.class, () -> {ez.updateUserRights(finalId, "x");});
 
         // gettingUserList, successful
         try{
@@ -200,7 +227,7 @@ public class EZShopTests {
         assertFalse(ez.logout());
 
         // getting User list failure because loggeduser==null
-        assertThrows(InvalidUsernameException.class, ez::getAllUsers);
+        assertThrows(UnauthorizedException.class, ez::getAllUsers);
 
         // getting user list, failure because logged user's role!=administrator
         try{
@@ -208,7 +235,12 @@ public class EZShopTests {
         }catch(Exception e){
             fail("Should have been able to login");
         }
-        assertThrows(InvalidRoleException.class, ez::getAllUsers);
+
+        // update user rights failed, invalid Role exception
+        Integer finalId8 = id;
+        assertThrows(UnauthorizedException.class, () -> {ez.updateUserRights(finalId8, "x");});
+
+
 
         // deleting user, failed because of invalid permissions
         Integer finalId2 = id;
@@ -217,31 +249,40 @@ public class EZShopTests {
         // delete user, failed because id is invalid
         try{
             ez.login("daniele", "789");
-            assertFalse(ez.deleteUser(0));
-            assertFalse(ez.deleteUser(null));
+
         }catch(Exception e){
-            fail("Should have been able to login");
+            fail("Should have been able to login, exceptions should have been the expected ones");
         }
+
+        // updating user rights to non existent ones, gives an exception
+        Integer finalId3 = id;
+        assertThrows(InvalidRoleException.class, () -> ez.updateUserRights(finalId3, "ShopDirector"));
 
         // delete user, success
         try{
-            ez.deleteUser(id);
+            assertTrue(ez.deleteUser(id));
+            assertFalse(ez.deleteUser(id));
         }catch(Exception e){
+            System.out.println("Exception Catched: " + e);
             fail("should have been able to delete the selected user");
         }
 
-        // get user id fails since user doesn't exist anymore
-        Integer finalId3 = id;
-        assertThrows(InvalidUserIdException.class, ()->{ez.getUser(finalId3);});
 
-        // delete user, invalid user id, no user associated to it
-        Integer finalId4 = id;
-        assertThrows(InvalidUserIdException.class, ()-> ez.deleteUser(finalId4));
-
-        // updating user Rights failed, invalid id
-        assertThrows(InvalidUsernameException.class, () -> {ez.updateUserRights(finalId, "ShopDirector");});
-
-
+        try{
+            // get user id fails since user doesn't exist anymore
+            assertNull(ez.getUser(id));
+            // delete user, invalid user id, no user associated to it
+            assertFalse(ez.deleteUser(id));
+            // updating user Rights failed, invalid id
+            assertFalse(ez.updateUserRights(id, "ShopManager"));
+        }
+        catch(Exception e){
+            System.out.println("Catched exception: " + e);
+            fail("Should have not thrown exceptions in any of them");
+        }
+        // trying to delete a user giving id less than or equal to zero or empty gives an exception
+        assertThrows(InvalidUserIdException.class, ()->ez.deleteUser(0));
+        assertThrows(InvalidUserIdException.class, ()->ez.deleteUser(null));
 
 
     }
