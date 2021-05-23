@@ -1436,12 +1436,16 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         if(saleNumber == null || saleNumber <= 0){throw new InvalidTransactionIdException();}
+        System.out.println("startReturnTransaction with saleNumber"+saleNumber.toString());
 
         //get the operation and verify it's a sale transaction and it has been already payed otherwise return -1
         BalanceOperation operation = accountBook.getOperation(saleNumber);
-        if(operation == null || !(operation instanceof SaleTransactionImplementation)){return -1;}
+        if(operation == null || !(operation instanceof SaleTransactionImplementation)){
+            System.out.println("operation was not a sale transaction");return -1;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) operation;
-        if (!sale.getStatus().equals("PAYED")){return -1;}
+        if (/*!sale.getStatus().equals("PAYED") && !sale.getStatus().equals("COMPLETED")*/
+                sale.getStatus().equals("OPEN")){
+            System.out.println("sale was not PAYED!, status:"+sale.getStatus()+"\n");return -1;}
 
         //initialize the ongoing return with a new instance
         this.ongoingReturn = new ReturnTransaction(saleNumber);

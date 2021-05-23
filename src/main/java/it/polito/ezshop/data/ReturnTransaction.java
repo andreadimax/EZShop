@@ -33,7 +33,7 @@ public class ReturnTransaction extends BalanceOperationImpl {
      * constructor with only the saleTransaction referenced, used to start a new return transaction, also auto-generates the balanceId as every BalanceOperation does
      */
     public ReturnTransaction(int saleId){
-        super("SaleTransaction");
+        super("ReturnTransaction");
         //setting the reference to the sale transaction
         this.saleId = saleId;
         this.returnEntries = new ArrayList<>();
