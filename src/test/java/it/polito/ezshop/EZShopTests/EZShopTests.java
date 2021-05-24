@@ -275,7 +275,8 @@ public class EZShopTests {
             assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(null));
             // @throws InvalidLocationException if the ordered product type has not an assigned location.
             ez.getProductTypeByBarCode(pCode).setLocation("");
-            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrival(id2));
+            int finalId1 = id2;
+            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrival(finalId1));
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
 
         }catch(Exception e){
