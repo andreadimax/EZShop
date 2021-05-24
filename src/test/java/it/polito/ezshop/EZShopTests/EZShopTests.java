@@ -119,6 +119,92 @@ public class EZShopTests {
         assertFalse(EZShop.validateCard(null));
     }
 
+    //  REQUIRES THE SALE AND RETURN TRANSACTIONS TO BE ALREADY TESTED, IF TESTED NOW WE CANNOT BE SURE WHERE THE ERROR ACTUALLY IS
+    @Test
+    public void testPaymentRelatedAPIs(){
+        EZShop ez = new EZShop();
+        /*
+            ReceiveCredit Card payment
+            records the payment of a sale transaction with cash and returns the change (if present).
+            updates balance of the system changes
+         */
+        try{
+            // success=> return the change (cash - sale price) 0 => balance changes
+            // return -1   if the cash is not enough and if there are problems with the db, no changes in balance
+            // @throws InvalidTransactionIdException if the  number is less than or equal to 0 or if it is null
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            // @throws InvalidPaymentException if the cash is less than or equal to 0
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        // receiveCashPayment
+        try{
+            // updates balance
+            // operation successful => true
+            //  if the sale does not exists, => false
+            //  if the card has not enough money, => false
+            //  if the card is not registered,  => false
+            //  if there is some problem with the db connection => false
+            // @throws InvalidTransactionIdException if the sale number is less than or equal to 0 or if it is null
+            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        // returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException;
+        try{
+            // receiveCreditCardPayment(Integer transactionId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
+            // affects the balance
+            // return  the money returned to the customer
+            // success => return  the money returned to the customer
+            // return -1  if the return transaction is not ended
+            // return if it does not exist,
+            // if there is a problem with the db
+            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+
+
+        // public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
+        try{
+            // This method record the payment of a return transaction to a credit card.
+            // The credit card number validity should be checked. It should follow the luhn algorithm.
+            // The credit card should be registered and its balance will be affected.
+            // This method affects the balance of the system.
+            // It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        try{
+            // @param returnId the id of the return transaction
+            // @param creditCard the credit card number of the customer
+
+            // return  the money returned to the customer
+            // return  -1  if the return transaction is not ended,
+            // return -1 if it does not exist,
+            // return -1 if the card is not registered,
+            // return -1 if there is a problem with the db
+
+            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
+            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
+            //throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+    }
+
     @Test
     public void TestProductTypeAPIs(){
 
