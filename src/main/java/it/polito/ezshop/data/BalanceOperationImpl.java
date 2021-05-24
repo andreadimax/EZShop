@@ -32,7 +32,7 @@ public class BalanceOperationImpl implements BalanceOperation {
 
     //used in loading phase by super() call of subclasses constructors
     public BalanceOperationImpl(int balanceId, String description, double money, LocalDate date){
-        balanceCounter++;
+        //balanceCounter++;
         this.balanceId = balanceId;
         this.description = description;
         this.money = money;

@@ -20,7 +20,7 @@ public class ReturnTransactionTests {
         tList.add(t3);
 
         ReturnTransaction rt = new ReturnTransaction(6, tList);
-        ReturnTransaction rt2 = new ReturnTransaction(5, "descr", 2.0, LocalDate.parse("2021-05-22"), 1, "PAYED",tList );
+        ReturnTransaction rt2 = new ReturnTransaction(5, "descr", 2.0, LocalDate.parse("2021-05-22"), 1, "PAYED",tList, 0.0 );
         ReturnTransaction rt3 = new ReturnTransaction(7);
 
         rt2.setStatus("ISSUED");
@@ -30,6 +30,9 @@ public class ReturnTransactionTests {
 
         rt3.setReturnEntries(tList);
         Assert.assertEquals(tList, rt3.getReturnEntries());
+
+        rt.setSaleDiscount(0.0);
+        Assert.assertEquals(0.0,rt.getSaleDiscount(),0.01);
 
 
 

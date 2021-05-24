@@ -1444,11 +1444,12 @@ public class EZShop implements EZShopInterface {
             System.out.println("operation was not a sale transaction");return -1;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) operation;
         if (/*!sale.getStatus().equals("PAYED") && !sale.getStatus().equals("COMPLETED")*/
-                sale.getStatus().equals("OPEN")){
+                !sale.getStatus().equals("CLOSED")){
             System.out.println("sale was not PAYED!, status:"+sale.getStatus()+"\n");return -1;}
 
         //initialize the ongoing return with a new instance
         this.ongoingReturn = new ReturnTransaction(saleNumber);
+        this.ongoingReturn.setSaleDiscount(sale.getDiscountRate());
         return ongoingReturn.getBalanceId();
     }
 
@@ -1485,7 +1486,10 @@ public class EZShop implements EZShopInterface {
             System.out.println("Adding "+amount+" to already existing RETURN entry");
         }
         else{
-            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),amount,product.getPricePerUnit(),0.0);
+            TicketEntry saleEntry = sale.getEntries().stream()
+                    .filter( e-> e.getBarCode().equals(productCode))
+                    .findFirst().get();
+            entry = new TicketEntryImpl(saleEntry.getBarCode(),saleEntry.getProductDescription(),amount,saleEntry.getPricePerUnit(),saleEntry.getDiscountRate());
             ongoingReturn.getReturnEntries().add(entry);
             System.out.println("Generated a new RETURN entry");
         }
@@ -1520,10 +1524,14 @@ public class EZShop implements EZShopInterface {
         ProductType product;
 
         for(TicketEntry returnE : returnEntries){
+            System.out.println("Return Entry product to remove: "+returnE.getBarCode()+" QT: "+returnE.getAmount());
             for(TicketEntry saleE : saleEntries){
                 if(saleE.getBarCode().equals(returnE.getBarCode())){
+
+                    System.out.println("Amount in Sale of : "+saleE.getBarCode()+" is QT: "+saleE.getAmount());
                     //decrease quantity in sale and add back product to shelves
                     saleE.setAmount(saleE.getAmount()-returnE.getAmount());
+                    System.out.println("New Amount is: "+saleE.getAmount());
                     try {
                         product = getProductTypeByBarCode(returnE.getBarCode());
                         product.setQuantity(product.getQuantity()+returnE.getAmount());
@@ -1543,7 +1551,7 @@ public class EZShop implements EZShopInterface {
         totalMoney = new BigDecimal(Double.toString(totalMoney)).setScale(2,RoundingMode.HALF_UP).doubleValue();
         sale.setMoney(totalMoney);
 
-        //removing old instance in jArray of operations
+        //removing old instance in jArray of operations and operationsMap
         JSONObject tmp;
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
@@ -1553,6 +1561,7 @@ public class EZShop implements EZShopInterface {
                 }
             }
         }
+        accountBook.getOperationsMap().remove(ongoingReturn.getSaleId());
         //replacing it with the updated sale
         accountBook.addOperation(sale);
 

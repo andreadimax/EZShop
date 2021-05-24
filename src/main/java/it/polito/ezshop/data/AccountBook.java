@@ -111,10 +111,10 @@ public class AccountBook {
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
             //building saleTransaction with the full constructor
-            SaleTransactionImplementation Sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
+            SaleTransactionImplementation sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
             //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
-                this.operationsMap.put(balanceId, Sale);
+                this.operationsMap.put(balanceId, sale);
                 if( status.equals("PAYED") ){this.changeBalance(money);}
             }
         }
@@ -122,13 +122,14 @@ public class AccountBook {
             String status = (String) x.get("status");
             Integer saleId = Integer.parseInt((String) x.get("saleId"));
             //JSON array to iterate over TicketEntries "entries"
+            double saleDiscount = Double.parseDouble((String) x.get("saleDiscount"));
             JSONArray jEntries = (JSONArray) x.get("entries");
             //loading TicketEntries list of the sale transaction
             List<TicketEntry> entries = new ArrayList<>();
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
             //building returnTransaction with the full constructor
-            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries);
+            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries,saleDiscount);
             //adding the Return Transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId,retTrans);
@@ -212,6 +213,7 @@ public class AccountBook {
         else if(NewOp instanceof ReturnTransaction){
             ReturnTransaction retTrans = (ReturnTransaction) NewOp;
             joperation.put("saleId",retTrans.getSaleId().toString());
+            joperation.put("saleDiscount", ((Double)retTrans.getSaleDiscount()).toString());
             joperation.put("status",retTrans.getStatus());
             //section to load the JSONArray entries
             JSONArray jEntries = new JSONArray();
