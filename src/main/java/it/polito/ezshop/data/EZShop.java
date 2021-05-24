@@ -551,31 +551,46 @@ public class EZShop implements EZShopInterface {
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
-
+        if(newDescription==null || "".equals(newDescription))throw new InvalidProductDescriptionException();
         // return false if another product already has the same barcode
         if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode)))return false;
+        // check productCode
+        if(!barcodeIsValid(newCode))throw new InvalidProductCodeException();
         //check for invalid product id
-        if(id== null || id<0) throw new InvalidProductIdException();
+        if(id == null || id<=0) throw new InvalidProductIdException();
         if(productMap.get(id)==null)return false;
+        // checkpriceperunit
+        if(newPrice<=0) throw new InvalidPricePerUnitException();
+        ProductTypeImplementation p;
+        // return false if product with given id doesn't exist
+        if((p=(ProductTypeImplementation)productMap.get(id))==null)return false;
 
-        //needs to remove object from memory array and commit to disk
-        if(productMap.get(id)==null)return false;
-        jArrayProduct.remove(productMap.get(id));
-
+        // if it exists, update it in RAM
         //update object in map
-        ProductTypeImplementation p =(ProductTypeImplementation) productMap.get(id);
-        p.setId(id);
         p.setProductDescription(newDescription);
         p.setBarCode(newCode);
         p.setPricePerUnit(newPrice);
         p.setNote(newNote);
 
-
-
-        JSONObject pDetails;
+        // update it on disk
+        JSONObject pDetails = null;
         pDetails = initializeJsonProductObject(p);
-        jArrayProduct.add(pDetails);
+        for(int i = 0; i< jArrayProduct.size(); i++){
+            pDetails  = (JSONObject) jArrayProduct.get(i);
+            if(pDetails.get("id").equals(id.toString())){
+                jArrayProduct.set(i,initializeJsonProductObject(p));
+                /*
+                pDetails.put("description", newDescription);
+                pDetails.put("barCode", newCode);
+                pDetails.put("sellPrice", newPrice);
+                pDetails.put("note", newNote);
+                */
+
+            }
+        }
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+
+
         return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
     }
 
@@ -586,7 +601,11 @@ public class EZShop implements EZShopInterface {
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
         //check for invalid product id
         if(id== null || id<=0) throw new InvalidProductIdException();
-        if(productMap.get(id)==null)return false;
+        if(productMap.get(id)==null){
+            System.out.println("no product with such id exists");
+            return false;
+        }
+
         //needs to remove object from memory array and commit to disk
         JSONObject pr = null;
         for(int i = 0; i< jArrayProduct.size(); i++){
@@ -595,8 +614,11 @@ public class EZShop implements EZShopInterface {
                 jArrayProduct.remove(i);
             }
         }
-        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
+        // writing to memory
+        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)){
+            System.out.println("Failure while writing to memory");
+            return false;
+        }
         //remove object from map
         productMap.remove(id);
         return true;
@@ -619,7 +641,14 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
+        if(!barcodeIsValid(barCode)) throw new InvalidProductCodeException();
+        try{
+            return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
+        }catch(Exception e){
+            return null;
+        }
+
+
     }
 
     @Override
@@ -628,7 +657,9 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().equals(description)).map( p -> (ProductType)new ProductTypeImplementation(p)).collect(Collectors.toList());
+        if(description==null)description="";
+        String finalDescription = description;
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().contains(finalDescription)).map(p -> (ProductType)new ProductTypeImplementation(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -641,36 +672,14 @@ public class EZShop implements EZShopInterface {
 
         if(productId==null || productId<=0)throw new InvalidProductIdException();
 
-        //System.out.println("removing old product from jarray");
-
-        // if the product doesn't exist or quantity couldn't be changed, return false
-        // but before doing so, restore the jarray
-        /*if(p == null || !p.changeQuantity(toBeAdded))return false;
-
-        System.out.println("quantity changed");
-
-        //needs to remove object from memory array
-        JSONObject pr = null;
-        for(int i = 0; i< jArrayProduct.size(); i++){
-            pr  = (JSONObject) jArrayProduct.get(i);
-            if(pr.get("id").equals(productId.toString())){
-                jArrayProduct.remove(i);
-            }
-        }
-
-        JSONObject pDetails;
-        pDetails = initializeJsonProductObject(p);
-        jArrayProduct.add(pDetails);
-        */
-
         if(!productMap.containsKey(productId)){return false;}
 
-        ProductType product = productMap.get(productId);
+        ProductTypeImplementation product = (ProductTypeImplementation) productMap.get(productId);
         System.out.println("Updating quantity of product: ("+ productId.toString()+")\n");
         System.out.println("Starting quantity: "+ product.getQuantity().toString() + "\n");
         System.out.println("Adding quantity: " + toBeAdded +"\n");
 
-        product.setQuantity( product.getQuantity() + toBeAdded );
+        if(!product.changeQuantity(toBeAdded))return false;
         //Updating JSON Object in the ProductType JSON Array
         JSONObject tmp;
         if (this.jArrayProduct != null) {
@@ -696,13 +705,15 @@ public class EZShop implements EZShopInterface {
 
         if( productId==null || productId<=0)throw new InvalidProductIdException();
 
+        if("".equals(newPos))newPos=null;
         //if position is not null, check if it satisfies <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber> format
-        if(newPos==null || !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
+        if(newPos!=null && !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
 
 
         //if position is not unique, or productId has no match return false
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
-        if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(newPos))))return false;
+        String finalNewPos = newPos;
+        if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(finalNewPos))))return false;
 
         // updating location
         p.setLocation(newPos);
