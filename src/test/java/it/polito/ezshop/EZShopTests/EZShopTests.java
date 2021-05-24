@@ -120,20 +120,16 @@ public class EZShopTests {
         assertFalse(EZShop.validateCard(""));
         assertFalse(EZShop.validateCard(null));
     }
-
+/*
     @Test
     public void testOrderAPIs(){
-        //public Integer issueOrder(String productCode, int quantity, double pricePerUnit)
+
         EZShop ez = new EZShop();
         int id = -1;
         int id2 = -1;
         double balance = 0;
-        /**
-         * This method issues an order of <quantity> units of product with given <productCode>, each unit will be payed
-         * <pricePerUnit> to the supplier. <pricePerUnit> can differ from the re-selling price of the same product. The
-         * product might have no location assigned in this step.
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-         */
+        //---------------------------------------------------------
+        //public Integer issueOrder(String productCode, int quantity, double pricePerUnit)
         try {
             ez.login("daniele", "789");
             Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
@@ -164,15 +160,8 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
+        //-------------------------------------------------------
         //public Integer payOrderFor(String productCode, int quantity, double pricePerUnit)
-        /**
-         * This method directly orders and pays <quantity> units of product with given <productCode>, each unit will be payed
-         * <pricePerUnit> to the supplier. <pricePerUnit> can differ from the re-selling price of the same product. The
-         * product might have no location assigned in this step.
-         * This method affects the balance of the system.
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-        **/
-
         try {
             ez.login("daniele", "789");
             balance= ez.computeBalance();
@@ -215,14 +204,8 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
-
+        // ------------------------------------------------------------------------------------
         //public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException;
-        /**
-         * This method change the status the order with given <orderId> into the "PAYED" state. The order should be either
-         * issued (in this case the status changes) or payed (in this case the method has no effect).
-         * This method affects the balance of the system.
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-         **/
         try {
             ez.login("daniele", "789");
             balance = ez.computeBalance();
@@ -250,15 +233,8 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
-
+        // --------------------------------------------------------------------------------
         //public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException;
-        /**
-         * This method records the arrival of an order with given <orderId>. This method changes the quantity of available product.
-         * The product type affected must have a location registered. The order should be either in the PAYED state (in this
-         * case the state will change to the COMPLETED one and the quantity of product type will be updated) or in the
-         * COMPLETED one (in this case this method will have no effect at all).
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-         **/
         try {
             ez.login("daniele", "789");
             Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
@@ -283,12 +259,8 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
-
+        //------------------------------------------------------------
         //public List<Order> getAllOrders() throws UnauthorizedException;
-        /**
-         * This method return the list of all orders ISSUED, ORDERED and COMLPETED.
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-         */
         try {
             // return a list containing all orders
             ez.login("daniele", "789");
@@ -306,6 +278,7 @@ public class EZShopTests {
             fail("should have not thrown any exception");
         }
     }
+    */
     @Test
     public void testCustomerAPIs(){
         EZShop ez = new EZShop();
