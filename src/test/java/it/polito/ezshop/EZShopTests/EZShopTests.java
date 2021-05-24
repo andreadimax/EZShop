@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
@@ -121,6 +122,190 @@ public class EZShopTests {
     }
 
     @Test
+    public void testOrderAPIs(){
+        //public Integer issueOrder(String productCode, int quantity, double pricePerUnit)
+        EZShop ez = new EZShop();
+        int id = -1;
+        int id2 = -1;
+        double balance = 0;
+        /**
+         * This method issues an order of <quantity> units of product with given <productCode>, each unit will be payed
+         * <pricePerUnit> to the supplier. <pricePerUnit> can differ from the re-selling price of the same product. The
+         * product might have no location assigned in this step.
+         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
+         */
+        try {
+            ez.login("daniele", "789");
+            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            assertTrue(pOptional.isPresent());
+            String pCode = pOptional.get().getBarCode();
+            // return  the id of the order (> 0)
+            assertTrue((id=ez.issueOrder(pCode, 3, 3.99))>0);
+
+            // return -1 if the product does not exists, if there are problems with the db
+            String nonExistentPCode = "837249732450"; // may fail if this id is already occupied
+            assertEquals(-1, (int)ez.issueOrder(nonExistentPCode, 3, 3.99));
+            // @throws InvalidProductCodeException if the productCode is not a valid bar code, if it is null or if it is empty
+            assertThrows(InvalidProductCodeException.class, ()->ez.issueOrder("462846283672", 3, 3.99));
+            assertThrows(InvalidProductCodeException.class, ()->ez.issueOrder("", 3, 3.99));
+            assertThrows(InvalidProductCodeException.class, ()->ez.issueOrder(null, 3, 3.99));
+            // @throws InvalidQuantityException if the quantity is less than or equal to 0
+            assertThrows(InvalidQuantityException.class, ()->ez.issueOrder("462846283670", 0, 3.99));
+            assertThrows(InvalidQuantityException.class, ()->ez.issueOrder("462846283670", -1, 3.99));
+            // @throws InvalidPricePerUnitException if the price per unit of product is less than or equal to 0
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.issueOrder("462846283670", 5, 0));
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.issueOrder("462846283670", 5, 0));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.issueOrder("462846283670", 5, 1));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.issueOrder("462846283670", 5, 1));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        //public Integer payOrderFor(String productCode, int quantity, double pricePerUnit)
+        /**
+         * This method directly orders and pays <quantity> units of product with given <productCode>, each unit will be payed
+         * <pricePerUnit> to the supplier. <pricePerUnit> can differ from the re-selling price of the same product. The
+         * product might have no location assigned in this step.
+         * This method affects the balance of the system.
+         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
+        **/
+
+        try {
+            ez.login("daniele", "789");
+            balance= ez.computeBalance();
+            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            assertTrue(pOptional.isPresent());
+            String pCode = pOptional.get().getBarCode();
+
+         // @return  the id of the order (> 0)
+            assertTrue((id2=ez.payOrderFor(pCode, 3, 3.99))>0);
+            // return   -1 if the product does not exists
+            String nonExistentPCode = "837249732450"; // may fail if this id is already occupied
+            assertEquals(-1, (int)ez.payOrderFor(nonExistentPCode, 3, 3.99));
+         // return -1 if the balance is not enough to satisfy the order
+            assertEquals(-1, (int)ez.payOrderFor(nonExistentPCode, 1, ez.computeBalance()+1));
+         // return -1 problems with the db
+         // not testable
+
+         // @throws InvalidProductCodeException if the productCode is not a valid bar code, if it is null or if it is empty
+            assertThrows(InvalidProductCodeException.class, ()->ez.payOrderFor("462846283672", 3, 3.99));
+            assertThrows(InvalidProductCodeException.class, ()->ez.payOrderFor("", 3, 3.99));
+            assertThrows(InvalidProductCodeException.class, ()->ez.payOrderFor(null, 3, 3.99));
+
+            // @throws InvalidQuantityException if the quantity is less than or equal to 0
+            assertThrows(InvalidQuantityException.class, ()->ez.payOrderFor("462846283670", 0, 3.99));
+            assertThrows(InvalidQuantityException.class, ()->ez.payOrderFor("462846283670", -1, 3.99));
+
+            // @throws InvalidPricePerUnitException if the price per unit of product is less than or equal to 0
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.payOrderFor("462846283670", 5, 0));
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.payOrderFor("462846283670", 5, 0));
+
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.payOrderFor("462846283670", 5, 1));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.payOrderFor("462846283670", 5, 1));
+            // need to check that it actually subtracts from the balance
+            ez.login("daniele", "789");
+            assertTrue(ez.computeBalance()<balance);
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        //public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException;
+        /**
+         * This method change the status the order with given <orderId> into the "PAYED" state. The order should be either
+         * issued (in this case the status changes) or payed (in this case the method has no effect).
+         * This method affects the balance of the system.
+         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
+         **/
+        try {
+            ez.login("daniele", "789");
+            balance = ez.computeBalance();
+        // return  true if the order has been successfully ordered
+            assertTrue(ez.payOrder(id));
+        // return  false if the order does not exist or if it was not in an ISSUED/ORDERED state
+            int nonExistentOrder = 62148234; //if it fails, it may be occupied
+            assertFalse(ez.payOrder(id2));
+            assertFalse(ez.payOrder(nonExistentOrder));
+
+            // throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
+            assertThrows(InvalidOrderIdException.class, ()->ez.payOrder(0));
+            assertThrows(InvalidOrderIdException.class, ()->ez.payOrder(null));
+            assertThrows(InvalidOrderIdException.class, ()->ez.payOrder(-1));
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            int finalId = id;
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.payOrder(finalId));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.payOrder(finalId));
+            // check the balance
+            ez.login("daniele", "789");
+            assertTrue(ez.computeBalance()<balance);
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        //public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException;
+        /**
+         * This method records the arrival of an order with given <orderId>. This method changes the quantity of available product.
+         * The product type affected must have a location registered. The order should be either in the PAYED state (in this
+         * case the state will change to the COMPLETED one and the quantity of product type will be updated) or in the
+         * COMPLETED one (in this case this method will have no effect at all).
+         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
+         **/
+        try {
+            ez.login("daniele", "789");
+            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            assertTrue(pOptional.isPresent());
+            String pCode = pOptional.get().getBarCode();
+            // return  true if the operation was successful
+            assertTrue(ez.recordOrderArrival(id));
+            assertTrue(ez.recordOrderArrival(id)); // even if already completed should be true
+            // return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
+            assertFalse(ez.recordOrderArrival(ez.issueOrder(pCode, 3, 3.00)));
+            // @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(0));
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(-1));
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(null));
+            // @throws InvalidLocationException if the ordered product type has not an assigned location.
+            ez.getProductTypeByBarCode(pCode).setLocation("");
+            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrival(id2));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        //public List<Order> getAllOrders() throws UnauthorizedException;
+        /**
+         * This method return the list of all orders ISSUED, ORDERED and COMLPETED.
+         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
+         */
+        try {
+            // return a list containing all orders
+            ez.login("daniele", "789");
+            assertNotNull(ez.getAllOrders());
+            ez.login("sandy brown", "abc");
+            assertNotNull(ez.getAllOrders());
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ez::getAllOrders);
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ez::getAllOrders);
+            // maybe there is the need to also check the actual list
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+    }
+    @Test
     public void testCustomerAPIs(){
         EZShop ez = new EZShop();
         int id=-1;
@@ -178,7 +363,6 @@ public class EZShopTests {
              // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
              ez.logout();
              assertThrows(UnauthorizedException.class, ()-> ez.modifyCustomer(finalId, "anothername", "4758365838"));
-
              ez.login("marina blue", "abc");
              assertTrue(ez.modifyCustomer(finalId, "anothername", "4758365839"));
 
