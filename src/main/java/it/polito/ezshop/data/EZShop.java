@@ -1681,11 +1681,27 @@ public class EZShop implements EZShopInterface {
         if(cash<=0) throw new InvalidPaymentException();
         ArrayList <String> cards = readCards();
 
-        SaleTransaction s = getSaleTransaction(ticketNumber);
+        SaleTransactionAdapter s = (SaleTransactionAdapter) getSaleTransaction(ticketNumber);
         if(s==null)return -1;
         double difference = cash-s.getPrice();
         if(difference<0)return -1;
         accountBook.changeBalance(s.getPrice());
+
+        //Updating SaleTransaction Status
+        s.sale.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ticketNumber.toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+
         return difference;
     }
 
@@ -1721,8 +1737,22 @@ public class EZShop implements EZShopInterface {
             e.printStackTrace();
         }
 
+        SaleTransactionAdapter s = (SaleTransactionAdapter) getSaleTransaction(ticketNumber);
+        //Updating SaleTransaction Status
+        s.sale.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ticketNumber.toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
 
-        // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
         return true;
     }
 
