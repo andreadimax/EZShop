@@ -99,28 +99,42 @@ stimpl --> teimpl
      JUnit test cases applied to them> JUnit test classes should be here src/test/java/it/polito/ezshop
 
 ## Step 1
-| Classes                                                            | JUnit test cases                                                         |
-|--------------------------------------------------------------------|--------------------------------------------------------------------------|
-| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
-| OrderImplementation + BalanceOperation                             | EZShopTests/OrderImplementationTests - testOrderImpl                     |
+
+| Classes                   | JUnit test cases                                             |
+| ------------------------- | ------------------------------------------------------------ |
+| CustomerImplementation    | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
+| UserImplementation        | EZShopTests/OrderImplementationTests - testOrderImpl         |
+| ProductTypeImplementation | EZShopTests/ProductTypeImplementationTest<br /> -testProduct <br /> -testProduct1<br /> -testProduct2 |
+| TicketEntryImpl           | EZShopTests/TicketEntryImplementationTest -testTicket        |
+| BalanceOperation          | EZShopTests/OrderImplementationTests<br />-testCreditDebit<br />-testBalanceSetters |
 
 
 
 ## Step 2
-| Classes                                                                                     | JUnit test cases                                                      |
-|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
-| TicketEntryImpl + BalanceOperation + ReturnTransaction                                      | EZShopTests/SaleTransactionImplementationTests -testReturnTransaction |
-| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation + SaleTransactionAdapter | EZShopTests/SaleTransactionAdapterTests - testOrderAdapter            |
+
+| Classes                                                      | JUnit test cases                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation | EZShopTests/SaleTransactionImplementationTests - testSaleTransactionImpl |
+| OrderImplementation + BalanceOperation                       | EZShopTests/OrderImplementationTests - testOrderImpl         |
+
 
 
 ## Step 3
-| Classes                                               | JUnit test cases                              |
-|-------------------------------------------------------|-----------------------------------------------|
-| BalanceOperation + OrderImplementation + OrderAdapter | EZShopTests/OrderAdapterTests - testOrderImpl |
-|                                                       |                                               |
+| Classes                                                      | JUnit test cases                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| BalanceOperation + OrderImpl + OrderAdapter                  | EZShopTests/OrderAdapterTests - testOrderImpl                |
+| TicketEntryImpl + BalanceOperation + ReturnTransaction       | EZShopTests/SaleTransactionImplementationTests -testReturnTransaction |
+| TicketEntryImpl + BalanceOperation + SaleTransactionImplementation + SaleTransactionAdapter | EZShopTests/SaleTransactionAdapterTests - testOrderAdapter   |
 
 
-## Step 4 (API Testing)
+## Step 4
+| Classes                                                      | JUnit test cases                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| BalanceOperation + TicketEntryImpl+ SaleTransactionImplementation + OrderImpl + ReturnTransaction + AccountBook | EZShopTests/AccountBookTest<br />-testSetters<br />-testGetFilepath<br />-testChangeBalance<br />-testAddOperation |
+|                                                              |                                                              |
+
+
+## Step 5 (API Testing)
 
    
 

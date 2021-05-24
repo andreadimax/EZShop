@@ -4,12 +4,32 @@ import it.polito.ezshop.data.*;
 import org.json.simple.JSONArray;
 import org.junit.Test;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
 public class AccountBookTest {
+
+
+    public static boolean writejArrayToFile(String filepath, JSONArray jArr){
+
+        if(filepath == null || jArr == null) return false;
+        try
+        {
+            FileWriter fOut = new FileWriter(filepath);
+            fOut.write(jArr.toJSONString());
+            fOut.flush();
+            fOut.close();
+
+        }
+        catch(IOException f) {
+            return false;
+        }
+        return true;
+    }
 
     @Test
     public void testSetters(){
@@ -47,6 +67,7 @@ public class AccountBookTest {
 
     @Test
     public void testAddOperation(){
+        writejArrayToFile("src/main/persistent_data/operations.json", new JSONArray());
         BalanceOperationImpl.setBalanceCounter(0);
 
         AccountBook accountBook = new AccountBook();
@@ -80,13 +101,14 @@ public class AccountBookTest {
         assertTrue(accountBook.addOperation(retOp));
         assertSame(retOp,accountBook.getOperation(id));
 
+        writejArrayToFile("src/main/persistent_data/operations.json", accountBook.getjArrayOperations());
+
+
         assertFalse(accountBook.addOperation(null));
         assertFalse(accountBook.addOperation(ordOp));
         assertFalse(accountBook.addOperation(saleOp));
         assertFalse(accountBook.addOperation(retOp));
 
-
-        assertEquals("src/main/persistent_data/operations.json",accountBook.getFilepath());
     }
 
 
