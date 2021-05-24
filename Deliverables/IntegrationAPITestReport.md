@@ -124,10 +124,11 @@ stimpl --> teimpl
 
    
 
-| Classes                     | JUnit test cases                       |
-|-----------------------------|----------------------------------------|
-| UserImplementation + EZShop | EZShopTests/EZShopTests - TestUserAPIs |
-|                             |                                        |
+| Classes                     | JUnit test cases                              |
+|-----------------------------|-----------------------------------------------|
+| UserImplementation + EZShop | EZShopTests/EZShopTests - TestUserAPIs        |
+| ProductTypeImpl + EZShop    | EZShopTests/EZShopTests - TestProductTypeAPIs |
+|                             |                                               |
 
 
 
@@ -159,12 +160,12 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 
 
-| Scenario ID     | Functional Requirements covered | JUnit  Test(s)                            |
-| -----------     | ------------------------------- | -----------                               |
-| From 2.1 to 2.3 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs    |
+| Scenario ID     | Functional Requirements covered | JUnit  Test(s)                                |
+| -----------     | ------------------------------- | -----------                                   |
+| From 2.1 to 2.3 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs        |
 | From 1.1 to 1.3 | all FR2 subrequirements         | EZShopTests/EZShopTests - TestProductTypeAPIs |
-| ...             |                                 |                                           |
-| ...             |                                 |                                           |
+| ...             |                                 |                                               |
+| ...             |                                 |                                               |
 
 
 
