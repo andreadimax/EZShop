@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 
@@ -119,7 +120,235 @@ public class EZShopTests {
         assertFalse(EZShop.validateCard(null));
     }
 
-    //  REQUIRES THE SALE AND RETURN TRANSACTIONS TO BE ALREADY TESTED, IF TESTED NOW WE CANNOT BE SURE WHERE THE ERROR ACTUALLY IS
+    @Test
+    public void testCustomerAPIs(){
+        EZShop ez = new EZShop();
+        int id=-1;
+
+        // --------------------------------------------------------
+        // public Integer defineCustomer(String customerName) throws InvalidCustomerNameException, UnauthorizedException
+        try{
+            ez.login("daniele", "789");
+            // return the id (>0) of the new customer if successful
+            id = ez.defineCustomer("customername");
+            assertTrue(id>0);
+
+            // -1 otherwise
+            assertEquals(-1, (int) ez.defineCustomer("customername"));
+
+            // @throws InvalidCustomerNameException if the customer name is empty or null
+            assertThrows(InvalidCustomerNameException.class, () -> ez.defineCustomer(""));
+
+            assertThrows(InvalidCustomerNameException.class, () -> ez.defineCustomer(null));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+
+            assertThrows(UnauthorizedException.class, () -> ez.defineCustomer("another name"));
+
+            ez.login("marina blue", "abc");
+            int id3=-1;
+            assertTrue(0<(id3=ez.defineCustomer("another name")));
+            assertTrue(ez.deleteCustomer(id3));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        //-----------------------------------------------------------
+        // public boolean modifyCustomer(Integer id, String newCustomerName, String newCustomerCard) throws InvalidCustomerNameException, InvalidCustomerCardException, InvalidCustomerIdException, UnauthorizedException;
+         try{
+             // @return true if the update is successful
+             assertTrue(ez.modifyCustomer(id, "newName", "1234567890"));
+
+             // @return false if the update fails ( cardCode assigned to another user, db unreacheable)
+             int id2 = ez.defineCustomer("pippo");
+             assertFalse(ez.modifyCustomer(id2, "anotherName", "1234567890"));
+             assertTrue(ez.deleteCustomer(id2));
+             assertNull(ez.getCustomer(id2));
+
+             // @throws InvalidCustomerNameException if the customer name is empty or null
+             int finalId = id;
+             assertThrows(InvalidCustomerNameException.class, ()-> ez.modifyCustomer(finalId, "", "4758365837"));
+             assertThrows(InvalidCustomerNameException.class, ()-> ez.modifyCustomer(finalId, null, "4758365837"));
+
+             // @throws InvalidCustomerCardException if the customer card is empty, null or if it is not in a valid format (string with 10 digits)
+             assertThrows(InvalidCustomerCardException.class, ()-> ez.modifyCustomer(finalId, "anothername", "475836583"));
+             assertThrows(InvalidCustomerCardException.class, ()-> ez.modifyCustomer(finalId, "anothername", "47583658377"));
+             assertThrows(InvalidCustomerCardException.class, ()-> ez.modifyCustomer(finalId, "anothername", "475836583a"));
+
+             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+             ez.logout();
+             assertThrows(UnauthorizedException.class, ()-> ez.modifyCustomer(finalId, "anothername", "4758365838"));
+
+             ez.login("marina blue", "abc");
+             assertTrue(ez.modifyCustomer(finalId, "anothername", "4758365839"));
+
+             // @throws InvalidCustomerIdException if the id is less than or equal to zero
+             assertThrows(InvalidCustomerIdException.class, ()-> ez.modifyCustomer(0, "anothername", "4758365837"));
+             assertThrows(InvalidCustomerIdException.class, ()-> ez.modifyCustomer(-1, "anothername", "4758365837"));
+         }catch(Exception e){
+             System.out.println("catched Exception: " + e);
+             fail("should have not thrown any exception");
+         }
+
+         //---------------------------------------------------------------
+        // public boolean deleteCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException;
+        try{
+            ez.login("daniele", "789");
+
+            // return false if the user does not exists or if we have problems to reach the db
+            int i;
+            for(i=1; ez.getCustomer(i)!=null; i++);
+            assertFalse(ez.deleteCustomer(i));
+            // @throws InvalidCustomerIdException if the id is null, less than or equal to 0.
+            assertThrows(InvalidCustomerIdException.class, ()-> ez.deleteCustomer(0));
+            assertThrows(InvalidCustomerIdException.class, ()-> ez.deleteCustomer(-1));
+            assertThrows(InvalidCustomerIdException.class, ()-> ez.deleteCustomer(null));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()-> ez.deleteCustomer(null));
+            ez.login("daniele", "789");
+            // return true if the customer was successfully deleted
+            assertTrue(ez.deleteCustomer(id));
+            assertNull(ez.getCustomer(id));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        // -----------------------------------------------
+        // public Customer getCustomer(Integer id) throws InvalidCustomerIdException, UnauthorizedException;
+        try{
+
+            ez.login("daniele", "789");
+            id = ez.defineCustomer("newCustomerTest");
+            // return the customer with given id
+            assertEquals("newCustomerTest", ez.getCustomer(id).getCustomerName());
+            ez.logout();
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            assertThrows(UnauthorizedException.class, ez::getAllCustomers);
+            ez.login("marina blue", "abc");
+            assertEquals("newCustomerTest", ez.getCustomer(id).getCustomerName());
+            ez.deleteCustomer(id);
+
+            // return null if that user does not exists
+            assertNull(ez.getCustomer(id));
+            // @throws InvalidCustomerIdException if the id is null, less than or equal to 0.
+            assertThrows(InvalidCustomerIdException.class, ()->ez.getCustomer(null));
+            assertThrows(InvalidCustomerIdException.class, ()->ez.getCustomer(0));
+            assertThrows(InvalidCustomerIdException.class, ()->ez.getCustomer(-1));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        // ------------------------------------------------
+        // public List<Customer> getAllCustomers() throws UnauthorizedException;
+        try{
+            //@return the list of all the customers registered
+            ez.login("daniele", "789");
+            id = ez.defineCustomer("newCustomerTest");
+            assertTrue(ez.getAllCustomers().stream().anyMatch(x -> x.getCustomerName().equals("newCustomerTest")));
+            ez.logout();
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            assertThrows(UnauthorizedException.class, ez::getAllCustomers);
+            ez.login("marina blue", "abc");
+            assertTrue(ez.getAllCustomers().stream().anyMatch(x -> x.getCustomerName().equals("newCustomerTest")));
+            ez.deleteCustomer(id);
+        }
+        catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        // -------------------------------------------------
+        // public String createCard() throws UnauthorizedException;
+        try{
+            ez.login("daniele", "789");
+            // @return the code of a new available card. An empty string if the db is unreachable
+            assertTrue(ez.createCard().matches("\\d{10}"));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()-> ez.createCard());
+            ez.login("marina blue", "abc");
+            assertTrue(ez.createCard().matches("\\d{10}"));
+        }
+        catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        // ---------------------------------------------------------
+        // public boolean attachCardToCustomer(String customerCard, Integer customerId) throws InvalidCustomerIdException, InvalidCustomerCardException, UnauthorizedException;
+        try{
+
+            ez.login("daniele", "789");
+            id = ez.defineCustomer("newCustomerTest");
+            String card = ez.createCard();
+
+            // @return true if the operation was successful
+            assertTrue(ez.attachCardToCustomer(card, id));
+
+            // return false if the card is already assigned to another user, if there is no customer with given id, if the db is unreachable
+            int id2 = -1;
+            assertTrue(0<(id2=ez.defineCustomer("customerTesting")));
+            assertFalse(ez.attachCardToCustomer(card, id2));
+
+            // @throws InvalidCustomerIdException if the id is null, less than or equal to 0.
+            assertThrows(InvalidCustomerIdException.class, ()->ez.attachCardToCustomer(ez.createCard(), 0));
+            assertThrows(InvalidCustomerIdException.class, ()->ez.attachCardToCustomer(ez.createCard(), -1));
+
+            // @throws InvalidCustomerCardException if the card is null, empty or in an invalid format
+            int finalId1 = id;
+            assertThrows(InvalidCustomerCardException.class, ()->ez.attachCardToCustomer(null, finalId1));
+            assertThrows(InvalidCustomerCardException.class, ()->ez.attachCardToCustomer("", finalId1));
+            assertThrows(InvalidCustomerCardException.class, ()->ez.attachCardToCustomer("22421a", finalId1));
+            assertThrows(InvalidCustomerCardException.class, ()->ez.attachCardToCustomer("22421664", finalId1));
+
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            int finalId = id2;
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.attachCardToCustomer(ez.createCard(), finalId));
+            ez.login("daniele", "789");
+            ez.deleteCustomer(id2);
+            ez.deleteCustomer(id);
+
+        }
+        catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        // ------------------------------------------------------------
+        // public boolean modifyPointsOnCard(String customerCard, int pointsToBeAdded) throws InvalidCustomerCardException, UnauthorizedException;
+        try{
+            ez.login("daniele", "789");
+            String card = ez.createCard();
+            id=ez.defineCustomer("pippo");
+            assertTrue(ez.attachCardToCustomer(card,id));
+            // @return true if the operation is successful
+            assertTrue(ez.modifyPointsOnCard(card, 50));
+            assertTrue(ez.modifyPointsOnCard(card, -50));
+            // return false   if there is no card with given code,
+            assertFalse(ez.modifyPointsOnCard(ez.createCard(), 50));
+            // return false if pointsToBeAdded is negative and there were not enough points on that card before this operation
+            assertFalse(ez.modifyPointsOnCard(card, -100));
+            // return false   if we cannot reach the db
+            //cannot test it
+
+            // @throws InvalidCustomerCardException if the card is null, empty or in an invalid format
+            assertThrows(InvalidCustomerCardException.class, ()->ez.modifyPointsOnCard(null,+100));
+            assertThrows(InvalidCustomerCardException.class, ()->ez.modifyPointsOnCard("",+100));
+            assertThrows(InvalidCustomerCardException.class, ()->ez.modifyPointsOnCard("a43262",+100));
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.modifyPointsOnCard(card,+100));
+            ez.login("marina blue", "abc");
+            assertTrue(ez.modifyPointsOnCard(card,+100));
+            ez.deleteCustomer(id);
+        }
+        catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+    }
+
+    //  TODO AFTER SALE AND RETURN TRANSACTIONS ARE ALREADY TESTED, IF TESTED NOW WE CANNOT BE SURE WHERE THE ERROR ACTUALLY IS
     @Test
     public void testPaymentRelatedAPIs(){
         EZShop ez = new EZShop();
@@ -326,7 +555,7 @@ public class EZShopTests {
             ez.logout();
             assertThrows(UnauthorizedException.class, ez::getAllProductTypes);
             ez.login("marina blue", "abc");
-            assertThrows(UnauthorizedException.class, ez::getAllProductTypes);
+            assertNotNull(ez.getAllProductTypes());
             ez.logout();
             ez.login("daniele", "789");
         }catch(Exception e){

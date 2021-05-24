@@ -934,12 +934,15 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerNameException();
         }
 
-        if(newCustomerCard.matches("\\d{11}")){
+        if(!newCustomerCard.matches("\\d{10}")){
             throw new InvalidCustomerCardException();
         }
 
-        if(!this.customersMap.containsKey(id)){
+        if(id<=0){
             throw new InvalidCustomerIdException();
+        }
+        if(!this.customersMap.containsKey(id)){
+            return false;
         }
 
         if(newCustomerCard != null) {
@@ -1069,13 +1072,13 @@ public class EZShop implements EZShopInterface {
         if(customerId == null || customerId<=0 ){
             throw new InvalidCustomerIdException();
         }
-        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
+        if(customerCard == null || !customerCard.matches("\\d{10}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
         for (Customer c: customersMap.values()){
             if(c != customersMap.get(customerId)) {
-                if (c.getCustomerCard().equals(customerCard)) {
+                if (customerCard.equals(c.getCustomerCard())) {
                     return false;
                 }
             }
@@ -1088,7 +1091,7 @@ public class EZShop implements EZShopInterface {
             //Updating JSON Object in the JSON Array
             for(int i = 0; i< jArrayCustomers.size(); i++){
                 customer_obj  = (JSONObject) jArrayCustomers.get(i);
-                if(customer_obj.get("id").equals(c.getId())){
+                if(customer_obj.get("id").equals(c.getId().toString())){
                     c.setCustomerCard(customerCard);
                     customer_obj.put("card", c.getCustomerCard());
                 }
@@ -1106,7 +1109,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
+        if(customerCard == null || !customerCard.matches("\\d{10}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
@@ -1114,7 +1117,7 @@ public class EZShop implements EZShopInterface {
         for(Customer c: customersMap.values()){
             if(c.getCustomerCard() != null) {
                 if (c.getCustomerCard().equals(customerCard)) {
-                    if (c.getPoints() + pointsToBeAdded > 0) {                  //In case points are negative -> enough points on card?
+                    if (c.getPoints() + pointsToBeAdded >= 0) {                  //In case points are negative -> enough points on card?
                         c.setPoints(c.getPoints() + pointsToBeAdded);           //Updating points
                         JSONObject customer_obj = null;
                         //Updating JSON Object in the JSON Array
