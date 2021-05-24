@@ -119,78 +119,356 @@ public class EZShopTests {
         assertFalse(EZShop.validateCard(null));
     }
 
+    //  REQUIRES THE SALE AND RETURN TRANSACTIONS TO BE ALREADY TESTED, IF TESTED NOW WE CANNOT BE SURE WHERE THE ERROR ACTUALLY IS
     @Test
-    public void TestProductTypeAPIs(){
-        //Tests CreateProductType
+    public void testPaymentRelatedAPIs(){
         EZShop ez = new EZShop();
-        // successful => returns product identifier "corresponds to barcode but parsed"
+        /*
+            ReceiveCredit Card payment
+            records the payment of a sale transaction with cash and returns the change (if present).
+            updates balance of the system changes
+         */
         try{
-            assertEquals("038678561125", ez.createProductType("description productype", "038678561125", 2.99, "simple note").toString());
+            // success=> return the change (cash - sale price) 0 => balance changes
+            // return -1   if the cash is not enough and if there are problems with the db, no changes in balance
+            // @throws InvalidTransactionIdException if the  number is less than or equal to 0 or if it is null
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            // @throws InvalidPaymentException if the cash is less than or equal to 0
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        // receiveCashPayment
+        try{
+            // updates balance
+            // operation successful => true
+            //  if the sale does not exists, => false
+            //  if the card has not enough money, => false
+            //  if the card is not registered,  => false
+            //  if there is some problem with the db connection => false
+            // @throws InvalidTransactionIdException if the sale number is less than or equal to 0 or if it is null
+            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        // returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException;
+        try{
+            // receiveCreditCardPayment(Integer transactionId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
+            // affects the balance
+            // return  the money returned to the customer
+            // success => return  the money returned to the customer
+            // return -1  if the return transaction is not ended
+            // return if it does not exist,
+            // if there is a problem with the db
+            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
         }catch(Exception e){
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
 
 
-        // no products with given product id return false
-        //  another product already has the same barcode => return false
-        // throws InvalidProductIdException if the product id is less than or equal to 0
-        // throws InvalidProductIdException if the product id is null
-        // throws InvalidProductDescriptionException if the product description is null
-        // throws InvalidProductDescriptionException if the product description is empty
-        // throws InvalidProductCodeException if the product code is null or empty
-        // throws InvalidProductCodeException if it is not a number or if it is not a valid barcode
-        // throws InvalidPricePerUnitException if the price per unit is less than or equal to 0
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+
+        // public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
+        try{
+            // This method record the payment of a return transaction to a credit card.
+            // The credit card number validity should be checked. It should follow the luhn algorithm.
+            // The credit card should be registered and its balance will be affected.
+            // This method affects the balance of the system.
+            // It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+        try{
+            // @param returnId the id of the return transaction
+            // @param creditCard the credit card number of the customer
+
+            // return  the money returned to the customer
+            // return  -1  if the return transaction is not ended,
+            // return -1 if it does not exist,
+            // return -1 if the card is not registered,
+            // return -1 if there is a problem with the db
+
+            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
+            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
+            //throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+    }
+
+    @Test
+    public void TestProductTypeAPIs(){
+
+        EZShop ez = new EZShop();
+        Integer id=null;
+//_______________________________________________________________________
+        //Tests CreateProductType
+        try{
+            ez.login("daniele", "789");
+            //     * @throws InvalidProductDescriptionException if the product description is null or empty
+            assertThrows(InvalidProductDescriptionException.class, ()->ez.createProductType(null, "8004263697047", 2.99, "simple note"));
+            assertThrows(InvalidProductDescriptionException.class, ()->ez.createProductType("", "8004263697047", 2.99, "simple note"));
+
+            //     * @throws InvalidProductCodeException if the product code is null or empty, if it is not a number or if it is not a valid barcode
+            assertThrows(InvalidProductCodeException.class, ()->ez.createProductType("description productype", "", 2.99, "simple note"));
+            assertThrows(InvalidProductCodeException.class, ()->ez.createProductType("description productype", null, 2.99, "simple note"));
+            assertThrows(InvalidProductCodeException.class, ()->ez.createProductType("description productype", "abc", 2.99, "simple note"));
+
+            //     * @throws InvalidPricePerUnitException if the price per unit si less than or equal to 0
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.createProductType("description productype", "abc", 0, "simple note"));
+            assertThrows(InvalidPricePerUnitException.class, ()->ez.createProductType("description productype", "abc", -1, "simple note"));
+
+            //     * @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->{ez.createProductType("description productype", "8004263697047", 2.99, "simple note");});
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->{ez.createProductType("description productype", "8004263697047", 2.99, "simple note");});
+            ez.logout();
+
+            // successful => return The unique identifier of the new product type ( > 0 ).
+            ez.login("daniele", "789");
+            id=ez.createProductType("description productype", "8004263697047", 2.99, "simple note");
+            assertTrue(id!=null && id>0);
+            // -1 if there is an error while saving the product type or if it exists a product with the same barcode
+            assertEquals(-1, (int)ez.createProductType("description productype", "8004263697047", 2.99, "simple note"));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
 
 
+        //___________________________________________________________
         //update Product
-        // return  true if the update is successful
-        // false if the update is not successful (no products with given product id or another product already hasthe same barcode)
-        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
-        // throws InvalidProductDescriptionException if the product description is null or empty
-        // throws InvalidProductCodeException if the product code is null or empty, if it is not a number or if it is not a valid barcode
-        // throws InvalidPricePerUnitException if the price per unit si less than or equal to 0
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            // false if no products with given product id
+            // selecting 1 free id
+            int i=0;
+            int found=0;
+            while(i<9999 && found==0){
+                i++;
+                int finalI = i;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+            }
+            assertFalse(ez.updateProduct(i,"newDescription", "526374859247", 3.99, "newnote2"));
+            // false if another product already has the same barcode
+            assertFalse(ez.updateProduct(id,"newDescription", "8004263697047", 3.99, "newnote2"));
+            // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+            assertThrows(InvalidProductIdException.class, ()-> ez.updateProduct(0,"newDescription", "4673628643780", 3.99, "newnote2"));
+            assertThrows(InvalidProductIdException.class, ()-> ez.updateProduct(-1,"newDescription", "4673628643780", 3.99, "newnote2"));
+            // throws InvalidProductDescriptionException if the product description is null or empty
+            Integer finalId1 = id;
+            assertThrows(InvalidProductDescriptionException.class, ()-> ez.updateProduct(finalId1,"", "4673628643780", 3.99, "newnote2"));
+            assertThrows(InvalidProductDescriptionException.class, ()-> ez.updateProduct(finalId1,null, "4673628643780", 3.99, "newnote2"));
+            // throws InvalidProductCodeException if the product code is null or empty, if it is not a number or if it is not a valid barcode
+            assertThrows(InvalidProductCodeException.class, ()-> ez.updateProduct(finalId1,"description", null, 3.99, "newnote2"));
+            assertThrows(InvalidProductCodeException.class, ()-> ez.updateProduct(finalId1,"description", "", 3.99, "newnote2"));
+            assertThrows(InvalidProductCodeException.class, ()-> ez.updateProduct(finalId1,"description", "a1", 3.99, "newnote2"));
+            assertThrows(InvalidProductCodeException.class, ()-> ez.updateProduct(finalId1,"description", "123453563568", 3.99, "newnote2"));
+            // throws InvalidPricePerUnitException if the price per unit si less than or equal to 0
+            assertThrows(InvalidPricePerUnitException.class, ()-> ez.updateProduct(finalId1,"description", "4673628643780", 0, "newnote2"));
+            assertThrows(InvalidPricePerUnitException.class, ()-> ez.updateProduct(finalId1,"description", "4673628643780", -1, "newnote2"));
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()-> ez.updateProduct(finalId1,"description", "4673628643780", -1, "newnote2"));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()-> ez.updateProduct(finalId1,"description", "4673628643780", -1, "newnote2"));
+            ez.login("daniele", "789");
+            // return  true if the update is successful
+            assertTrue(ez.updateProduct(id,"newDescription", "4673628643780", 3.99, "newnote2"));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+
+
+
+        //________________________________________________________________
+
+
+
 
         // delete ProductType
         // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+        assertThrows(InvalidProductIdException.class, ()->ez.deleteProductType(0));
+        assertThrows(InvalidProductIdException.class, ()->ez.deleteProductType(-1));
+        assertThrows(InvalidProductIdException.class, ()->ez.deleteProductType(null));
+
         // return true if the product was deleted, false otherwise
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            assertTrue(ez.deleteProductType(id));
+            assertFalse(ez.deleteProductType(id));
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        // throws UnauthorizedException if there is no logged user
+        ez.logout();
+        Integer finalId = id;
+        assertThrows(UnauthorizedException.class, ()->ez.deleteProductType(finalId));
 
         // getAllProductTypes
-        // return a list containing all saved product types
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            ez.login("daniele", "789");
+            // return a list containing all saved product types
+            Integer finalId2 = id;
+            assertTrue(ez.getAllProductTypes().stream().noneMatch(x-> finalId2.equals(x.getId())));
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ez::getAllProductTypes);
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ez::getAllProductTypes);
+            ez.logout();
+            ez.login("daniele", "789");
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
 
         // getProductTypeByBarCode
-        // return the product type with given barCode if present, null otherwise
-        // throws InvalidProductCodeException if barCode is not a valid bar code, if is it empty or if it is null
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            id=ez.createProductType("description productype", "8004263697047", 2.99, "simple note");
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.getProductTypeByBarCode("8004263697047"));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.getProductTypeByBarCode("8004263697047"));
+            // throws InvalidProductCodeException if barCode is not a valid bar code, if is it empty or if it is null
+            ez.login("daniele", "789");
+            assertThrows(InvalidProductCodeException.class, ()->ez.getProductTypeByBarCode("800426369a047"));
+            assertThrows(InvalidProductCodeException.class, ()->ez.getProductTypeByBarCode(""));
+            assertThrows(InvalidProductCodeException.class, ()->ez.getProductTypeByBarCode(null));
+            // return the product type with given barCode if present, null otherwise
+            assertNotNull(ez.getProductTypeByBarCode("8004263697047"));
+            ez.deleteProductType(id);
+            assertNull(ez.getProductTypeByBarCode("8004263697047"));
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
 
         // getProductTypesByDescription
-        // description the description (or part of it) of the products we are searching for.
-        // Null should be considered as the empty string
-        // return a list of products containing the requested string in their description
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            id=ez.createProductType("description productype", "8004263697047", 2.99, "simple note");
+            // Null should be considered as the empty string
+            assertTrue(ez.getProductTypesByDescription("").stream().anyMatch(x->"description productype".equals(x.getProductDescription())));
+            assertTrue(ez.getProductTypesByDescription(null).stream().anyMatch(x->"description productype".equals(x.getProductDescription())));
+            // return a list of products containing the requested string in their description
+            assertTrue(ez.getProductTypesByDescription("description productype").stream().anyMatch(x->"description productype".equals(x.getProductDescription())));
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            assertThrows(UnauthorizedException.class, ()->ez.getProductTypesByDescription("description productype"));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.getProductTypesByDescription("description productype"));
+            ez.login("daniele", "789");
+            ez.deleteProductType(id);
 
-        // This method updates the quantity of product available in store. <toBeAdded> can be negative but the final updated
-        // quantity cannot be negative. The product should have a location assigned to it.
-        // return  true if the update was successful
-        // false if the product does not exists, if <toBeAdded> is negative and the resulting amount would be
-        // negative too or if the product type has not an assigned location.
-        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
 
         //updatePosition
         // The position has the following format : <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber>
         // The position should be unique null or empty
-        // If is null or empty it should reset the position of given product type.
-        // return true if the update was successful
-        // false if the product does not exists or if <newPos> is already assigned to another product
-        // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
-        // throws InvalidLocationException if the product location is in an invalid format (not <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber>)
-        // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        try{
+            id=ez.createProductType("description productype", "8004263697047", 2.99, "simple note");
+            // return true if the update was successful
+            assertTrue(ez.updatePosition(id,"232-abs-53"));
+
+            // If is null or empty it should reset the position of given product type.
+            assertTrue(ez.updatePosition(id,""));
+            assertTrue(ez.updateQuantity(id,+10)); // used to verify the object has a position
+            assertTrue(ez.updatePosition(id,null));
+            assertTrue(ez.updateQuantity(id,-10)); // used to verify the object has a position
+
+
+
+            // false if the product does not exist
+            int i=0;
+            int found=0;
+            while(i<9999 && found==0){
+                i++;
+                int finalI = i;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+            }
+            assertFalse(ez.updatePosition(i,"324-ahfj-421"));
+            assertFalse(ez.updatePosition(i,"324-abdu-421"));
+            // false if <newPos> is already assigned to another product
+            assertTrue(ez.updatePosition(id,"324-abdc-421"));
+            int id2=ez.createProductType("description2", "765343443456", 5.99,"note2");
+            assertFalse(ez.updatePosition(id2,"324-abdc-421"));
+            ez.deleteProductType(id2);
+
+
+            // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+            assertThrows(InvalidProductIdException.class, ()->ez.updatePosition(0, "654-add-473"));
+            assertThrows(InvalidProductIdException.class, ()->ez.updatePosition(-1, "654-add-473"));
+            assertThrows(InvalidProductIdException.class, ()->ez.updatePosition(null, "654-add-473"));
+            // throws InvalidLocationException if the product location is in an invalid format (not <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber>)
+            Integer finalId4 = id;
+            assertThrows(InvalidLocationException.class, ()->ez.updatePosition(finalId4,"a-aa-232"));
+            assertThrows(InvalidLocationException.class, ()->ez.updatePosition(finalId4, "654-a2dd-473"));
+
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.deleteProductType(id);
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+
+
+        // updateQuantity
+        try{
+            id=ez.createProductType("description productype", "8004263697047", 2.99, "simple note");
+            ez.updatePosition(id, "232-adh-95");
+            // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
+            assertThrows(InvalidProductIdException.class, ()->ez.updateQuantity(-1, 1));
+            assertThrows(InvalidProductIdException.class, ()->ez.updateQuantity(0, 1));
+            assertThrows(InvalidProductIdException.class, ()->ez.updateQuantity(null, 1));
+            // throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            Integer finalId3 = id;
+            assertThrows(UnauthorizedException.class, ()->ez.updateQuantity(finalId3, 1));
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.updateQuantity(finalId3, 1));
+            ez.login("daniele", "789");
+            // false if the product does not exists, if <toBeAdded> is negative and the resulting amount would be
+            int i=0;
+            int found=0;
+            while(i<9999 && found==0){
+                i++;
+                int finalI = i;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+            }
+            assertFalse(ez.updateQuantity(i, 1));
+            // false if <toBeAdded> is negative and the resulting amount would be negative
+            assertFalse(ez.updateQuantity(id, -500));
+            // return  true if the update was successful
+            assertTrue(ez.updateQuantity(id, +500));
+            // false if the product type has not an assigned location.
+            ez.updatePosition(id, "");
+            assertTrue(ez.updateQuantity(id, +500));
+            ez.deleteProductType(id);
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
     }
+
     @Test
     public void TestUserAPIs(){
 
