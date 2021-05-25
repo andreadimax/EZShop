@@ -303,7 +303,15 @@ public class EZShop implements EZShopInterface {
 
     public static boolean writejArrayToFile(String filepath, JSONArray jArr){
 
-        if(filepath == null || jArr == null) return false;
+        //System.out.println("filepath: " + filepath);
+        if(filepath == null || "".equals(filepath)){
+            System.out.println("Error in writing jarray to file: invalid filepath");
+            return false;
+        }
+        else if(jArr == null) {
+            System.out.println("Error in writing jarray to file: jarray is null");
+            return false;
+        }
         try
         {
             FileWriter fOut = new FileWriter(filepath);
@@ -313,6 +321,9 @@ public class EZShop implements EZShopInterface {
 
         }
         catch(IOException f) {
+            System.out.println("Error Occurred while writing the jarray to memory");
+            System.out.println("filepath: " + filepath);
+            System.out.println("jarray: " + jArr);
             return false;
         }
         return true;
@@ -753,15 +764,18 @@ public class EZShop implements EZShopInterface {
         //otherwise finally generates the order in "issued" state
         OrderImpl order = new OrderImpl(productCode,quantity,pricePerUnit);
         this.accountBook.addOperation(order);
-        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
-        return order.getOrderId();
+
+        if(writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations()))return order.getOrderId();
+        else return -1;
+
     }
 
     @Override
     public Integer payOrderFor(String productCode, int quantity, double pricePerUnit) throws InvalidProductCodeException, InvalidQuantityException, InvalidPricePerUnitException, UnauthorizedException {
         int orderId = issueOrder(productCode, quantity, pricePerUnit);
-        if( orderId == -1){ return -1; }
 
+        if( orderId == -1){ return -1; }
+        System.out.println("look at: " + this.accountBook.getOperation(orderId));
         //check for the order existence
         if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return -1;}
 
@@ -1895,4 +1909,6 @@ public class EZShop implements EZShopInterface {
         }
         return accountBook.getBalance();
     }
+
+
 }

@@ -193,6 +193,7 @@ public class AccountBook {
         }
         else if(NewOp instanceof SaleTransactionImplementation){
             SaleTransactionImplementation sale = (SaleTransactionImplementation) NewOp;
+
             joperation.put("discountRate", ((Double)sale.getDiscountRate()).toString());
             joperation.put("status", sale.getStatus());
             //section to load the JSONArray entries
