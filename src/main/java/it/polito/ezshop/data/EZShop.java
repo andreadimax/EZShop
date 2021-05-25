@@ -1497,8 +1497,7 @@ public class EZShop implements EZShopInterface {
         if(operation == null || !(operation instanceof SaleTransactionImplementation)){
             System.out.println("operation was not a sale transaction");return -1;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) operation;
-        if (/*!sale.getStatus().equals("PAYED") && !sale.getStatus().equals("COMPLETED")*/
-                !sale.getStatus().equals("CLOSED")){
+        if (!sale.getStatus().equals("PAYED") && !sale.getStatus().equals("COMPLETED")){
             System.out.println("sale was not PAYED!, status:"+sale.getStatus()+"\n");return -1;}
 
         //initialize the ongoing return with a new instance
@@ -1521,7 +1520,7 @@ public class EZShop implements EZShopInterface {
         //return transaction does not exist
         if(returnId != this.ongoingReturn.getBalanceId()){return false;}
         //case were the product does not exist
-        ProductType product = getProductTypeByBarCode(productCode);
+        ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(productCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
         if(product == null ){return false;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
         //case where the product returned was not part of the referenced sale entries
@@ -1560,7 +1559,7 @@ public class EZShop implements EZShopInterface {
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
 
         //return false for returnId not being the id of the active return transaction
-        if(ongoingReturn.getBalanceId() != returnId){return false;}
+        if(ongoingReturn != null){ if(ongoingReturn.getBalanceId() != returnId){return false;}}else{return false;}
 
         SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
         //return false for non available sale Transaction (db problems)
@@ -1707,6 +1706,9 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public double receiveCashPayment(Integer ticketNumber, double cash) throws InvalidTransactionIdException, InvalidPaymentException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
@@ -1741,6 +1743,9 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public boolean receiveCreditCardPayment(Integer ticketNumber, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
