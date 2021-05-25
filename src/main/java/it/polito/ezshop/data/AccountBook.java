@@ -22,6 +22,7 @@ public class AccountBook {
     private double balance;
 
     public AccountBook(){
+        BalanceOperationImpl.setBalanceCounter(0);
         this.balance = 0;
         this.operationsMap = new HashMap<>();
 

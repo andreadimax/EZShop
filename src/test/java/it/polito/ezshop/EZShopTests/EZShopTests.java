@@ -123,12 +123,12 @@ public class EZShopTests {
 
     @Test
     public void testOrderAPIs(){
-
+        BalanceOperationImpl.setBalanceCounter(0);
         EZShop ez = new EZShop();
         int id = -1;
         int id2 = -1;
         double balance = 0;
-        BalanceOperationImpl.setBalanceCounter(0);
+
         //---------------------------------------------------------
         //public Integer issueOrder(String productCode, int quantity, double pricePerUnit)
         try {
