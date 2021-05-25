@@ -122,9 +122,30 @@ public class EZShopTests {
     }
 
     @Test
-    public void testOrderAPIs(){
-        BalanceOperationImpl.setBalanceCounter(0);
+    public void testResetAPI(){
         EZShop ez = new EZShop();
+        try {
+            ez.reset();
+        }catch (Exception e){
+            fail("reset() should have not thrown exception: "+ e);
+        }
+    }
+
+    @Test
+    public void testOrderAPIs(){
+        //BalanceOperationImpl.setBalanceCounter(0);
+        EZShop ez = new EZShop();
+        try {
+            ez.login("alessio", "456");
+        }catch(Exception e){
+            fail("unable to login with credentials user: alessio  password: 456");
+        }
+        ez.reset();
+        try {
+            ez.recordBalanceUpdate(1000.0);
+        }catch(Exception e){
+            fail("unable to update Balance with credit operation");
+        }
         int id = -1;
         int id2 = -1;
         double balance = 0;
@@ -137,9 +158,13 @@ public class EZShopTests {
             assertTrue(ez.recordBalanceUpdate(13));
             System.out.println("BALANCE : " + ez.computeBalance());
 
-            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
-            assertTrue(pOptional.isPresent());
-            String pCode = pOptional.get().getBarCode();
+            //Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            //assertTrue(pOptional.isPresent());
+            //String pCode = pOptional.get().getBarCode();
+
+            Integer tmpId = ez.createProductType("DeathSword","526374859278",666,"first for Order Tests");
+            ez.updatePosition(tmpId,"436-atf-3445");
+            String pCode = "526374859278";
             // return  the id of the order (> 0)
             assertTrue((id=ez.issueOrder(pCode, 3, 3.99))>0);
 
@@ -172,13 +197,15 @@ public class EZShopTests {
             ez.login("daniele", "789");
             balance= ez.computeBalance();
             // getting a barcode for a product in the inventory
-            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
-            assertTrue(pOptional.isPresent());
-            String pCode = pOptional.get().getBarCode();
+            //Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            //assertTrue(pOptional.isPresent());
+            //String pCode = pOptional.get().getBarCode();
+            ProductType product = ez.getProductTypeByBarCode("526374859278");
+            String pCode = "526374859278";
 
             // (?) THIS TEST FAILS at statement: if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl)
          // @return  the id of the order (> 0)
-            System.out.println("order is actually for product: " + pCode + "with id: "+ pOptional.get().getId());
+            System.out.println("order is actually for product: " + pCode + "with id: "+ product.getId());
             //assertThrows(IndexOutOfBoundsException.class,()->ez.payOrderFor(pCode, 3, 3.99));
             assertTrue((id2=ez.payOrderFor(pCode, 3, 3.99))>0);
 
@@ -221,7 +248,7 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
-        /*
+
         // ------------------------------------------------------------------------------------
         //public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException;
         try {
@@ -255,21 +282,31 @@ public class EZShopTests {
         //public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException;
         try {
             ez.login("daniele", "789");
-            Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
-            assertTrue(pOptional.isPresent());
-            String pCode = pOptional.get().getBarCode();
+            Integer tmpId = ez.createProductType("necronomicon","526374859261",6.66,"for Order Tests");
+            ez.updatePosition(tmpId,"435-atf-3444");
+            //Optional<ProductType> pOptional = ez.getAllProductTypes().stream().findFirst();
+            //assertTrue(pOptional.isPresent());
+            //String pCode = pOptional.get().getBarCode();
+            String pCode = "526374859261";
             // return  true if the operation was successful
+            System.out.println("id just before fail is: "+id);
             assertTrue(ez.recordOrderArrival(id));
             assertTrue(ez.recordOrderArrival(id)); // even if already completed should be true
-            // return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
-            assertFalse(ez.recordOrderArrival(ez.issueOrder(pCode, 3, 3.00)));
+            // return  false if the order does not exist or if it was not in an ORDERED/ISSUED/PAYED/COMPLETED state
+            Integer idBadState = ez.issueOrder(pCode, 3, 3.00);
+            ez.getAllOrders().stream().filter(o->o.getBalanceId() == idBadState).findFirst()
+                    .get().setStatus("INVALIDSTATUS");
+            assertFalse(ez.recordOrderArrival(idBadState));
             // @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
             assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(0));
             assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(-1));
             assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrival(null));
             // @throws InvalidLocationException if the ordered product type has not an assigned location.
-            ez.getProductTypeByBarCode(pCode).setLocation("");
-            int finalId1 = id2;
+            Integer noLocProdId = ez.createProductType("LocationLess","526374859285",1.00,"for Order Tests with no location");
+
+            Integer noLocOrder = ez.payOrderFor("526374859285",2,0.50);
+            int finalId1 = noLocOrder;
+            System.out.println("noLocOrder before failing is: "+noLocOrder);
             assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrival(finalId1));
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
 
@@ -277,7 +314,7 @@ public class EZShopTests {
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");
         }
-        */
+
         //------------------------------------------------------------
         //public List<Order> getAllOrders() throws UnauthorizedException;
         try {
@@ -663,7 +700,7 @@ public class EZShopTests {
             while(i<9999 && found==0){
                 i++;
                 int finalI = i;
-                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()== finalI))found=1;
             }
             assertFalse(ez.updateProduct(i,"newDescription", "526374859247", 3.99, "newnote2"));
             // false if another product already has the same barcode
@@ -809,7 +846,7 @@ public class EZShopTests {
             while(i<9999 && found==0){
                 i++;
                 int finalI = i;
-                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()== finalI))found=1;
             }
             assertFalse(ez.updatePosition(i,"324-ahfj-421"));
             assertFalse(ez.updatePosition(i,"324-abdu-421"));
@@ -858,7 +895,7 @@ public class EZShopTests {
             while(i<9999 && found==0){
                 i++;
                 int finalI = i;
-                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()!= finalI))found=1;
+                if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()== finalI))found=1;
             }
             assertFalse(ez.updateQuantity(i, 1));
             // false if <toBeAdded> is negative and the resulting amount would be negative
@@ -1113,12 +1150,20 @@ public class EZShopTests {
         //ShopManager
         try{
             ez.login("damiana diamond", "abc");
+            //ShopManager will add 2 of product to sale
+            //Cashier will add 1
+            //Administrator will add 1
+            //firstly i create the productType for the test
+            Integer tmpId = ez.createProductType("chair","526374859254",19.99,null);
+            ez.updatePosition(tmpId,"434-atf-3443");
+            //so i put 4 items of the same product into the system before starting
+            ProductType tmpProd = ez.getProductTypeByBarCode("526374859254");
+            ez.updateQuantity(tmpProd.getId(),4);
         }catch(Exception e){
             fail("Should have been able to login");
         }
         System.out.println(id);
         try {
-
             assertTrue(ez.addProductToSale(id, "526374859254", 2));
         }
         catch (Exception e){
@@ -1136,7 +1181,7 @@ public class EZShopTests {
             assertTrue(ez.addProductToSale(id, "526374859254", 1) );
         }
         catch (Exception e){
-            fail("Should have been able add The product To sale");
+            fail("Should have been able add The product To sale " + e);
         }
 
         //Administator

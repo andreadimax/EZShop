@@ -335,6 +335,7 @@ public class EZShop implements EZShopInterface {
         //setting balance to 0
         accountBook.setBalance(0);
         //clearing all operation history
+        BalanceOperationImpl.setBalanceCounter(0);
         accountBook.getOperationsMap().clear();
         accountBook.getjArrayOperations().clear();
         writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
@@ -809,16 +810,19 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException {
         //exceptions
-        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if(orderId == null || orderId <= 0){throw new InvalidOrderIdException();}
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return false;}
-
+        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){
+            System.out.println("order with id "+orderId+"does not exist");
+            return false;
+        }
+        System.out.println("executing payOrder() of orderId: " + orderId);
         //check if already payed
         OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
-        if( order.getStatus().equals("PAYED") ){ return false; }
+        if(!order.getStatus().equals("ISSUED") && !order.getStatus().equals("ORDERED")){ return false; }
 
         //check if the balance is enough to pay the order, operation is '+' because getMoney() has a negative value for subclass OrderImpl
         if(accountBook.getBalance() + order.getMoney() < 0){ return false; }
@@ -843,7 +847,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException {
         //exceptions
-        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if(orderId == null || orderId <= 0){throw new InvalidOrderIdException();}
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
@@ -852,10 +856,15 @@ public class EZShop implements EZShopInterface {
         OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
         if(order == null){
             System.out.println("RETRIEVED ORDER IS NULL");
+            return false;
         }
         ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(order.getProductCode())).findFirst().get();
-        if(product.getLocation() == null){ throw new InvalidLocationException(); }
+        if(product.getLocation() == null || product.getLocation().equals("")){ throw new InvalidLocationException(); }
 
+        //returning false if order was not in a ORDERED (ISSUED) / COMPLETED state
+        if(!order.getStatus().equals("ORDERED") && !order.getStatus().equals("ISSUED") && !order.getStatus().equals("COMPLETED") && !order.getStatus().equals("PAYED") ){
+            return false;
+        }
         //registering the order arrival and updating the product quantity (unless it was already completed)
         if(order.getStatus().equals("COMPLETED")){
             return true;
