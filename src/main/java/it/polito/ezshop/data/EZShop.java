@@ -775,9 +775,10 @@ public class EZShop implements EZShopInterface {
         int orderId = issueOrder(productCode, quantity, pricePerUnit);
 
         if( orderId == -1){ return -1; }
-        System.out.println("look at: " + this.accountBook.getOperation(orderId));
+        System.out.println("look at operation with balanceId: " + this.accountBook.getOperation(orderId).getBalanceId());
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return -1;}
+
+        if (!(this.accountBook.getOperation(orderId) instanceof OrderImpl)) {return -1;}
 
         OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
 
@@ -788,7 +789,17 @@ public class EZShop implements EZShopInterface {
         accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
         //Updating JSON Object in the JSON Array
-        ((JSONObject) accountBook.getjArrayOperations().get(orderId)).put("status","PAYED");
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(((Integer) orderId).toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
         //Updating JSON File
         writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
 

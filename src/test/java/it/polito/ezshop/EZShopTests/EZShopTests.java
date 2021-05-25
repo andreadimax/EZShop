@@ -168,7 +168,7 @@ public class EZShopTests {
 
         //-------------------------------------------------------
         //public Integer payOrderFor(String productCode, int quantity, double pricePerUnit)
-        try {
+        try{
             ez.login("daniele", "789");
             balance= ez.computeBalance();
             // getting a barcode for a product in the inventory
@@ -178,7 +178,8 @@ public class EZShopTests {
 
             // (?) THIS TEST FAILS at statement: if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl)
          // @return  the id of the order (> 0)
-            System.out.println("order is actually for : " + pCode);
+            System.out.println("order is actually for product: " + pCode + "with id: "+ pOptional.get().getId());
+            //assertThrows(IndexOutOfBoundsException.class,()->ez.payOrderFor(pCode, 3, 3.99));
             assertTrue((id2=ez.payOrderFor(pCode, 3, 3.99))>0);
 
             // return   -1 if the product does not exists
@@ -188,7 +189,11 @@ public class EZShopTests {
             assertEquals(-1, (int)ez.payOrderFor(nonExistentPCode, 1, ez.computeBalance()+1));
          // return -1 problems with the db
          // not testable
-
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        try{
          // @throws InvalidProductCodeException if the productCode is not a valid bar code, if it is null or if it is empty
             assertThrows(InvalidProductCodeException.class, ()->ez.payOrderFor("462846283672", 3, 3.99));
             assertThrows(InvalidProductCodeException.class, ()->ez.payOrderFor("", 3, 3.99));
