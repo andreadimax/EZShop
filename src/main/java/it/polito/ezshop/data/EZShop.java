@@ -1180,7 +1180,7 @@ public class EZShop implements EZShopInterface {
         //false returns
         if(transactionId != this.ongoingSale.getBalanceId()){return false;}
         if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
-        ProductType product = productMap.values().stream().filter(p -> p.getBarCode().equals(productCode)).findFirst().get();
+        ProductType product = productMap.values().stream().filter(p -> p.getBarCode().equals(productCode)).findFirst().get();;
         if(product.getQuantity() < amount){return false;}
 
         //if product already in sale, update quantity, otherwise, create the new Ticket Entry

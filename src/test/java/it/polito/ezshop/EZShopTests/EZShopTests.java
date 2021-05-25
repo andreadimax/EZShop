@@ -1113,7 +1113,8 @@ public class EZShopTests {
         }
         System.out.println(id);
         try {
-            assertTrue(ez.addProductToSale(id, "8004263697047", 6));
+
+            assertTrue(ez.addProductToSale(id, "526374859254", 2));
         }
         catch (Exception e){
             fail("Should have been able to login"+e);
@@ -1127,10 +1128,10 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.addProductToSale(id, "8004263697047", 1) );
+            assertTrue(ez.addProductToSale(id, "526374859254", 1) );
         }
         catch (Exception e){
-            fail("Should have been able to login");
+            fail("Should have been able add The product To sale");
         }
 
         //Administator
@@ -1141,7 +1142,7 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.addProductToSale(id, "8004263697047", 1));
+            assertTrue(ez.addProductToSale(id, "526374859254", 1));
         }
         catch (Exception e){
             fail("Should have been able to login");
@@ -1173,7 +1174,7 @@ public class EZShopTests {
         }
         System.out.println(id);
         try {
-            assertTrue(ez.deleteProductFromSale(id, "8004263697047", 1));
+            assertTrue(ez.deleteProductFromSale(id, "526374859254", 1));
         }
         catch (Exception e){
             fail("Should have been able to login"+e);
@@ -1187,7 +1188,7 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.deleteProductFromSale(id, "8004263697047", 1) );
+            assertTrue(ez.deleteProductFromSale(id, "526374859254", 1) );
         }
         catch (Exception e){
             fail("Should have been able to login");
@@ -1201,16 +1202,16 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.deleteProductFromSale(id, "8004263697047", 1));
+            assertTrue(ez.deleteProductFromSale(id, "526374859254", 1));
         }
         catch (Exception e){
             fail("Should have been able to login");
         }
 
 
-        assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSale(-1, "8004263697047", 5));
-        assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSale(null, "8004263697047", 5));
-        assertThrows(InvalidQuantityException.class, ()->ez.deleteProductFromSale(finalId, "8004263697047", -1));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSale(-1, "526374859254", 5));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSale(null, "526374859254", 5));
+        assertThrows(InvalidQuantityException.class, ()->ez.deleteProductFromSale(finalId, "526374859254", -1));
         assertThrows(InvalidProductCodeException.class, ()->ez.deleteProductFromSale(finalId, "", 5));
         assertThrows(InvalidProductCodeException.class, ()->ez.deleteProductFromSale(finalId, null, 5));
         assertThrows(InvalidProductCodeException.class, ()->ez.deleteProductFromSale(finalId, "123456789", 5));
@@ -1234,7 +1235,7 @@ public class EZShopTests {
         }
         System.out.println(id);
         try {
-            assertTrue(ez.applyDiscountRateToProduct(id, "8004263697047", 0.2));
+            assertTrue(ez.applyDiscountRateToProduct(id, "526374859254", 0.2));
         }
         catch (Exception e){
             fail("Should have been able to login"+e);
@@ -1248,7 +1249,7 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.applyDiscountRateToProduct(id, "8004263697047", 0.2) );
+            assertTrue(ez.applyDiscountRateToProduct(id, "526374859254", 0.2) );
         }
         catch (Exception e){
             fail("Should have been able to login");
@@ -1262,17 +1263,17 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue(ez.applyDiscountRateToProduct(id, "8004263697047", 0.2));
+            assertTrue(ez.applyDiscountRateToProduct(id, "526374859254", 0.2));
         }
         catch (Exception e){
             fail("Should have been able to login");
         }
 
 
-        assertThrows(InvalidTransactionIdException.class, ()->ez.applyDiscountRateToProduct(-1, "8004263697047", 0.2));
-        assertThrows(InvalidTransactionIdException.class, ()->ez.applyDiscountRateToProduct(null, "8004263697047", 0.2));
-        assertThrows(InvalidDiscountRateException.class, ()->ez.applyDiscountRateToProduct(finalId, "8004263697047", -1));
-        assertThrows(InvalidDiscountRateException.class, ()->ez.applyDiscountRateToProduct(finalId, "8004263697047", 2));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.applyDiscountRateToProduct(-1, "526374859254", 0.2));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.applyDiscountRateToProduct(null, "526374859254", 0.2));
+        assertThrows(InvalidDiscountRateException.class, ()->ez.applyDiscountRateToProduct(finalId, "526374859254", -1));
+        assertThrows(InvalidDiscountRateException.class, ()->ez.applyDiscountRateToProduct(finalId, "526374859254", 2));
         assertThrows(InvalidProductCodeException.class, ()->ez.applyDiscountRateToProduct(finalId, "", 5));
         assertThrows(InvalidProductCodeException.class, ()->ez.applyDiscountRateToProduct(finalId, null, 5));
         assertThrows(InvalidProductCodeException.class, ()->ez.applyDiscountRateToProduct(finalId, "123456789", 5));
@@ -1582,7 +1583,7 @@ public class EZShopTests {
         //Testing a saleTransaction payed
         try {
             id = ez.startSaleTransaction();
-            ez.addProductToSale(id, "8004263697047", 1);
+            ez.addProductToSale(id, "526374859254", 1);
             ez.endSaleTransaction(id);
         } catch (UnauthorizedException | InvalidTransactionIdException | InvalidProductCodeException | InvalidQuantityException e) {
             e.printStackTrace();
