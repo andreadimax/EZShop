@@ -138,11 +138,15 @@ stimpl --> teimpl
 
    
 
-| Classes                         | JUnit test cases                              |
-|---------------------------------|-----------------------------------------------|
-| UserImplementation + EZShop     | EZShopTests/EZShopTests - TestUserAPIs        |
-| ProductTypeImpl + EZShop        | EZShopTests/EZShopTests - TestProductTypeAPIs |
-| CustomerImplementation + EZShop | EZShopTests/EZShopTests - TestCustomerAPIs    |
+| Classes                         | JUnit test cases                                  |
+| ------------------------------- | ------------------------------------------------- |
+| UserImplementation + EZShop     | EZShopTests/EZShopTests - TestUserAPIs            |
+| ProductTypeImpl + EZShop        | EZShopTests/EZShopTests - TestProductTypeAPIs     |
+| CustomerImplementation + EZShop | EZShopTests/EZShopTests - TestCustomerAPIs        |
+| SaleTransactionImplementation   | EZShopTests/EZShopTests - TestSaleTransactionAPIs |
+| EZShop.assignId                 | EZShopTests/EZShopTests - testAssignId            |
+| EZShop.barcodeIsValid           | EZShopTests/EZShopTests - testBarcodeIsValid      |
+| EZShop.writejArrayToFile        | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
 
 
 # Scenarios
