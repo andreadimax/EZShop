@@ -1,10 +1,10 @@
 # Integration and API Test Documentation
 
-Authors:
+Authors: Andrea Di Mauro, Alessio Bincoletto, Daniele Cacciabue (Team 15)
 
-Date:
+Date: 26/05/2021
 
-Version:
+Version: 1.0
 
 # Contents
 
@@ -16,19 +16,13 @@ Version:
   - [Step 1](#step-1)
   - [Step 2](#step-2)
   - [Step 3](#step-3)
-  - [Step n](#step-n)
+  - [Step 4](#step-4)
+  - [Step 5](#step-5)
 - [Scenarios](#scenarios)
   - [Scenario UCx.y](#scenario-ucxy)
 - [Coverage of Scenarios and FR](#coverage-of-scenarios-and-fr)
 - [Coverage of Non Functional Requirements](#coverage-of-non-functional-requirements)
-    - [](#)
 
-- [Tests](#tests)
-
-- [Scenarios](#scenarios)
-
-- [Coverage of scenarios and FR](#scenario-coverage)
-- [Coverage of non-functional requirements](#nfr-coverage)
 
 
 
@@ -138,23 +132,19 @@ stimpl --> teimpl
 
    
 
-| Classes                                                      | JUnit test cases                                  |
-| ------------------------------------------------------------ | ------------------------------------------------- |
-| UserImplementation + EZShop                                  | EZShopTests/EZShopTests - testUserAPIs            |
-| ProductTypeImpl + EZShop                                     | EZShopTests/EZShopTests - testProductTypeAPIs     |
-| CustomerImplementation + EZShop                              | EZShopTests/EZShopTests - testCustomerAPIs        |
-| SaleTransactionImplementation + SaleTransactionAdapter + EZShop | EZShopTests/EZShopTests - testSaleTransactionAPIs |
-| OrderImpl + OrderAdapter + EZShop                            | EZShopTests/EZShopTests - testOrderAPIs           |
-| EZShop.reset()                                               | EZShopTests/EZShopTests - testResetAPI            |
-| EZShop.assignId                                              | EZShopTests/EZShopTests - testAssignId            |
-| EZShop.barcodeIsValid                                        | EZShopTests/EZShopTests - testBarcodeIsValid      |
-| EZShop.writejArrayToFile                                     | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
-| EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs  |
-| EZShop + receiveCreditCardPayment, receiveCashPayment, returnCreditCardPayment, returnCashPayment | EZShopTests/EZShopTests - testPaymentAPIs         |
+| Classes                                                      | JUnit test cases                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| UserImplementation + EZShop                                  | EZShopTests/EZShopTests - testUserAPIs                       |
+| ProductTypeImpl + EZShop                                     | EZShopTests/EZShopTests - testProductTypeAPIs                |
+| CustomerImplementation + EZShop                              | EZShopTests/EZShopTests - testCustomerAPIs                   |
+| SaleTransactionImplementation + SaleTransactionAdapter + EZShop | EZShopTests/EZShopTests - testSaleTransactionAPIs            |
+| OrderImpl + OrderAdapter + EZShop                            | EZShopTests/EZShopTests - testOrderAPIs                      |
+| EZShop                                                       | EZShopTests/EZShopTests - testResetAPI<br />EZShopTests/EZShopTests - testAssignId<br />EZShopTests/EZShopTests - testBarcodeIsValid<br />EZShopTests/EZShopTests - testWriteJarrayToFIle<br />EZShopTests/EZShopTests - testValidateCard |
+| EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs             |
+| EZShop + receiveCreditCardPayment, receiveCashPayment, returnCreditCardPayment, returnCashPayment | EZShopTests/EZShopTests - testPaymentAPIs                    |
 
 
 # Scenarios
-
 
 <If needed, define here additional scenarios for the application. Scenarios should be named
  referring the UC in the OfficialRequirements that they detail>
@@ -180,16 +170,18 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 
 
-| Scenario ID                         | Functional Requirements covered         | JUnit  Test(s)                                   |
-| -----------                         | -------------------------------         | -----------                                      |
-| From 2.1 to 2.3 and from 5.1 to 5.2 | all FR1 subrequirements                 | EZShopTests/EZShopTests - TestUserAPIs           |
-| From 1.1 to 1.3                     | all FR3 subrequirements + FR4.1 + FR4.2 | EZShopTests/EZShopTests - TestProductTypeAPIs    |
-| From 4.1 to 4.4                     | all FR5 subrequirements                 | EZShopTests/EZShopTests - TestCustomerAPIs       |
-| 9.1                                 | all FR8 subrequirements                 | EZShopTests/EZShopTests - testBalanceRelatedAPIs |
-| From 3.1 to 3.3                     | From FR4.3 to FR4.7                     | EZShopTests/EZShopTests - testOrderAPIs          |
-|                                     |                                         |                                                  |
-
-
+| Scenario ID                         | Functional Requirements covered         | JUnit  Test(s)                                      |
+| ----------------------------------- | --------------------------------------- | --------------------------------------------------- |
+| From 2.1 to 2.3 and from 5.1 to 5.2 | all FR1 subrequirements                 | EZShopTests/EZShopTests - testUserAPIs              |
+| From 1.1 to 1.3                     | all FR3 subrequirements + FR4.1 + FR4.2 | EZShopTests/EZShopTests - testProductTypeAPIs       |
+| From 3.1 to 3.3                     | FR4.3 to FR4.7                          | EZShopTests/EZShopTests - testOrderAPIs             |
+| From 4.1 to 4.4                     | all FR5 subrequirements                 | EZShopTests/EZShopTests - testCustomerAPIs          |
+| 6.1 to 6.6                          | FR6.1 to FR6.6 and FR6.10 to FR6.11     | EZShopTests/EZShopTests - testSaleTransactionAPIs   |
+| 8.1 , 8.2                           | FR6.12 to FR6.15                        | EZShopTests/EZShopTests - testReturnTransactionAPIs |
+| 7.1 to 7.4                          | FR7.1 to FR7.4                          | EZShopTests/EZShopTests - testPaymentAPIs           |
+| 9.1                                 | all FR8 subrequirements                 | EZShopTests/EZShopTests - testBalanceRelatedAPIs    |
+|                                     |                                         |                                                     |
+|                                     |                                         |                                                     |
 
 # Coverage of Non Functional Requirements
 
@@ -199,7 +191,9 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 ### 
 
-| Non Functional Requirement | Test name |
-| -------------------------- | --------- |
-|                            |           |
+| Non Functional Requirement | Test name                                    |
+| -------------------------- | -------------------------------------------- |
+| NFR4                       | EZShopTests/EZShopTests - testBarcodeIsValid |
+| NFR5                       | EZShopTests/EZShopTests - testValidateCard   |
+| NFR6                       | EZShopTests/EZShopTests - testCustomerAPIs   |
 

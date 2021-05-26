@@ -117,7 +117,7 @@ public class EZShop implements EZShopInterface {
         return checkDigit == Character.getNumericValue(bcode[len-1]);
     }
 //////---------------------------------------------------------------------------
-    public static boolean validateCard(String cardNumber) {
+    private static boolean validateCard(String cardNumber) {
         if (cardNumber == null || cardNumber.equals("") || cardNumber.length()<2)
             return false;
         //convert to array of int
@@ -209,7 +209,7 @@ public class EZShop implements EZShopInterface {
         return  int_random;
     }
 
-    public void parseObjectType(JSONObject obj, String type){
+    private void parseObjectType(JSONObject obj, String type){
         switch (type) {
             case "product": {
 
