@@ -2267,8 +2267,7 @@ public class EZShopTests {
 
         try {
             assertFalse(ez.receiveCreditCardPayment(finalId, "4716258050958645"));
-            //assertFalse(ez.receiveCreditCardPayment(finalId, "4716258050958646"));
-            //assertFalse(ez.receiveCreditCardPayment(22, "4716258050958646"));
+            assertFalse(ez.receiveCreditCardPayment(22, "4716258050958645"));
         }
         catch (Exception e){
             fail("receiveCreditCardPayment throws: "+e);
@@ -2286,6 +2285,142 @@ public class EZShopTests {
         ez.logout();
 
         /* --------- END receiveCreditCardPayment --------- */
+
+        /* --------- returnCashPayment --------- */
+
+        //No user logged
+        assertThrows(UnauthorizedException.class, ()->ez.returnCashPayment(1));
+
+        Integer returnId = 0;
+
+
+        //User logged as Administrator, Cashier or ShopManager
+
+
+        //ShopManager
+        try{
+            ez.login("damiana diamond", "abc");
+
+            //Completing a return transaction
+            returnId = ez.startReturnTransaction(finalId);
+            ez.returnProduct(returnId, "526374859254" , 2);
+
+        }catch(Exception e){
+            fail("Should have been able to login"+e);
+        }
+        try {
+            assertTrue((ez.returnCashPayment(returnId)) == -1);
+            ez.endReturnTransaction(returnId, true);
+        }
+        catch (Exception e){
+            fail("Should have been able to login"+e);
+        }
+
+        //Cashier
+        try{
+            ez.login("marina blue", "abc");
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+
+        try {
+            assertTrue((ez.returnCashPayment(returnId)) != -1);
+        }
+        catch (Exception e){
+            fail("Should have been able to login");
+        }
+
+        //Administator
+        try{
+            ez.login("andrea", "123");
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+
+        try {
+            assertTrue((ez.returnCashPayment(returnId)) != -1);
+            assertEquals(-1, (int) ez.returnCashPayment(22));
+        }
+        catch (Exception e){
+            fail("Should have been able to login");
+        }
+
+
+
+        assertThrows(InvalidTransactionIdException.class, ()->ez.returnCashPayment(-1));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.returnCashPayment(0));
+
+        ez.logout();
+
+        /* --------- END returnCashPayment --------- */
+
+        /* --------- returnCreditCardPayment --------- */
+
+        //No user logged
+        assertThrows(UnauthorizedException.class, ()->ez.returnCreditCardPayment(2, "4485370086510891"));
+
+
+
+        //User logged as Administrator, Cashier or ShopManager
+
+
+        //ShopManager
+        try{
+            ez.login("damiana diamond", "abc");
+            returnId = ez.startReturnTransaction(finalId);
+            ez.returnProduct(returnId, "526374859254" , 2);
+
+        }catch(Exception e){
+            fail("Should have been able to login"+e);
+        }
+        try {
+            assertTrue((ez.returnCreditCardPayment(returnId, "4485370086510891" ) )== -1);
+            ez.endReturnTransaction(returnId, true);
+        }
+        catch (Exception e){
+            fail("Should have been able to login"+e);
+        }
+
+        //Cashier
+        try{
+            ez.login("marina blue", "abc");
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+
+        try {
+            assertTrue((ez.returnCreditCardPayment(returnId, "4485370086510891" ) )!= -1);
+        }
+        catch (Exception e){
+            fail("Should have been able to login"+e);
+        }
+
+        //Administator
+        try{
+            ez.login("andrea", "123");
+        }catch(Exception e){
+            fail("Should have been able to login");
+        }
+
+        try {
+            assertFalse(ez.returnCreditCardPayment(finalId, "4716258050958645") != -1);
+            assertFalse(ez.returnCreditCardPayment(22, "4716258050958645") != -1);
+        }
+        catch (Exception e){
+            fail("Should have been able to login"+e);
+        }
+
+
+        Integer finalReturnId2 = returnId;
+        assertThrows(InvalidCreditCardException.class, ()->ez.returnCreditCardPayment(finalReturnId2, ""));
+        assertThrows(InvalidCreditCardException.class, ()->ez.returnCreditCardPayment(finalReturnId2 , null));
+        assertThrows(InvalidCreditCardException.class, ()->ez.returnCreditCardPayment(finalReturnId2 , "11"));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.returnCreditCardPayment(-1, "4485370086510891" ));
+        assertThrows(InvalidTransactionIdException.class, ()->ez.returnCreditCardPayment(0, "4485370086510891" ));
+
+        ez.logout();
+
+        /* --------- END returnCreditCardPayment --------- */
 
 
 

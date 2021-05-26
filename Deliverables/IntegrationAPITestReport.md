@@ -138,19 +138,19 @@ stimpl --> teimpl
 
    
 
-| Classes                                                                                              | JUnit test cases                                  |
-| ------------------------------------------------------------                                         | ------------------------------------------------- |
-| UserImplementation + EZShop                                                                          | EZShopTests/EZShopTests - testUserAPIs            |
-| ProductTypeImpl + EZShop                                                                             | EZShopTests/EZShopTests - testProductTypeAPIs     |
-| CustomerImplementation + EZShop                                                                      | EZShopTests/EZShopTests - testCustomerAPIs        |
-| SaleTransactionImplementation + SaleTransactionAdapter + EZShop                                      | EZShopTests/EZShopTests - testSaleTransactionAPIs |
-| OrderImpl + OrderAdapter + EZShop                                                                    | EZShopTests/EZShopTests - testOrderAPIs           |
-| EZShop.reset()                                                                                       | EZShopTests/EZShopTests - testResetAPI            |
-| EZShop.assignId                                                                                      | EZShopTests/EZShopTests - testAssignId            |
-| EZShop.barcodeIsValid                                                                                | EZShopTests/EZShopTests - testBarcodeIsValid      |
-| EZShop.writejArrayToFile                                                                             | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
+| Classes                                                      | JUnit test cases                                  |
+| ------------------------------------------------------------ | ------------------------------------------------- |
+| UserImplementation + EZShop                                  | EZShopTests/EZShopTests - testUserAPIs            |
+| ProductTypeImpl + EZShop                                     | EZShopTests/EZShopTests - testProductTypeAPIs     |
+| CustomerImplementation + EZShop                              | EZShopTests/EZShopTests - testCustomerAPIs        |
+| SaleTransactionImplementation + SaleTransactionAdapter + EZShop | EZShopTests/EZShopTests - testSaleTransactionAPIs |
+| OrderImpl + OrderAdapter + EZShop                            | EZShopTests/EZShopTests - testOrderAPIs           |
+| EZShop.reset()                                               | EZShopTests/EZShopTests - testResetAPI            |
+| EZShop.assignId                                              | EZShopTests/EZShopTests - testAssignId            |
+| EZShop.barcodeIsValid                                        | EZShopTests/EZShopTests - testBarcodeIsValid      |
+| EZShop.writejArrayToFile                                     | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
 | EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs  |
-|                                                                                                      |                                                   |
+| EZShop + receiveCreditCardPayment, receiveCashPayment, returnCreditCardPayment, returnCashPayment | EZShopTests/EZShopTests - testPaymentAPIs         |
 
 
 # Scenarios

@@ -1750,7 +1750,13 @@ public class EZShop implements EZShopInterface {
 
         String line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst().get();
         double money = Double.parseDouble(line.split(";")[1]);
-        double costTransaction = getSaleTransaction(ticketNumber).getPrice();
+        double costTransaction = 0.0;
+        if(getSaleTransaction(ticketNumber) != null) {
+            costTransaction = getSaleTransaction(ticketNumber).getPrice();
+        }
+        else{
+            return false;
+        }
         if (money< costTransaction)return false;
         money=money-costTransaction;
         accountBook.changeBalance(+costTransaction);
@@ -1790,9 +1796,15 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public double returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
+        }
+        if (returnId <= 0) {
+            throw new InvalidTransactionIdException();
         }
         BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
         if(! (op instanceof ReturnTransaction))return -1;
@@ -1807,6 +1819,9 @@ public class EZShop implements EZShopInterface {
     @Override
     public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
         // checking privilegies
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
@@ -1818,7 +1833,7 @@ public class EZShop implements EZShopInterface {
         ReturnTransaction ret = (ReturnTransaction) op;
         if(!ret.getStatus().equals("CLOSED")) return -1;
         // checking credit card validity
-        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
 
         // checking if credit card is stored
         ArrayList <String> cards = readCards();
