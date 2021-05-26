@@ -186,6 +186,7 @@ public class EZShopTests {
             assertEquals(p.getProductDescription(), "description" );
 
             // checking Users
+            int userCount = ez.getAllUsers().size();
             User u;
             assertNotNull(u=ez.getUser(u1.getId()));
             assertEquals(u1.getId(),u.getId());
@@ -194,6 +195,7 @@ public class EZShopTests {
             assertEquals(u1.getRole(), u.getRole());
 
             // checking Customers
+            int customerCount = ez.getAllCustomers().size();
             Customer c;
             assertNotNull(c=ez.getCustomer(c1.getId()));
             assertEquals(c1.getId(),c.getId());
@@ -214,6 +216,7 @@ public class EZShopTests {
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
             // checking Users
+            assertEquals(ez.getAllUsers().size(), userCount);
             assertNotNull(u=ez.getUser(u1.getId()));
             assertEquals(u1.getId(),u.getId());
             assertEquals(u1.getUsername(), u.getUsername());
@@ -221,6 +224,7 @@ public class EZShopTests {
             assertEquals(u1.getRole(), u.getRole());
 
             // checking Customers
+            assertEquals(ez.getAllCustomers().size(), customerCount);
             assertNotNull(c=ez.getCustomer(c1.getId()));
             assertEquals(c1.getId(),c.getId());
             assertEquals(c1.getCustomerName(), c.getCustomerName());
@@ -238,7 +242,8 @@ public class EZShopTests {
             // checking product
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
-            // checking users
+            // checking Users
+            assertEquals(ez.getAllUsers().size(), userCount);
             assertNotNull(u=ez.getUser(u1.getId()));
             assertEquals(u1.getId(),u.getId());
             assertEquals(u1.getUsername(), u.getUsername());
@@ -246,6 +251,7 @@ public class EZShopTests {
             assertEquals(u1.getRole(), u.getRole());
 
             // checking Customers
+            assertEquals(ez.getAllCustomers().size(), customerCount);
             assertNotNull(c=ez.getCustomer(c1.getId()));
             assertEquals(c1.getId(),c.getId());
             assertEquals(c1.getCustomerName(), c.getCustomerName());
