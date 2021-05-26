@@ -167,7 +167,7 @@ public class EZShop implements EZShopInterface {
         ArrayList<String> lines = new ArrayList<String>();
         try {
             while ((strLine = reader.readLine()) != null) {
-                String lastWord = strLine.substring(strLine.lastIndexOf(" ") + 1);
+                String lastWord = strLine;//.substring(strLine.lastIndexOf(" ") + 1);//todo valuta lastIndexOf("\n")+1;
                 lines.add(lastWord);
             }
         } catch (IOException e) {
@@ -1768,7 +1768,7 @@ public class EZShop implements EZShopInterface {
         accountBook.changeBalance(+costTransaction);
         // proceed to recording the payment
         String updatedEntry = creditCard.concat(";").concat(""+money);
-        cards.add(updatedEntry);
+        cards.add(updatedEntry);  //todo valuta di sovrascrivere il valore di line
         try{
             Files.write(Paths.get("src/main/persistent_data/creditcards.txt"),
                     (Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
