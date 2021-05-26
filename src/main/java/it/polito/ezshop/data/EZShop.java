@@ -116,42 +116,30 @@ public class EZShop implements EZShopInterface {
         //if the Check Digit is the same, return true, else return false
         return checkDigit == Character.getNumericValue(bcode[len-1]);
     }
-
-
+//////---------------------------------------------------------------------------
     public static boolean validateCard(String cardNumber) {
-        if (cardNumber == null || cardNumber.equals(""))
+        if (cardNumber == null || cardNumber.equals("") || cardNumber.length()<2)
             return false;
-
-        // taking last digit
-        char lastDigit = cardNumber.charAt(cardNumber.length() - 1);
-
-        //if the number inserted is too long, crop it
-        String card = cardNumber.substring(0, cardNumber.length() - 1);
-
-        /* convert String to array of int */
-        int[] num = new int[card.length()];
-        for (int i = 0; i < card.length(); i++) {
-            num[i] = Character.getNumericValue(card.charAt(i));
+        //convert to array of int
+        int[] digits = new int[cardNumber.length()];
+        for (int i = 0; i < cardNumber.length(); i++) {
+            digits[i] = Character.getNumericValue(cardNumber.charAt(i));
         }
 
-        /*  STEP 1: double every other digit starting from right - jumping from 2 in 2 */
-        for (int i = num.length - 1; i >= 0; i -= 2)	{
-            num[i] += num[i];
+        // double every other digit left to right
+        for (int i = 0; i <= digits.length -1; i += 2)	{
+            digits[i] += digits[i];
 
-            /* summing the digits > 10 -> subtracting 9 has the same result */
-            if (num[i] >= 10) {
-                num[i] = num[i] - 9;
+            if (digits[i] >= 10) {
+                digits[i] = digits[i] - 9;
             }
         }
 
-        // STEP 2: summing the array values
         int sum = 0;
-        for (int i = 0; i < num.length; i++) {
-            sum += num[i];
+        for (int digit : digits) {
+            sum += digit;
         }
-        // STEP 3: if the sum is exactly multiple of 10, the card is valid
-        if(sum%10==0) return true;
-        else return false;
+        return sum % 10 == 0;
     }
 
 
@@ -1754,7 +1742,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         if(ticketNumber==null || ticketNumber<=0)throw new InvalidTransactionIdException();
-        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
         ArrayList <String> cards = readCards();
 
         //checking if card is inside the list
