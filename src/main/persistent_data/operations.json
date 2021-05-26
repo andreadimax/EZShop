@@ -1,1 +1,1 @@
-[{"date":"2021-05-26","money":"500.0","description":"Credit","balanceId":"1"},{"date":"2021-05-26","money":"-500.0","description":"Debit","balanceId":"2"},{"date":"2021-05-26","money":"500.0","description":"Credit","balanceId":"3"},{"date":"2021-05-26","discountRate":"0.0","entries":[{"discountRate":"0.0","amount":"5","PPU":"10.0","description":"description","barcode":"632857389245"}],"money":"50.0","description":"SaleTransaction","balanceId":"4","status":"PAYED"}]
+[]

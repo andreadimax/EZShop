@@ -126,10 +126,110 @@ public class EZShopTests {
     @Test
     public void testResetAPI(){
         EZShop ez = new EZShop();
-        try {
+        try{
             ez.reset();
-        }catch (Exception e){
-            fail("reset() should have not thrown exception: "+ e);
+            ez.login("daniele", "789");
+            // storing 1 product
+            int pid = ez.createProductType("description", "789657485759", 10, "note");
+            ez.updateQuantity(pid, 1000);
+            ez.updatePosition(pid, "673-fhsa-538");
+
+            //storing 1 debit and 1 credit
+            ez.recordBalanceUpdate(-300);
+            ez.recordBalanceUpdate(300);
+
+            // cannot store a new user since they are never reset
+
+            // store  a new customer and card
+            Integer cid;
+            assertTrue(0<(cid=ez.defineCustomer("Flora Green")));
+            String card = ez.createCard();
+            ez.attachCardToCustomer(card, cid);
+            ez.modifyPointsOnCard(card, 100);
+
+            //store a saleTransaction
+            Integer sid = ez.startSaleTransaction();
+            ez.addProductToSale(sid, "789657485759", 5);
+            ez.endSaleTransaction(sid);
+            ez.receiveCashPayment(sid,500);
+
+            // store a returnTransaction
+            Integer rid = ez.startReturnTransaction(sid);
+            ez.returnCashPayment(rid);
+            ez.endReturnTransaction(rid, true);
+
+            // store a new order
+            Integer oid = ez.payOrderFor("789657485759",5,10);
+            ez.recordOrderArrival(oid);
+
+            // storing balance and number of debits and credits
+            double previousBalance = ez.computeBalance();
+            int oldSize = ez.getCreditsAndDebits(null, null).size();
+
+            ez = null; // removing old instance of ezshop => same as a reboot
+
+            ez = new EZShop();
+            ez.login("daniele", "789");
+
+            // checking balance
+            assertTrue(ez.computeBalance()-previousBalance<0.001);
+            // checking product
+            ProductType p;
+            assertNotNull(p=ez.getProductTypeByBarCode("789657485759"));
+            int qty = p.getQuantity();
+            assertEquals(1000, qty);
+            assertEquals("789657485759", p.getBarCode());
+            assertEquals("673-fhsa-538", p.getLocation());
+            double price = p.getPricePerUnit();
+            assertTrue( abs(10- price) < 0.001);
+            assertEquals("note", p.getNote());
+            int new_pid = p.getId();
+            assertEquals(pid, new_pid);
+            assertEquals(p.getProductDescription(), "description" );
+
+            // checking Customers
+            Customer c;
+            assertNotNull(c=ez.getCustomer(cid));
+            assertEquals(cid,c.getId());
+            assertEquals("Flora Green", c.getCustomerName());
+            assertEquals(card,c.getCustomerCard());
+            int points=c.getPoints();
+            assertEquals(100,points);
+
+            //checking total of balance operations
+            assertEquals(ez.getCreditsAndDebits(null, null).size(), oldSize);
+
+            //resetting and checking deletion occurred
+            ez.reset();
+            // checking balance
+            assertTrue(ez.computeBalance()<=0.001);
+            // checking product
+            assertNull(ez.getProductTypeByBarCode("789657485759"));
+
+            // checking Customers
+            assertNull(ez.getCustomer(cid));
+
+            //checking total of balance operations
+            assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
+
+            // rebooting ezshop, should show no sign of the old values
+            ez = new EZShop();
+            ez.login("daniele", "789");
+            // checking balance
+            assertTrue(ez.computeBalance()<=0.001);
+            // checking product
+            assertNull(ez.getProductTypeByBarCode("789657485759"));
+
+            // checking Customers
+            assertNull(ez.getCustomer(cid));
+
+            //checking total of balance operations
+            assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
+
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
         }
     }
 
