@@ -1746,20 +1746,22 @@ public class EZShop implements EZShopInterface {
         ArrayList <String> cards = readCards();
 
         //checking if card is inside the list
-        Optional<String> line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst();
+        if(cards.stream().filter(x->x.charAt(0)!='#').noneMatch(x->x.contains(creditCard))){return false;}
 
-        if(!line.isPresent())return false;
-        double money = Double.parseDouble(line.get().split(";")[1]);
+        String line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst().get();
+        double money = Double.parseDouble(line.split(";")[1]);
         double costTransaction = getSaleTransaction(ticketNumber).getPrice();
         if (money< costTransaction)return false;
         money=money-costTransaction;
         accountBook.changeBalance(+costTransaction);
         // proceed to recording the payment
         String updatedEntry = creditCard.concat(";").concat(""+money);
-        cards.add(updatedEntry);  //todo valuta di sovrascrivere il valore di line
+        int updateIndex = cards.indexOf(line);
+        cards.remove(updateIndex);
+        cards.add(updateIndex,updatedEntry);
         try{
             Files.write(Paths.get("src/main/persistent_data/creditcards.txt"),
-                    (Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
+                    (Iterable<String>)cards.stream()::iterator); //(Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
         }
 //Handing Exception
         catch (Exception e) {
