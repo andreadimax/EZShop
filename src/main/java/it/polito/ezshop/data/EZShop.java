@@ -117,7 +117,7 @@ public class EZShop implements EZShopInterface {
         return checkDigit == Character.getNumericValue(bcode[len-1]);
     }
 //////---------------------------------------------------------------------------
-    private static boolean validateCard(String cardNumber) {
+    public static boolean validateCard(String cardNumber) {
         if (cardNumber == null || cardNumber.equals("") || cardNumber.length()<2)
             return false;
         //convert to array of int
