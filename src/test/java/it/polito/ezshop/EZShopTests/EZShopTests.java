@@ -213,8 +213,19 @@ public class EZShopTests {
             // checking product
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
+            // checking Users
+            assertNotNull(u=ez.getUser(u1.getId()));
+            assertEquals(u1.getId(),u.getId());
+            assertEquals(u1.getUsername(), u.getUsername());
+            assertEquals(u1.getPassword(), u.getPassword());
+            assertEquals(u1.getRole(), u.getRole());
+
             // checking Customers
-            assertNull(ez.getCustomer(c.getId()));
+            assertNotNull(c=ez.getCustomer(c1.getId()));
+            assertEquals(c1.getId(),c.getId());
+            assertEquals(c1.getCustomerName(), c.getCustomerName());
+            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
+            assertEquals(c1.getPoints(),c.getPoints());
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
