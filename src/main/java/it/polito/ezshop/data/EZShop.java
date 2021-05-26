@@ -1490,7 +1490,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         if(saleNumber == null || saleNumber <= 0){throw new InvalidTransactionIdException();}
-        System.out.println("startReturnTransaction with saleNumber"+saleNumber.toString());
+        System.out.println("startReturnTransaction with saleNumber "+saleNumber.toString());
 
         //get the operation and verify it's a sale transaction and it has been already payed otherwise return -1
         BalanceOperation operation = accountBook.getOperation(saleNumber);
@@ -1589,6 +1589,7 @@ public class EZShop implements EZShopInterface {
                         product = getProductTypeByBarCode(returnE.getBarCode());
                         product.setQuantity(product.getQuantity()+returnE.getAmount());
                     }catch (InvalidProductCodeException e){
+                        System.out.println("productException nella endReturnTransaction");
                         return false;
                     }
                 }
@@ -1654,8 +1655,10 @@ public class EZShop implements EZShopInterface {
             for(TicketEntry saleE : saleEntries){
                 if(saleE.getBarCode().equals(returnE.getBarCode())){
                     try {
-                        product = getProductTypeByBarCode(returnE.getBarCode());
-                    }catch (InvalidProductCodeException e){
+                        String barCode = returnE.getBarCode();
+                        product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map(p -> (ProductType)new ProductTypeImplementation(p)).get();
+                    }catch (Exception e){
+                        System.out.println("exception thrown in deleteReturnTransaction: "+e);
                         return false;
                     }
                     //Add back product to sale and decrease quantity in shelves
@@ -1679,7 +1682,7 @@ public class EZShop implements EZShopInterface {
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
                 tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
-                if( ((String)tmp.get("balanceId")).equals(ongoingReturn.getSaleId().toString()) ){
+                if( ((String)tmp.get("balanceId")).equals(retTran.getSaleId().toString()) ){
                     accountBook.getjArrayOperations().remove(tmp);
                 }
             }

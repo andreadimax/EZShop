@@ -1084,7 +1084,14 @@ public class EZShopTests {
     @Test
     public void testSaleTransactionAPIs(){
         EZShop ez = new EZShop();
+        try {
+            ez.login("alessio", "456");
+        }catch(Exception e){
+            System.out.println("unable to login.");
+        }
+        ez.reset();
         Integer id = 0;
+        ez.logout();
 
         /* -------------- startSaleTransaction() -------------- */
         //No user logged
@@ -1160,7 +1167,7 @@ public class EZShopTests {
             ProductType tmpProd = ez.getProductTypeByBarCode("526374859254");
             ez.updateQuantity(tmpProd.getId(),4);
         }catch(Exception e){
-            fail("Should have been able to login");
+            fail("Should have been able to login"+e);
         }
         System.out.println(id);
         try {
@@ -1689,7 +1696,7 @@ public class EZShopTests {
             productId = ez.createProductType("chair", "526374859254", 5.0, "nota" );
             ez.updateQuantity(productId, 500);
 
-            //Completing a return transaction
+            //Completing a sale transaction
             finalId = ez.startSaleTransaction();
             ez.addProductToSale(finalId, "526374859254", 15);
             ez.endSaleTransaction(finalId);
@@ -1727,7 +1734,7 @@ public class EZShopTests {
         }
 
         try {
-            assertTrue((finalReturnId = ez.startReturnTransaction(finalId)) != 1);
+            assertTrue((finalReturnId = ez.startReturnTransaction(finalId)) != -1);
         }
         catch (Exception e){
             fail("Should have been able to login");
@@ -1892,7 +1899,7 @@ public class EZShopTests {
 
             finalReturnId2 = ez.startReturnTransaction(finalId);
             ez.returnProduct(finalReturnId2, "526374859254", 1 );
-            //ez.endReturnTransaction(finalReturnId2, true);
+            ez.endReturnTransaction(finalReturnId2, true);
 
         }catch(Exception e){
             fail("Should have been able to login"+e);
@@ -1915,7 +1922,7 @@ public class EZShopTests {
             assertTrue(( ez.deleteReturnTransaction(finalReturnId2)));
         }
         catch (Exception e){
-            fail("Should have been able to login");
+            fail("Should have been able to delete"+e);
         }
 
         //Administator
