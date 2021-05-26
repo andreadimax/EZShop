@@ -13,11 +13,13 @@ import org.junit.Test;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import static java.lang.Math.abs;
 import static org.junit.Assert.*;
 
 public class EZShopTests {
@@ -563,85 +565,105 @@ public class EZShopTests {
         }
     }
 
-    //  TODO AFTER SALE AND RETURN TRANSACTIONS ARE ALREADY TESTED, IF TESTED NOW WE CANNOT BE SURE WHERE THE ERROR ACTUALLY IS
     @Test
-    public void testPaymentRelatedAPIs(){
+    public void testBalanceRelatedAPIs(){
         EZShop ez = new EZShop();
+        ez.reset();
+        //__________________________________________________________
+        // public boolean recordBalanceUpdate(double toBeAdded) throws UnauthorizedException;
         /*
-            ReceiveCredit Card payment
-            records the payment of a sale transaction with cash and returns the change (if present).
-            updates balance of the system changes
+         * This method record a balance update. <toBeAdded> can be both positive and nevative. If positive the balance entry
+         * should be recorded as CREDIT, if negative as DEBIT. The final balance after this operation should always be
+         * positive.
          */
         try{
-            // success=> return the change (cash - sale price) 0 => balance changes
-            // return -1   if the cash is not enough and if there are problems with the db, no changes in balance
-            // @throws InvalidTransactionIdException if the  number is less than or equal to 0 or if it is null
+            ez.login("daniele","789");
+            // @return  true if the balance has been successfully updated
+            assertTrue(ez.recordBalanceUpdate(500));
+            assertTrue(ez.recordBalanceUpdate(-500));
+            // return   false if toBeAdded + currentBalance < 0.
+            assertFalse(ez.recordBalanceUpdate(-1));
+            //@throws UnauthorizedException if there is no logged user or if it is not administrator or shopmanager
+            ez.logout();
+            //no user
+            assertThrows(UnauthorizedException.class, ()->ez.recordBalanceUpdate(500));
+            //cashier
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.recordBalanceUpdate(500));
+            //shopmanager(administrator has already been tested)
+            ez.login("damiana diamond", "abc");
+            assertTrue(ez.recordBalanceUpdate(500));
+            // checking the final balance
+            assertTrue(abs(500.0-ez.computeBalance()) < 0.001 );
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        //______________________________________________________________
+        //public List<BalanceOperation> getCreditsAndDebits(LocalDate from, LocalDate to) throws UnauthorizedException;
+        /**
+         * This method returns a list of all the balance operations (CREDIT,DEBIT,ORDER,SALE,RETURN) performed between two
+         * given dates.
+         * This method should understand if a user exchanges the order of the dates and act consequently to correct
+         * them.
+         * Both <from> and <to> are included in the range of dates and might be null. This means the absence of one (or
+         * both) temporal constraints.
+         **/
+        try{
+            ez.login("daniele", "789");
+             // @return All the operations on the balance whose date is <= to and >= from
+            List <BalanceOperation> lb = ez.getCreditsAndDebits(null,null);
+            assertNotNull(lb);
+            assertEquals(lb.size(),3);
+            LocalDate dt = lb.get(0).getDate();
+            assertTrue(ez.getCreditsAndDebits(dt.plusDays(1),null).isEmpty());
+            assertTrue(ez.getCreditsAndDebits(null,dt.minusDays(1)).isEmpty());
+            assertTrue(ez.getCreditsAndDebits(dt.minusDays(1),dt.plusDays(1)).stream().anyMatch(x->x.getBalanceId()==lb.get(0).getBalanceId()));
+             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            //no user
+            assertThrows(UnauthorizedException.class, ()->ez.getCreditsAndDebits(null,null));
+            //cashier
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ()->ez.getCreditsAndDebits(null,null));
+            //shopmanager(administrator has already been tested)
+            ez.login("damiana diamond", "abc");
+            ez.getCreditsAndDebits(null,null);
+
+        }catch(Exception e){
+            System.out.println("catched Exception: " + e);
+            fail("should have not thrown any exception");
+        }
+        //_____________________________________________________________
+        // public double computeBalance() throws UnauthorizedException
+        // This method returns the actual balance of the system.
+        try{
+            ez.login("daniele", "789");
+
+            // @return the value of the current balance
+            assertTrue(abs(500- ez.computeBalance())<0.001);
+            Integer sid = ez.startSaleTransaction();
+            assertTrue(sid>=0);
+            Integer pid = ez.createProductType("description", "632857389245", 10, "item");
+            assertTrue(0<pid);
+            ez.updateQuantity(pid, 5);
+            assertTrue(ez.addProductToSale(sid,"632857389245", 5));
+            assertTrue(ez.endSaleTransaction(sid));
+            assertNotNull(ez.getSaleTransaction(sid));
+            assertTrue(ez.receiveCashPayment(sid, 60)!=-1);
+            assertTrue(abs((500+50)- ez.computeBalance())<0.001);
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
-            // @throws InvalidPaymentException if the cash is less than or equal to 0
-        }catch(Exception e){
-            System.out.println("catched Exception: " + e);
-            fail("should have not thrown any exception");
-        }
+            ez.logout();
+            //no user
+            assertThrows(UnauthorizedException.class, ez::computeBalance);
+            //cashier
+            ez.login("marina blue", "abc");
+            assertThrows(UnauthorizedException.class, ez::computeBalance);
+            //shopmanager(administrator has already been tested)
+            ez.login("damiana diamond", "abc");
+            ez.computeBalance();
 
-        // receiveCashPayment
-        try{
-            // updates balance
-            // operation successful => true
-            //  if the sale does not exists, => false
-            //  if the card has not enough money, => false
-            //  if the card is not registered,  => false
-            //  if there is some problem with the db connection => false
-            // @throws InvalidTransactionIdException if the sale number is less than or equal to 0 or if it is null
-            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
-            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
-        }catch(Exception e){
-            System.out.println("catched Exception: " + e);
-            fail("should have not thrown any exception");
-        }
-
-        // returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException;
-        try{
-            // receiveCreditCardPayment(Integer transactionId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
-            // affects the balance
-            // return  the money returned to the customer
-            // success => return  the money returned to the customer
-            // return -1  if the return transaction is not ended
-            // return if it does not exist,
-            // if there is a problem with the db
-            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
-            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
-        }catch(Exception e){
-            System.out.println("catched Exception: " + e);
-            fail("should have not thrown any exception");
-        }
-
-
-
-        // public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
-        try{
-            // This method record the payment of a return transaction to a credit card.
-            // The credit card number validity should be checked. It should follow the luhn algorithm.
-            // The credit card should be registered and its balance will be affected.
-            // This method affects the balance of the system.
-            // It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
-        }catch(Exception e){
-            System.out.println("catched Exception: " + e);
-            fail("should have not thrown any exception");
-        }
-
-        try{
-            // @param returnId the id of the return transaction
-            // @param creditCard the credit card number of the customer
-
-            // return  the money returned to the customer
-            // return  -1  if the return transaction is not ended,
-            // return -1 if it does not exist,
-            // return -1 if the card is not registered,
-            // return -1 if there is a problem with the db
-
-            // @throws InvalidTransactionIdException if the return id is less than or equal to 0
-            // @throws InvalidCreditCardException if the credit card number is empty, null or if luhn algorithm does not validate the credit card
-            //throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
         }catch(Exception e){
             System.out.println("catched Exception: " + e);
             fail("should have not thrown any exception");

@@ -138,17 +138,19 @@ stimpl --> teimpl
 
    
 
-| Classes                                                      | JUnit test cases                                  |
-| ------------------------------------------------------------ | ------------------------------------------------- |
-| UserImplementation + EZShop                                  | EZShopTests/EZShopTests - testUserAPIs            |
-| ProductTypeImpl + EZShop                                     | EZShopTests/EZShopTests - testProductTypeAPIs     |
-| CustomerImplementation + EZShop                              | EZShopTests/EZShopTests - testCustomerAPIs        |
-| SaleTransactionImplementation + SaleTransactionAdapter + EZShop | EZShopTests/EZShopTests - testSaleTransactionAPIs |
-| OrderImpl + OrderAdapter + EZShop                            | EZShopTests/EZShopTests - testOrderAPIs           |
-| EZShop.reset()                                               | EZShopTests/EZShopTests - testResetAPI            |
-| EZShop.assignId                                              | EZShopTests/EZShopTests - testAssignId            |
-| EZShop.barcodeIsValid                                        | EZShopTests/EZShopTests - testBarcodeIsValid      |
-| EZShop.writejArrayToFile                                     | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
+| Classes                                                                                              | JUnit test cases                                  |
+| ------------------------------------------------------------                                         | ------------------------------------------------- |
+| UserImplementation + EZShop                                                                          | EZShopTests/EZShopTests - testUserAPIs            |
+| ProductTypeImpl + EZShop                                                                             | EZShopTests/EZShopTests - testProductTypeAPIs     |
+| CustomerImplementation + EZShop                                                                      | EZShopTests/EZShopTests - testCustomerAPIs        |
+| SaleTransactionImplementation + SaleTransactionAdapter + EZShop                                      | EZShopTests/EZShopTests - testSaleTransactionAPIs |
+| OrderImpl + OrderAdapter + EZShop                                                                    | EZShopTests/EZShopTests - testOrderAPIs           |
+| EZShop.reset()                                                                                       | EZShopTests/EZShopTests - testResetAPI            |
+| EZShop.assignId                                                                                      | EZShopTests/EZShopTests - testAssignId            |
+| EZShop.barcodeIsValid                                                                                | EZShopTests/EZShopTests - testBarcodeIsValid      |
+| EZShop.writejArrayToFile                                                                             | EZShopTests/EZShopTests - testWriteJarrayToFIle   |
+| EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs  |
+|                                                                                                      |                                                   |
 
 
 # Scenarios
@@ -178,12 +180,13 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 
 
-| Scenario ID     | Functional Requirements covered | JUnit  Test(s)                                |
-| -----------     | ------------------------------- | -----------                                   |
-| From 2.1 to 2.3 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs        |
-| From 1.1 to 1.3 | all FR3 subrequirements         | EZShopTests/EZShopTests - TestProductTypeAPIs |
-| From 4.1 to 4.4 | all FR5 subrequirements         | EZShopTests/EZShopTests - TestCustomerAPIs    |
-| ...             |                                 |                                               |
+| Scenario ID                         | Functional Requirements covered | JUnit  Test(s)                                    |
+| -----------                         | ------------------------------- | -----------                                       |
+| From 2.1 to 2.3 and from 5.1 to 5.2 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs            |
+| From 1.1 to 1.3                     | all FR3 subrequirements         | EZShopTests/EZShopTests - TestProductTypeAPIs     |
+| From 4.1 to 4.4                     | all FR5 subrequirements         | EZShopTests/EZShopTests - TestCustomerAPIs        |
+| 9.1                                 | all FR8 subrequirements         | EZShopTests/EZShopTests - testBalanceRelatedAPIs  |
+|                                     |                                 |                                                   |
 
 
 
