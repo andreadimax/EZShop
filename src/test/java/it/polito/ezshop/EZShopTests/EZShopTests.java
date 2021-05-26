@@ -139,13 +139,10 @@ public class EZShopTests {
             ez.recordBalanceUpdate(300);
 
             // cannot store a new user since they are never reset
+            User u1 = ez.getAllUsers().get(0);
 
-            // store  a new customer and card
-            Integer cid;
-            assertTrue(0<(cid=ez.defineCustomer("Flora Green")));
-            String card = ez.createCard();
-            ez.attachCardToCustomer(card, cid);
-            ez.modifyPointsOnCard(card, 100);
+            // store  a new customer since they are never reset
+            Customer c1 = ez.getAllCustomers().get(0);
 
             //store a saleTransaction
             Integer sid = ez.startSaleTransaction();
@@ -166,6 +163,7 @@ public class EZShopTests {
             double previousBalance = ez.computeBalance();
             int oldSize = ez.getCreditsAndDebits(null, null).size();
 
+            //__________________________________________________________________________
             ez = null; // removing old instance of ezshop => same as a reboot
 
             ez = new EZShop();
@@ -187,19 +185,28 @@ public class EZShopTests {
             assertEquals(pid, new_pid);
             assertEquals(p.getProductDescription(), "description" );
 
+            // checking Users
+            User u;
+            assertNotNull(u=ez.getUser(u1.getId()));
+            assertEquals(u1.getId(),u.getId());
+            assertEquals(u1.getUsername(), u.getUsername());
+            assertEquals(u1.getPassword(), u.getPassword());
+            assertEquals(u1.getRole(), u.getRole());
+
             // checking Customers
             Customer c;
-            assertNotNull(c=ez.getCustomer(cid));
-            assertEquals(cid,c.getId());
-            assertEquals("Flora Green", c.getCustomerName());
-            assertEquals(card,c.getCustomerCard());
-            int points=c.getPoints();
-            assertEquals(100,points);
+            assertNotNull(c=ez.getCustomer(c1.getId()));
+            assertEquals(c1.getId(),c.getId());
+            assertEquals(c1.getCustomerName(), c.getCustomerName());
+            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
+            assertEquals(c1.getPoints(),c.getPoints());
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), oldSize);
 
+            //________________________________________________________________
             //resetting and checking deletion occurred
+
             ez.reset();
             // checking balance
             assertTrue(ez.computeBalance()<=0.001);
@@ -207,7 +214,7 @@ public class EZShopTests {
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
             // checking Customers
-            assertNull(ez.getCustomer(cid));
+            assertNull(ez.getCustomer(c.getId()));
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
@@ -220,8 +227,19 @@ public class EZShopTests {
             // checking product
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
+            // checking users
+            assertNotNull(u=ez.getUser(u1.getId()));
+            assertEquals(u1.getId(),u.getId());
+            assertEquals(u1.getUsername(), u.getUsername());
+            assertEquals(u1.getPassword(), u.getPassword());
+            assertEquals(u1.getRole(), u.getRole());
+
             // checking Customers
-            assertNull(ez.getCustomer(cid));
+            assertNotNull(c=ez.getCustomer(c1.getId()));
+            assertEquals(c1.getId(),c.getId());
+            assertEquals(c1.getCustomerName(), c.getCustomerName());
+            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
+            assertEquals(c1.getPoints(),c.getPoints());
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);

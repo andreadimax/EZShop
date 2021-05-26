@@ -343,11 +343,6 @@ public class EZShop implements EZShopInterface {
         this.productMap.clear();
         this.jArrayProduct.clear();
         writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct);
-
-        // clearing all customers
-        this.customersMap.clear();
-        this.jArrayCustomers.clear();
-        writejArrayToFile("src/main/persistent_data/customers.json",jArrayCustomers);
     }
 
     @Override
