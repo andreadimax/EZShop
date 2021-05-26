@@ -180,13 +180,14 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 
 
 
-| Scenario ID                         | Functional Requirements covered | JUnit  Test(s)                                    |
-| -----------                         | ------------------------------- | -----------                                       |
-| From 2.1 to 2.3 and from 5.1 to 5.2 | all FR1 subrequirements         | EZShopTests/EZShopTests - TestUserAPIs            |
-| From 1.1 to 1.3                     | all FR3 subrequirements         | EZShopTests/EZShopTests - TestProductTypeAPIs     |
-| From 4.1 to 4.4                     | all FR5 subrequirements         | EZShopTests/EZShopTests - TestCustomerAPIs        |
-| 9.1                                 | all FR8 subrequirements         | EZShopTests/EZShopTests - testBalanceRelatedAPIs  |
-|                                     |                                 |                                                   |
+| Scenario ID                         | Functional Requirements covered         | JUnit  Test(s)                                   |
+| -----------                         | -------------------------------         | -----------                                      |
+| From 2.1 to 2.3 and from 5.1 to 5.2 | all FR1 subrequirements                 | EZShopTests/EZShopTests - TestUserAPIs           |
+| From 1.1 to 1.3                     | all FR3 subrequirements + FR4.1 + FR4.2 | EZShopTests/EZShopTests - TestProductTypeAPIs    |
+| From 4.1 to 4.4                     | all FR5 subrequirements                 | EZShopTests/EZShopTests - TestCustomerAPIs       |
+| 9.1                                 | all FR8 subrequirements                 | EZShopTests/EZShopTests - testBalanceRelatedAPIs |
+| From 3.1 to 3.3                     | From FR4.3 to FR4.7                     | EZShopTests/EZShopTests - testOrderAPIs          |
+|                                     |                                         |                                                  |
 
 
 
