@@ -755,7 +755,7 @@ public interface EZShopInterface {
     public boolean receiveCreditCardPayment(Integer transactionId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException;
 
     /**
-     * This method record the payment of a closed return transaction with given id. The return value of this method is the
+     * This method recor the payment of a closed return transaction with given id. The return value of this method is the
      * amount of money to be returned.
      * This method affects the balance of the application.
      * It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.

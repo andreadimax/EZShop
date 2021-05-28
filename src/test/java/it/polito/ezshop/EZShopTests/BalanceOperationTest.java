@@ -26,6 +26,7 @@ public class BalanceOperationTest {
 
     @Test
     public void testBalanceSetters(){
+        BalanceOperationImpl.setBalanceCounter(0);
         BalanceOperationImpl op = new BalanceOperationImpl(10.0);
         op.setBalanceId(1);
         assertEquals(1,op.getBalanceId());

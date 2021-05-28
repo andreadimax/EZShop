@@ -93,7 +93,7 @@ public class EZShop implements EZShopInterface {
      * @return
      */
     public static boolean barcodeIsValid(String barcode){
-        if(barcode == null || barcode.isEmpty()){return false;}
+        if(barcode == null || barcode.isEmpty() || !barcode.matches("-?\\d+")){return false;}
         int len = barcode.length();
         if(len<12 || len>14){return false;}
 
@@ -116,42 +116,30 @@ public class EZShop implements EZShopInterface {
         //if the Check Digit is the same, return true, else return false
         return checkDigit == Character.getNumericValue(bcode[len-1]);
     }
-
-
+//////---------------------------------------------------------------------------
     public static boolean validateCard(String cardNumber) {
-        if (cardNumber == null || cardNumber.equals(""))
+        if (cardNumber == null || cardNumber.equals("") || cardNumber.length()<2)
             return false;
-
-        // taking last digit
-        char lastDigit = cardNumber.charAt(cardNumber.length() - 1);
-
-        //if the number inserted is too long, crop it
-        String card = cardNumber.substring(0, cardNumber.length() - 1);
-
-        /* convert String to array of int */
-        int[] num = new int[card.length()];
-        for (int i = 0; i < card.length(); i++) {
-            num[i] = Character.getNumericValue(card.charAt(i));
+        //convert to array of int
+        int[] digits = new int[cardNumber.length()];
+        for (int i = 0; i < cardNumber.length(); i++) {
+            digits[i] = Character.getNumericValue(cardNumber.charAt(i));
         }
 
-        /*  STEP 1: double every other digit starting from right - jumping from 2 in 2 */
-        for (int i = num.length - 1; i >= 0; i -= 2)	{
-            num[i] += num[i];
+        // double every other digit left to right
+        for (int i = 0; i <= digits.length -1; i += 2)	{
+            digits[i] += digits[i];
 
-            /* summing the digits > 10 -> subtracting 9 has the same result */
-            if (num[i] >= 10) {
-                num[i] = num[i] - 9;
+            if (digits[i] >= 10) {
+                digits[i] = digits[i] - 9;
             }
         }
 
-        // STEP 2: summing the array values
         int sum = 0;
-        for (int i = 0; i < num.length; i++) {
-            sum += num[i];
+        for (int digit : digits) {
+            sum += digit;
         }
-        // STEP 3: if the sum is exactly multiple of 10, the card is valid
-        if(sum%10==0) return true;
-        else return false;
+        return sum % 10 == 0;
     }
 
 
@@ -167,7 +155,7 @@ public class EZShop implements EZShopInterface {
         ArrayList<String> lines = new ArrayList<String>();
         try {
             while ((strLine = reader.readLine()) != null) {
-                String lastWord = strLine.substring(strLine.lastIndexOf(" ") + 1);
+                String lastWord = strLine;//.substring(strLine.lastIndexOf(" ") + 1);//todo valuta lastIndexOf("\n")+1;
                 lines.add(lastWord);
             }
         } catch (IOException e) {
@@ -221,7 +209,7 @@ public class EZShop implements EZShopInterface {
         return  int_random;
     }
 
-    public void parseObjectType(JSONObject obj, String type){
+    private void parseObjectType(JSONObject obj, String type){
         switch (type) {
             case "product": {
 
@@ -303,7 +291,15 @@ public class EZShop implements EZShopInterface {
 
     public static boolean writejArrayToFile(String filepath, JSONArray jArr){
 
-        if(filepath == null || jArr == null) return false;
+        //System.out.println("filepath: " + filepath);
+        if(filepath == null || "".equals(filepath)){
+            System.out.println("Error in writing jarray to file: invalid filepath");
+            return false;
+        }
+        else if(jArr == null) {
+            System.out.println("Error in writing jarray to file: jarray is null");
+            return false;
+        }
         try
         {
             FileWriter fOut = new FileWriter(filepath);
@@ -313,6 +309,9 @@ public class EZShop implements EZShopInterface {
 
         }
         catch(IOException f) {
+            System.out.println("Error Occurred while writing the jarray to memory");
+            System.out.println("filepath: " + filepath);
+            System.out.println("jarray: " + jArr);
             return false;
         }
         return true;
@@ -324,6 +323,7 @@ public class EZShop implements EZShopInterface {
         //setting balance to 0
         accountBook.setBalance(0);
         //clearing all operation history
+        BalanceOperationImpl.setBalanceCounter(0);
         accountBook.getOperationsMap().clear();
         accountBook.getjArrayOperations().clear();
         writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
@@ -389,6 +389,9 @@ public class EZShop implements EZShopInterface {
         if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
+        if(id==null || id <=0){
+            throw new InvalidUserIdException();
+        }
 
         //Checking if user exists...
         if(users_data.get(id) != null){
@@ -406,7 +409,7 @@ public class EZShop implements EZShopInterface {
             if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return false;
         }
         else {
-            throw new InvalidUserIdException("User not present!");
+            return false;
         }
         return true;
     }
@@ -426,7 +429,7 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
-        if(id == null || id==0){
+        if(id == null || id<=0){
             throw new InvalidUserIdException();
         }
 
@@ -445,11 +448,10 @@ public class EZShop implements EZShopInterface {
         if(userLogged == null || !userLogged.getRole().equals("Administrator")){
             throw new UnauthorizedException();
         }
-
-        if(role == null ||( !role.equals("Administrator") & !role.equals("Cashier") & !role.equals("ShopManager"))){
+        if(role == null ||( !role.equals("Administrator") && !role.equals("Cashier") && !role.equals("ShopManager"))){
             throw new InvalidRoleException("Invalid role");
         }
-        if(id == null || id==0){
+        if(id == null || id<=0){
             throw new InvalidUserIdException();
         }
         User user;
@@ -513,17 +515,20 @@ public class EZShop implements EZShopInterface {
     public Integer createProductType(String description, String productCode, double pricePerUnit, String note) throws InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
 
         //check privileges
-        if(userLogged!=null && !("ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
+        if(userLogged==null || (!"ShopManager".equals(userLogged.getRole())) && !"Administrator".equals(userLogged.getRole())) throw new UnauthorizedException();
         Integer productID;
-
+        // check pricePerUnit
+        if(pricePerUnit<=0) throw new InvalidPricePerUnitException();
         // check description
         if(description == null || description.isEmpty()) throw new InvalidProductDescriptionException();
 
-        //check if productCode is null or empty and if it is a number
-        if((productCode==null || productCode.isEmpty() || !productCode.matches("-?\\d+"))) {
+        //check if productCode is valid and it is a number
+        if(!barcodeIsValid(productCode)) {
             throw new InvalidProductCodeException();
         }
-        Integer id=Integer.parseInt(productCode);
+        // return -1 if there already exists a product with the same barcode
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(productCode)))return -1;
+        Integer id=assignId(this.productMap.keySet());
         // check if product code is positive and if it already present in map
         if(id<0 || this.productMap.get(id)!=null) throw new InvalidProductCodeException();
 
@@ -546,28 +551,46 @@ public class EZShop implements EZShopInterface {
     public boolean updateProduct(Integer id, String newDescription, String newCode, double newPrice, String newNote) throws InvalidProductIdException, InvalidProductDescriptionException, InvalidProductCodeException, InvalidPricePerUnitException, UnauthorizedException {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
-
+        if(newDescription==null || "".equals(newDescription))throw new InvalidProductDescriptionException();
+        // return false if another product already has the same barcode
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode)))return false;
+        // check productCode
+        if(!barcodeIsValid(newCode))throw new InvalidProductCodeException();
         //check for invalid product id
-        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
-
-        //needs to remove object from memory array and commit to disk
+        if(id == null || id<=0) throw new InvalidProductIdException();
         if(productMap.get(id)==null)return false;
-        jArrayProduct.remove(productMap.get(id));
+        // checkpriceperunit
+        if(newPrice<=0) throw new InvalidPricePerUnitException();
+        ProductTypeImplementation p;
+        // return false if product with given id doesn't exist
+        if((p=(ProductTypeImplementation)productMap.get(id))==null)return false;
 
+        // if it exists, update it in RAM
         //update object in map
-        ProductTypeImplementation p =(ProductTypeImplementation) productMap.get(id);
-        p.setId(id);
         p.setProductDescription(newDescription);
         p.setBarCode(newCode);
         p.setPricePerUnit(newPrice);
         p.setNote(newNote);
 
-
-
-        JSONObject pDetails;
+        // update it on disk
+        JSONObject pDetails = null;
         pDetails = initializeJsonProductObject(p);
-        jArrayProduct.add(pDetails);
+        for(int i = 0; i< jArrayProduct.size(); i++){
+            pDetails  = (JSONObject) jArrayProduct.get(i);
+            if(pDetails.get("id").equals(id.toString())){
+                jArrayProduct.set(i,initializeJsonProductObject(p));
+                /*
+                pDetails.put("description", newDescription);
+                pDetails.put("barCode", newCode);
+                pDetails.put("sellPrice", newPrice);
+                pDetails.put("note", newNote);
+                */
+
+            }
+        }
         //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
+
+
         return writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
     }
 
@@ -577,7 +600,11 @@ public class EZShop implements EZShopInterface {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))) throw new UnauthorizedException();
         //check for invalid product id
-        if(id== null || productMap.get(id)==null || id<0) throw new InvalidProductIdException();
+        if(id== null || id<=0) throw new InvalidProductIdException();
+        if(productMap.get(id)==null){
+            System.out.println("no product with such id exists");
+            return false;
+        }
 
         //needs to remove object from memory array and commit to disk
         JSONObject pr = null;
@@ -587,8 +614,11 @@ public class EZShop implements EZShopInterface {
                 jArrayProduct.remove(i);
             }
         }
-        //(?) I am not doing error handling on this write, if it fails, i should rollback the previous removal
-        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)) return false;
+        // writing to memory
+        if(!writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct)){
+            System.out.println("Failure while writing to memory");
+            return false;
+        }
         //remove object from map
         productMap.remove(id);
         return true;
@@ -611,7 +641,14 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
+        if(!barcodeIsValid(barCode)) throw new InvalidProductCodeException();
+        try{
+            return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
+        }catch(Exception e){
+            return null;
+        }
+
+
     }
 
     @Override
@@ -620,7 +657,9 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().equals(description)).map( p -> (ProductType)new ProductTypeImplementation(p)).collect(Collectors.toList());
+        if(description==null)description="";
+        String finalDescription = description;
+        return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getProductDescription().contains(finalDescription)).map(p -> (ProductType)new ProductTypeImplementation(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -633,36 +672,14 @@ public class EZShop implements EZShopInterface {
 
         if(productId==null || productId<=0)throw new InvalidProductIdException();
 
-        //System.out.println("removing old product from jarray");
-
-        // if the product doesn't exist or quantity couldn't be changed, return false
-        // but before doing so, restore the jarray
-        /*if(p == null || !p.changeQuantity(toBeAdded))return false;
-
-        System.out.println("quantity changed");
-
-        //needs to remove object from memory array
-        JSONObject pr = null;
-        for(int i = 0; i< jArrayProduct.size(); i++){
-            pr  = (JSONObject) jArrayProduct.get(i);
-            if(pr.get("id").equals(productId.toString())){
-                jArrayProduct.remove(i);
-            }
-        }
-
-        JSONObject pDetails;
-        pDetails = initializeJsonProductObject(p);
-        jArrayProduct.add(pDetails);
-        */
-
         if(!productMap.containsKey(productId)){return false;}
 
-        ProductType product = productMap.get(productId);
+        ProductTypeImplementation product = (ProductTypeImplementation) productMap.get(productId);
         System.out.println("Updating quantity of product: ("+ productId.toString()+")\n");
         System.out.println("Starting quantity: "+ product.getQuantity().toString() + "\n");
         System.out.println("Adding quantity: " + toBeAdded +"\n");
 
-        product.setQuantity( product.getQuantity() + toBeAdded );
+        if(!product.changeQuantity(toBeAdded))return false;
         //Updating JSON Object in the ProductType JSON Array
         JSONObject tmp;
         if (this.jArrayProduct != null) {
@@ -688,13 +705,15 @@ public class EZShop implements EZShopInterface {
 
         if( productId==null || productId<=0)throw new InvalidProductIdException();
 
+        if("".equals(newPos))newPos=null;
         //if position is not null, check if it satisfies <aisleNumber>-<rackAlphabeticIdentifier>-<levelNumber> format
-        if(newPos==null || !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
+        if(newPos!=null && !newPos.matches("[0-9]*-[^0-9]*-[0-9]*"))throw new InvalidLocationException();
 
 
         //if position is not unique, or productId has no match return false
         ProductTypeImplementation p = (ProductTypeImplementation) productMap.get(productId);
-        if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(newPos))))return false;
+        String finalNewPos = newPos;
+        if(p==null || (newPos!=null && getAllProductTypes().stream().anyMatch(pr -> pr.getLocation() != null && pr.getLocation().equals(finalNewPos))))return false;
 
         // updating location
         p.setLocation(newPos);
@@ -734,17 +753,21 @@ public class EZShop implements EZShopInterface {
         //otherwise finally generates the order in "issued" state
         OrderImpl order = new OrderImpl(productCode,quantity,pricePerUnit);
         this.accountBook.addOperation(order);
-        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
-        return order.getOrderId();
+
+        if(writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations()))return order.getOrderId();
+        else return -1;
+
     }
 
     @Override
     public Integer payOrderFor(String productCode, int quantity, double pricePerUnit) throws InvalidProductCodeException, InvalidQuantityException, InvalidPricePerUnitException, UnauthorizedException {
         int orderId = issueOrder(productCode, quantity, pricePerUnit);
-        if( orderId == -1){ return -1; }
 
+        if( orderId == -1){ return -1; }
+        System.out.println("look at operation with balanceId: " + this.accountBook.getOperation(orderId).getBalanceId());
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return -1;}
+
+        if (!(this.accountBook.getOperation(orderId) instanceof OrderImpl)) {return -1;}
 
         OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
 
@@ -755,7 +778,17 @@ public class EZShop implements EZShopInterface {
         accountBook.changeBalance(order.getMoney());
         order.setStatus("PAYED");
         //Updating JSON Object in the JSON Array
-        ((JSONObject) accountBook.getjArrayOperations().get(orderId)).put("status","PAYED");
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(((Integer) orderId).toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
         //Updating JSON File
         writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
 
@@ -765,16 +798,19 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean payOrder(Integer orderId) throws InvalidOrderIdException, UnauthorizedException {
         //exceptions
-        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if(orderId == null || orderId <= 0){throw new InvalidOrderIdException();}
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
         //check for the order existence
-        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){return false;}
-
+        if( !(this.accountBook.getOperation(orderId) instanceof OrderImpl) ){
+            System.out.println("order with id "+orderId+"does not exist");
+            return false;
+        }
+        System.out.println("executing payOrder() of orderId: " + orderId);
         //check if already payed
         OrderImpl order = (OrderImpl) this.accountBook.getOperation(orderId);
-        if( order.getStatus().equals("PAYED") ){ return false; }
+        if(!order.getStatus().equals("ISSUED") && !order.getStatus().equals("ORDERED")){ return false; }
 
         //check if the balance is enough to pay the order, operation is '+' because getMoney() has a negative value for subclass OrderImpl
         if(accountBook.getBalance() + order.getMoney() < 0){ return false; }
@@ -799,7 +835,7 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean recordOrderArrival(Integer orderId) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException {
         //exceptions
-        if(orderId <= 0){throw new InvalidOrderIdException();}
+        if(orderId == null || orderId <= 0){throw new InvalidOrderIdException();}
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
@@ -808,10 +844,15 @@ public class EZShop implements EZShopInterface {
         OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
         if(order == null){
             System.out.println("RETRIEVED ORDER IS NULL");
+            return false;
         }
         ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(order.getProductCode())).findFirst().get();
-        if(product.getLocation() == null){ throw new InvalidLocationException(); }
+        if(product.getLocation() == null || product.getLocation().equals("")){ throw new InvalidLocationException(); }
 
+        //returning false if order was not in a ORDERED (ISSUED) / COMPLETED state
+        if(!order.getStatus().equals("ORDERED") && !order.getStatus().equals("ISSUED") && !order.getStatus().equals("COMPLETED") && !order.getStatus().equals("PAYED") ){
+            return false;
+        }
         //registering the order arrival and updating the product quantity (unless it was already completed)
         if(order.getStatus().equals("COMPLETED")){
             return true;
@@ -915,12 +956,15 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerNameException();
         }
 
-        if(newCustomerCard.matches("\\d{11}")){
+        if(!newCustomerCard.matches("\\d{10}")){
             throw new InvalidCustomerCardException();
         }
 
-        if(!this.customersMap.containsKey(id)){
+        if(id<=0){
             throw new InvalidCustomerIdException();
+        }
+        if(!this.customersMap.containsKey(id)){
+            return false;
         }
 
         if(newCustomerCard != null) {
@@ -1050,13 +1094,13 @@ public class EZShop implements EZShopInterface {
         if(customerId == null || customerId<=0 ){
             throw new InvalidCustomerIdException();
         }
-        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
+        if(customerCard == null || !customerCard.matches("\\d{10}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
         for (Customer c: customersMap.values()){
             if(c != customersMap.get(customerId)) {
-                if (c.getCustomerCard().equals(customerCard)) {
+                if (customerCard.equals(c.getCustomerCard())) {
                     return false;
                 }
             }
@@ -1069,7 +1113,7 @@ public class EZShop implements EZShopInterface {
             //Updating JSON Object in the JSON Array
             for(int i = 0; i< jArrayCustomers.size(); i++){
                 customer_obj  = (JSONObject) jArrayCustomers.get(i);
-                if(customer_obj.get("id").equals(c.getId())){
+                if(customer_obj.get("id").equals(c.getId().toString())){
                     c.setCustomerCard(customerCard);
                     customer_obj.put("card", c.getCustomerCard());
                 }
@@ -1087,7 +1131,7 @@ public class EZShop implements EZShopInterface {
         {
             throw new UnauthorizedException();
         }
-        if(customerCard == null || customerCard.matches("\\d{11}") || customerCard.equals("")){
+        if(customerCard == null || !customerCard.matches("\\d{10}") || customerCard.equals("")){
             throw new InvalidCustomerCardException();
         }
 
@@ -1095,7 +1139,7 @@ public class EZShop implements EZShopInterface {
         for(Customer c: customersMap.values()){
             if(c.getCustomerCard() != null) {
                 if (c.getCustomerCard().equals(customerCard)) {
-                    if (c.getPoints() + pointsToBeAdded > 0) {                  //In case points are negative -> enough points on card?
+                    if (c.getPoints() + pointsToBeAdded >= 0) {                  //In case points are negative -> enough points on card?
                         c.setPoints(c.getPoints() + pointsToBeAdded);           //Updating points
                         JSONObject customer_obj = null;
                         //Updating JSON Object in the JSON Array
@@ -1143,13 +1187,13 @@ public class EZShop implements EZShopInterface {
 
         //false returns
         if(transactionId != this.ongoingSale.getBalanceId()){return false;}
-        if(productMap.values().stream().noneMatch(p -> p.getBarCode() == productCode)){return false;}
-        ProductType product = productMap.values().stream().filter(p -> p.getBarCode() == productCode).findFirst().get();
+        if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
+        ProductType product = productMap.values().stream().filter(p -> p.getBarCode().equals(productCode)).findFirst().get();;
         if(product.getQuantity() < amount){return false;}
 
         //if product already in sale, update quantity, otherwise, create the new Ticket Entry
         TicketEntry entry;
-        if(ongoingSale.getEntries().stream().anyMatch( e -> e.getBarCode() == productCode)){
+        if(ongoingSale.getEntries().stream().anyMatch( e -> e.getBarCode().equals(productCode))){
             entry = ongoingSale.getEntries().stream()
                     .filter( e-> e.getBarCode().equals(productCode))
                     .findFirst().get();
@@ -1434,15 +1478,19 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         if(saleNumber == null || saleNumber <= 0){throw new InvalidTransactionIdException();}
+        System.out.println("startReturnTransaction with saleNumber "+saleNumber.toString());
 
         //get the operation and verify it's a sale transaction and it has been already payed otherwise return -1
         BalanceOperation operation = accountBook.getOperation(saleNumber);
-        if(operation == null || !(operation instanceof SaleTransactionImplementation)){return -1;}
+        if(operation == null || !(operation instanceof SaleTransactionImplementation)){
+            System.out.println("operation was not a sale transaction");return -1;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) operation;
-        if (!sale.getStatus().equals("PAYED")){return -1;}
+        if (!sale.getStatus().equals("PAYED") && !sale.getStatus().equals("COMPLETED")){
+            System.out.println("sale was not PAYED!, status:"+sale.getStatus()+"\n");return -1;}
 
         //initialize the ongoing return with a new instance
         this.ongoingReturn = new ReturnTransaction(saleNumber);
+        this.ongoingReturn.setSaleDiscount(sale.getDiscountRate());
         return ongoingReturn.getBalanceId();
     }
 
@@ -1460,7 +1508,7 @@ public class EZShop implements EZShopInterface {
         //return transaction does not exist
         if(returnId != this.ongoingReturn.getBalanceId()){return false;}
         //case were the product does not exist
-        ProductType product = getProductTypeByBarCode(productCode);
+        ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(productCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
         if(product == null ){return false;}
         SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
         //case where the product returned was not part of the referenced sale entries
@@ -1479,7 +1527,10 @@ public class EZShop implements EZShopInterface {
             System.out.println("Adding "+amount+" to already existing RETURN entry");
         }
         else{
-            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),amount,product.getPricePerUnit(),0.0);
+            TicketEntry saleEntry = sale.getEntries().stream()
+                    .filter( e-> e.getBarCode().equals(productCode))
+                    .findFirst().get();
+            entry = new TicketEntryImpl(saleEntry.getBarCode(),saleEntry.getProductDescription(),amount,saleEntry.getPricePerUnit(),saleEntry.getDiscountRate());
             ongoingReturn.getReturnEntries().add(entry);
             System.out.println("Generated a new RETURN entry");
         }
@@ -1496,7 +1547,7 @@ public class EZShop implements EZShopInterface {
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
 
         //return false for returnId not being the id of the active return transaction
-        if(ongoingReturn.getBalanceId() != returnId){return false;}
+        if(ongoingReturn != null){ if(ongoingReturn.getBalanceId() != returnId){return false;}}else{return false;}
 
         SaleTransactionImplementation sale = (SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId());
         //return false for non available sale Transaction (db problems)
@@ -1514,14 +1565,19 @@ public class EZShop implements EZShopInterface {
         ProductType product;
 
         for(TicketEntry returnE : returnEntries){
+            System.out.println("Return Entry product to remove: "+returnE.getBarCode()+" QT: "+returnE.getAmount());
             for(TicketEntry saleE : saleEntries){
                 if(saleE.getBarCode().equals(returnE.getBarCode())){
+
+                    System.out.println("Amount in Sale of : "+saleE.getBarCode()+" is QT: "+saleE.getAmount());
                     //decrease quantity in sale and add back product to shelves
                     saleE.setAmount(saleE.getAmount()-returnE.getAmount());
+                    System.out.println("New Amount is: "+saleE.getAmount());
                     try {
                         product = getProductTypeByBarCode(returnE.getBarCode());
                         product.setQuantity(product.getQuantity()+returnE.getAmount());
                     }catch (InvalidProductCodeException e){
+                        System.out.println("productException nella endReturnTransaction");
                         return false;
                     }
                 }
@@ -1537,7 +1593,7 @@ public class EZShop implements EZShopInterface {
         totalMoney = new BigDecimal(Double.toString(totalMoney)).setScale(2,RoundingMode.HALF_UP).doubleValue();
         sale.setMoney(totalMoney);
 
-        //removing old instance in jArray of operations
+        //removing old instance in jArray of operations and operationsMap
         JSONObject tmp;
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
@@ -1547,6 +1603,7 @@ public class EZShop implements EZShopInterface {
                 }
             }
         }
+        accountBook.getOperationsMap().remove(ongoingReturn.getSaleId());
         //replacing it with the updated sale
         accountBook.addOperation(sale);
 
@@ -1586,8 +1643,10 @@ public class EZShop implements EZShopInterface {
             for(TicketEntry saleE : saleEntries){
                 if(saleE.getBarCode().equals(returnE.getBarCode())){
                     try {
-                        product = getProductTypeByBarCode(returnE.getBarCode());
-                    }catch (InvalidProductCodeException e){
+                        String barCode = returnE.getBarCode();
+                        product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map(p -> (ProductType)new ProductTypeImplementation(p)).get();
+                    }catch (Exception e){
+                        System.out.println("exception thrown in deleteReturnTransaction: "+e);
                         return false;
                     }
                     //Add back product to sale and decrease quantity in shelves
@@ -1611,7 +1670,7 @@ public class EZShop implements EZShopInterface {
         if (accountBook.getjArrayOperations() != null) {
             for (int i=0;i<accountBook.getjArrayOperations().size();i++){
                 tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
-                if( ((String)tmp.get("balanceId")).equals(ongoingReturn.getSaleId().toString()) ){
+                if( ((String)tmp.get("balanceId")).equals(retTran.getSaleId().toString()) ){
                     accountBook.getjArrayOperations().remove(tmp);
                 }
             }
@@ -1638,6 +1697,9 @@ public class EZShop implements EZShopInterface {
 
     @Override
     public double receiveCashPayment(Integer ticketNumber, double cash) throws InvalidTransactionIdException, InvalidPaymentException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
@@ -1646,39 +1708,66 @@ public class EZShop implements EZShopInterface {
         if(cash<=0) throw new InvalidPaymentException();
         ArrayList <String> cards = readCards();
 
-        SaleTransaction s = getSaleTransaction(ticketNumber);
+        SaleTransactionAdapter s = (SaleTransactionAdapter) getSaleTransaction(ticketNumber);
         if(s==null)return -1;
         double difference = cash-s.getPrice();
         if(difference<0)return -1;
         accountBook.changeBalance(s.getPrice());
+
+        //Updating SaleTransaction Status
+        s.sale.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ticketNumber.toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
+
         return difference;
     }
 
     @Override
     public boolean receiveCreditCardPayment(Integer ticketNumber, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
         }
         if(ticketNumber==null || ticketNumber<=0)throw new InvalidTransactionIdException();
-        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
         ArrayList <String> cards = readCards();
 
         //checking if card is inside the list
-        Optional<String> line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst();
+        if(cards.stream().filter(x->x.charAt(0)!='#').noneMatch(x->x.contains(creditCard))){return false;}
 
-        if(!line.isPresent())return false;
-        double money = Double.parseDouble(line.get().split(";")[1]);
-        double costTransaction = getSaleTransaction(ticketNumber).getPrice();
+        String line = cards.stream().filter(x->x.charAt(0)!='#').filter(x->x.contains(creditCard)).findFirst().get();
+        double money = Double.parseDouble(line.split(";")[1]);
+        double costTransaction = 0.0;
+        if(getSaleTransaction(ticketNumber) != null) {
+            costTransaction = getSaleTransaction(ticketNumber).getPrice();
+        }
+        else{
+            return false;
+        }
         if (money< costTransaction)return false;
         money=money-costTransaction;
         accountBook.changeBalance(+costTransaction);
         // proceed to recording the payment
         String updatedEntry = creditCard.concat(";").concat(""+money);
-        cards.add(updatedEntry);
+        int updateIndex = cards.indexOf(line);
+        cards.remove(updateIndex);
+        cards.add(updateIndex,updatedEntry);
         try{
             Files.write(Paths.get("src/main/persistent_data/creditcards.txt"),
-                    (Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
+                    (Iterable<String>)cards.stream()::iterator); //(Iterable<String>)cards.stream().filter(x->!x.contains(line.get()))::iterator);
         }
 //Handing Exception
         catch (Exception e) {
@@ -1686,16 +1775,36 @@ public class EZShop implements EZShopInterface {
             e.printStackTrace();
         }
 
+        SaleTransactionAdapter s = (SaleTransactionAdapter) getSaleTransaction(ticketNumber);
+        //Updating SaleTransaction Status
+        s.sale.setStatus("PAYED");
+        //Updating JSON Object in the JSON Array
+        JSONObject tmp;
+        if (accountBook.getjArrayOperations() != null) {
+            for (int i=0;i<accountBook.getjArrayOperations().size();i++){
+                tmp = (JSONObject) accountBook.getjArrayOperations().get(i);
+                if( ((String)tmp.get("balanceId")).equals(ticketNumber.toString()) ){
+                    tmp.put("status","PAYED");
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile(accountBook.getFilepath(), accountBook.getjArrayOperations());
 
-        // (?) may need to set something on the saletransaction in order to label it as closed or as payed with credit card
         return true;
     }
 
     @Override
     public double returnCashPayment(Integer returnId) throws InvalidTransactionIdException, UnauthorizedException {
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
+        }
+        if (returnId <= 0) {
+            throw new InvalidTransactionIdException();
         }
         BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
         if(! (op instanceof ReturnTransaction))return -1;
@@ -1710,6 +1819,9 @@ public class EZShop implements EZShopInterface {
     @Override
     public double returnCreditCardPayment(Integer returnId, String creditCard) throws InvalidTransactionIdException, InvalidCreditCardException, UnauthorizedException {
         // checking privilegies
+        if(userLogged == null){
+            throw  new UnauthorizedException();
+        }
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
@@ -1721,7 +1833,7 @@ public class EZShop implements EZShopInterface {
         ReturnTransaction ret = (ReturnTransaction) op;
         if(!ret.getStatus().equals("CLOSED")) return -1;
         // checking credit card validity
-        if(creditCard== null || creditCard.isEmpty() || validateCard(creditCard)) throw new InvalidCreditCardException();
+        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
 
         // checking if credit card is stored
         ArrayList <String> cards = readCards();
@@ -1830,4 +1942,6 @@ public class EZShop implements EZShopInterface {
         }
         return accountBook.getBalance();
     }
+
+
 }

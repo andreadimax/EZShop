@@ -22,6 +22,7 @@ public class AccountBook {
     private double balance;
 
     public AccountBook(){
+        BalanceOperationImpl.setBalanceCounter(0);
         this.balance = 0;
         this.operationsMap = new HashMap<>();
 
@@ -111,25 +112,25 @@ public class AccountBook {
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
             //building saleTransaction with the full constructor
-            SaleTransactionImplementation Sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
+            SaleTransactionImplementation sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
             //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
-                this.operationsMap.put(balanceId, Sale);
+                this.operationsMap.put(balanceId, sale);
                 if( status.equals("PAYED") ){this.changeBalance(money);}
             }
         }
         else if(description.equals("ReturnTransaction")){
-            //@todo implement ReturnTrans subclass loading
             String status = (String) x.get("status");
-            Integer saleId = Integer.parseInt((String) x.get("status"));
+            Integer saleId = Integer.parseInt((String) x.get("saleId"));
             //JSON array to iterate over TicketEntries "entries"
+            double saleDiscount = Double.parseDouble((String) x.get("saleDiscount"));
             JSONArray jEntries = (JSONArray) x.get("entries");
             //loading TicketEntries list of the sale transaction
             List<TicketEntry> entries = new ArrayList<>();
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
             //building returnTransaction with the full constructor
-            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries);
+            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries,saleDiscount);
             //adding the Return Transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId,retTrans);
@@ -149,7 +150,7 @@ public class AccountBook {
     }
 
     /**
-     * used to simplify entries load of sales transactions,
+     * used to simplify entries load of sale and return transactions,
      * parses the Ticket entry fields and adds it to the list of entries
      */
     private void addEntry( List<TicketEntry> entries, JSONObject entry){
@@ -193,6 +194,7 @@ public class AccountBook {
         }
         else if(NewOp instanceof SaleTransactionImplementation){
             SaleTransactionImplementation sale = (SaleTransactionImplementation) NewOp;
+
             joperation.put("discountRate", ((Double)sale.getDiscountRate()).toString());
             joperation.put("status", sale.getStatus());
             //section to load the JSONArray entries
@@ -213,6 +215,7 @@ public class AccountBook {
         else if(NewOp instanceof ReturnTransaction){
             ReturnTransaction retTrans = (ReturnTransaction) NewOp;
             joperation.put("saleId",retTrans.getSaleId().toString());
+            joperation.put("saleDiscount", ((Double)retTrans.getSaleDiscount()).toString());
             joperation.put("status",retTrans.getStatus());
             //section to load the JSONArray entries
             JSONArray jEntries = new JSONArray();
@@ -266,6 +269,10 @@ public class AccountBook {
         return this.operationsMap;
     }
 
+    public void setOperationsMap(HashMap<Integer, BalanceOperation> operationsMap) {
+        this.operationsMap = operationsMap;
+    }
+
     public String getFilepath() {
         return filepath;
     }
@@ -274,7 +281,12 @@ public class AccountBook {
         return jArrayOperations;
     }
 
+    public void setjArrayOperations(JSONArray jArrayOperations) {
+        this.jArrayOperations = jArrayOperations;
+    }
+
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
 }
