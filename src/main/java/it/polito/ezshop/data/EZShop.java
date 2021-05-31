@@ -331,6 +331,14 @@ public class EZShop implements EZShopInterface {
         this.productMap.clear();
         this.jArrayProduct.clear();
         writejArrayToFile("src/main/persistent_data/productTypes.json",jArrayProduct);
+        //clearing all the customers
+        this.customersMap.clear();
+        this.jArrayCustomers.clear();
+        writejArrayToFile("src/main/persistent_data/customers.json",jArrayCustomers);
+        //clearing all the customers
+        this.users_data.clear();
+        this.jArrayUsers.clear();
+        writejArrayToFile("src/main/persistent_data/users.json",jArrayUsers);
     }
 
     @Override
@@ -497,7 +505,7 @@ public class EZShop implements EZShopInterface {
                 }
             }
         }
-        return userLogged;
+        return null;
     }
 
     @Override
@@ -552,15 +560,15 @@ public class EZShop implements EZShopInterface {
         //check for invalid user
         if(this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager")))throw new UnauthorizedException();
         if(newDescription==null || "".equals(newDescription))throw new InvalidProductDescriptionException();
-        // return false if another product already has the same barcode
-        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode)))return false;
         // check productCode
         if(!barcodeIsValid(newCode))throw new InvalidProductCodeException();
         //check for invalid product id
         if(id == null || id<=0) throw new InvalidProductIdException();
-        if(productMap.get(id)==null)return false;
         // checkpriceperunit
         if(newPrice<=0) throw new InvalidPricePerUnitException();
+        // return false if another product already has the same barcode
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode) && x.getId()!=id))return false;
+        if(productMap.get(id)==null)return false;
         ProductTypeImplementation p;
         // return false if product with given id doesn't exist
         if((p=(ProductTypeImplementation)productMap.get(id))==null)return false;
@@ -952,6 +960,10 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
 
+        if(id == null || id <= 0){
+            throw new InvalidCustomerIdException();
+        }
+
         if(newCustomerName == null || newCustomerName.equals("") ){
             throw new InvalidCustomerNameException();
         }
@@ -960,7 +972,7 @@ public class EZShop implements EZShopInterface {
             throw new InvalidCustomerCardException();
         }
 
-        if(id<=0){
+        if(id == null || id<=0){
             throw new InvalidCustomerIdException();
         }
         if(!this.customersMap.containsKey(id)){
@@ -1186,7 +1198,7 @@ public class EZShop implements EZShopInterface {
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
 
         //false returns
-        if(transactionId != this.ongoingSale.getBalanceId()){return false;}
+        if(this.ongoingSale == null || transactionId != this.ongoingSale.getBalanceId()){return false;}
         if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
         ProductType product = productMap.values().stream().filter(p -> p.getBarCode().equals(productCode)).findFirst().get();;
         if(product.getQuantity() < amount){return false;}
@@ -1506,7 +1518,7 @@ public class EZShop implements EZShopInterface {
 
         //false returns
         //return transaction does not exist
-        if(returnId != this.ongoingReturn.getBalanceId()){return false;}
+        if(ongoingReturn == null || returnId != this.ongoingReturn.getBalanceId()){return false;}
         //case were the product does not exist
         ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(productCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
         if(product == null ){return false;}
@@ -1803,7 +1815,7 @@ public class EZShop implements EZShopInterface {
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){
             throw new UnauthorizedException();
         }
-        if (returnId <= 0) {
+        if (returnId== null || returnId <= 0) {
             throw new InvalidTransactionIdException();
         }
         BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
@@ -1827,13 +1839,13 @@ public class EZShop implements EZShopInterface {
             throw new UnauthorizedException();
         }
         // checking returnId validity
-        if(returnId<=0)throw new InvalidTransactionIdException();
+        if(returnId == null || returnId<=0)throw new InvalidTransactionIdException();
         BalanceOperationImpl op = (BalanceOperationImpl) accountBook.getOperation(returnId);
+        // checking credit card validity
+        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
         if(! (op instanceof ReturnTransaction))return -1;
         ReturnTransaction ret = (ReturnTransaction) op;
         if(!ret.getStatus().equals("CLOSED")) return -1;
-        // checking credit card validity
-        if(creditCard== null || creditCard.isEmpty() || !validateCard(creditCard)) throw new InvalidCreditCardException();
 
         // checking if credit card is stored
         ArrayList <String> cards = readCards();
