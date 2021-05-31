@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -24,6 +25,22 @@ import static java.lang.Math.abs;
 import static org.junit.Assert.*;
 
 public class EZShopTests {
+    static EZShop ez;
+    @Before
+    public void setup(){
+        ez = new EZShop();
+        ez.reset();
+        try{
+            ez.createUser("daniele", "789", "Administrator");
+            ez.createUser("alessio", "456", "Administrator");
+            ez.createUser("andrea", "123", "Administrator");
+            ez.createUser("damiana diamond", "abc", "ShopManager");
+            ez.createUser("marina blue", "abc", "Cashier");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
     @Test
     public void testAssignId(){
         HashMap<Integer, Integer> test_set = new HashMap<Integer, Integer>();
@@ -126,9 +143,8 @@ public class EZShopTests {
 
     @Test
     public void testResetAPI(){
-        EZShop ez = new EZShop();
         try{
-            ez.reset();
+
             ez.login("daniele", "789");
             // storing 1 product
             int pid = ez.createProductType("description", "789657485759", 10, "note");
@@ -142,8 +158,9 @@ public class EZShopTests {
             // cannot store a new user since they are never reset
             User u1 = ez.getAllUsers().get(0);
 
-            // store  a new customer since they are never reset
-            Customer c1 = ez.getAllCustomers().get(0);
+            // create a new customer
+            Integer cid = ez.defineCustomer("pippo");
+            CustomerImplementation c1 = (CustomerImplementation) ez.getCustomer(cid);
 
             //store a saleTransaction
             Integer sid = ez.startSaleTransaction();
@@ -186,6 +203,8 @@ public class EZShopTests {
             assertEquals(pid, new_pid);
             assertEquals(p.getProductDescription(), "description" );
 
+
+
             // checking Users
             int userCount = ez.getAllUsers().size();
             User u;
@@ -196,41 +215,28 @@ public class EZShopTests {
             assertEquals(u1.getRole(), u.getRole());
 
             // checking Customers
-            int customerCount = ez.getAllCustomers().size();
-            Customer c;
-            assertNotNull(c=ez.getCustomer(c1.getId()));
-            assertEquals(c1.getId(),c.getId());
-            assertEquals(c1.getCustomerName(), c.getCustomerName());
-            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
-            assertEquals(c1.getPoints(),c.getPoints());
+            assertNotNull(ez.getCustomer(cid));
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), oldSize);
 
             //________________________________________________________________
             //resetting and checking deletion occurred
-
             ez.reset();
+            ez.createUser("daniele","789","Administrator");
+            ez.login("daniele","789");
+
+
             // checking balance
             assertTrue(ez.computeBalance()<=0.001);
             // checking product
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
             // checking Users
-            assertEquals(ez.getAllUsers().size(), userCount);
-            assertNotNull(u=ez.getUser(u1.getId()));
-            assertEquals(u1.getId(),u.getId());
-            assertEquals(u1.getUsername(), u.getUsername());
-            assertEquals(u1.getPassword(), u.getPassword());
-            assertEquals(u1.getRole(), u.getRole());
+            assertEquals(ez.getAllUsers().size(), 1);
 
             // checking Customers
-            assertEquals(ez.getAllCustomers().size(), customerCount);
-            assertNotNull(c=ez.getCustomer(c1.getId()));
-            assertEquals(c1.getId(),c.getId());
-            assertEquals(c1.getCustomerName(), c.getCustomerName());
-            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
-            assertEquals(c1.getPoints(),c.getPoints());
+            assertNull(ez.getCustomer(cid));
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
@@ -244,20 +250,10 @@ public class EZShopTests {
             assertNull(ez.getProductTypeByBarCode("789657485759"));
 
             // checking Users
-            assertEquals(ez.getAllUsers().size(), userCount);
-            assertNotNull(u=ez.getUser(u1.getId()));
-            assertEquals(u1.getId(),u.getId());
-            assertEquals(u1.getUsername(), u.getUsername());
-            assertEquals(u1.getPassword(), u.getPassword());
-            assertEquals(u1.getRole(), u.getRole());
+            assertEquals(ez.getAllUsers().size(), 1);
 
             // checking Customers
-            assertEquals(ez.getAllCustomers().size(), customerCount);
-            assertNotNull(c=ez.getCustomer(c1.getId()));
-            assertEquals(c1.getId(),c.getId());
-            assertEquals(c1.getCustomerName(), c.getCustomerName());
-            assertEquals(c1.getCustomerCard(),c.getCustomerCard());
-            assertEquals(c1.getPoints(),c.getPoints());
+            assertNull(ez.getCustomer(cid));
 
             //checking total of balance operations
             assertEquals(ez.getCreditsAndDebits(null, null).size(), 0);
@@ -272,13 +268,12 @@ public class EZShopTests {
     @Test
     public void testOrderAPIs(){
         //BalanceOperationImpl.setBalanceCounter(0);
-        EZShop ez = new EZShop();
+
         try {
             ez.login("alessio", "456");
         }catch(Exception e){
             fail("unable to login with credentials user: alessio  password: 456");
         }
-        ez.reset();
         try {
             ez.recordBalanceUpdate(1000.0);
         }catch(Exception e){
@@ -704,7 +699,6 @@ public class EZShopTests {
     @Test
     public void testBalanceRelatedAPIs(){
         EZShop ez = new EZShop();
-        ez.reset();
         //__________________________________________________________
         // public boolean recordBalanceUpdate(double toBeAdded) throws UnauthorizedException;
         /*
@@ -810,7 +804,6 @@ public class EZShopTests {
     @Test
     public void TestProductTypeAPIs(){
 
-        EZShop ez = new EZShop();
         Integer id=null;
 //_______________________________________________________________________
         //Tests CreateProductType
@@ -861,8 +854,8 @@ public class EZShopTests {
                 if(ez.getAllProductTypes().stream().noneMatch(x-> x.getId()== finalI))found=1;
             }
             assertFalse(ez.updateProduct(i,"newDescription", "526374859247", 3.99, "newnote2"));
-            // false if another product already has the same barcode
-            assertFalse(ez.updateProduct(id,"newDescription", "8004263697047", 3.99, "newnote2"));
+            // false if another product already has the same barcode and it is not the one we are updating
+            assertFalse(ez.updateProduct(id+1,"newDescription", "8004263697047", 3.99, "newnote2"));
             // throws InvalidProductIdException if the product id is less than or equal to 0 or if it is null
             assertThrows(InvalidProductIdException.class, ()-> ez.updateProduct(0,"newDescription", "4673628643780", 3.99, "newnote2"));
             assertThrows(InvalidProductIdException.class, ()-> ez.updateProduct(-1,"newDescription", "4673628643780", 3.99, "newnote2"));
@@ -1247,7 +1240,6 @@ public class EZShopTests {
         }catch(Exception e){
             System.out.println("unable to login.");
         }
-        ez.reset();
         Integer id = 0;
         ez.logout();
 
@@ -1831,9 +1823,6 @@ public class EZShopTests {
     @Test
     public void testReturnTransactionAPIs(){
 
-        EZShop ez = new EZShop();
-        ez.reset();
-
         /* --------- startReturnTransaction --------- */
 
         //No user logged
@@ -2117,8 +2106,7 @@ public class EZShopTests {
 
     @Test
     public void testPaymentAPIs(){
-        EZShop ez = new EZShop();
-        ez.reset();
+
 
         /*SAVING STATE OF CREDITCARDS.TXT BEFORE TESTS TO ROLLBACK FILE AT THE END*/
         FileInputStream stream = null;

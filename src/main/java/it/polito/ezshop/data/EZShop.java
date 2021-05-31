@@ -566,8 +566,8 @@ public class EZShop implements EZShopInterface {
         if(id == null || id<=0) throw new InvalidProductIdException();
         // checkpriceperunit
         if(newPrice<=0) throw new InvalidPricePerUnitException();
-        // return false if another product already has the same barcode
-        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode) && x.getId()!=id))return false;
+        // return false if another product already has the same barcode, but it is not the one we are updating
+        if(productMap.values().stream().anyMatch(x->x.getBarCode().equals(newCode) && !x.getId().equals(id)))return false;
         if(productMap.get(id)==null)return false;
         ProductTypeImplementation p;
         // return false if product with given id doesn't exist
