@@ -29,11 +29,11 @@ with all elements explosed, all dependencies, NO tangles; and report it here as 
 
 | Metric                                    | Measure |
 | ----------------------------------------- | ------- |
-| Packages                                  |         |
-| Classes (outer)                           |         |
-| Classes (all)                             |         |
-| NI (number of bytecode instructions)      |         |
-| LOC (non comment non blank lines of code) |         |
+| Packages                                  | 5       |
+| Classes (outer)                           | 40      |
+| Classes (all)                             | 41      |
+| NI (number of bytecode instructions)      | 8,360   |
+| LOC (non comment non blank lines of code) | ~3,595  |
 
 
 
@@ -43,11 +43,16 @@ with all elements explosed, all dependencies, NO tangles; and report it here as 
 <Report here information about code tangles and fat packages>
 ```
 
-| Item | Tangled | Fat  | Size | XS   |
-| ---- | ------- | ---- | ---- | ---- |
-|      |         |      |      |      |
-|      |         |      |      |      |
-
+| Item                                                                                                              | Tangled |  Fat |  Size |    XS |
+| ----                                                                                                              | ------- | ---- |  ---- |  ---- |
+| ezshop.it.polito.ezshop.data.EZShop class                                                                         |         |  266 | 6,406 | 3,516 |
+| ezshop.it.polito.ezshop.data.EZShop.deleteReturnTransaction(java.lang.Integer):boolean                            |         |   21 |   285 |    81 |
+| ezshop.it.polito.ezshop.data.EZShop.endReturnTransaction(java.lang.Integer, boolean):boolean                      |         |   17 |   280 |    32 |
+| ezshop.it.polito.ezshop.data.EZShop.addProductToSale(java.lang.Integer, java.lang.String, int):boolean            |         |   17 |   199 |    23 |
+| ezshop.it.polito.ezshop.data.EZShop.recordOrderArrival(java.lang.Integer):boolean                                 |         |   17 |   195 |    22 |
+| ezshop.it.polito.ezshop.data.EZShop.deleteProductFromSale(java.lang.Integer, java.lang.String, int):boolean       |         |   17 |   172 |    20 |
+| ezshop.it.polito.ezshop.data.EZShop.modifyCustomer(java.lang.Integer, java.lang.String, java.lang.String):boolean |         |   16 |   165 |    10 |
+|                                                                                                                   |         |      |       |       |
 
 
 # Package level tangles
