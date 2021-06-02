@@ -1,0 +1,1262 @@
+<html>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>untitled
+		summary
+	</title>
+        <style>
+
+						body {
+						border: 1px solid #d4d4d4;
+						-webkit-border-radius: 4px;
+						-moz-border-radius: 4px;
+						border-radius: 4px;
+						-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						-moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						font-family: sans-serif;
+						font-size: 1.0em;
+						color: #627883;
+						margin: 10;
+						}
+
+						body p,body a,body li {
+						font-size: 1.0em;
+						}
+
+						body a {
+						color: #0088cc;
+						text-decoration: none;
+						cursor: pointer;
+						}
+
+						body a:hover {
+						text-decoration: underline;
+						}
+
+						h2 {
+						color: #618454;
+						font-weight: bold;
+						font-size: 1.3em;
+						padding-bottom: 10px;
+						border-bottom: 1px solid #d4d4d4;
+						clear: left;
+						}
+
+						p {
+						margin-top: 0;
+						margin-bottom: 3;
+						}
+
+						li {
+						margin-top: 0;
+						margin-bottom: 0;
+						}
+
+						table.inbrowser {
+						border: 1px solid #d4d4d4;
+						}
+
+						table.inbrowser th {
+						color: #FFFFFF;
+						text-align: left;
+						font-size: 0.8em;
+						font-weight bold;
+						padding: 0px 5px 0px 5px;
+						}
+
+						table {
+						cellpadding: 0;
+						}
+
+						table thead {
+						background: #8fa7a7;
+						color: #FFFFFF;
+						padding: 0px 0px 0px 5px;
+						}
+
+						table th {
+						color: #FFFFFF;
+						text-align: left;
+						font-size: 1.0em;
+						font-weight bold;
+						padding: 0px 0px 0px 0px;
+						}
+
+						table td {
+						font-size: 0.9em;
+						padding: 0px 5px 0px 5px;
+						}
+
+						div#container {
+						margin: 10;
+						}
+
+						div#navbar {
+						height: 50px;
+						padding-left: 20px;
+						padding-right: 20px;
+						background-color: #fafafa;
+						background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff),
+						to(#f2f2f2));
+						background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+						background-repeat: repeat-x;
+						border-bottom: 1px solid #d4d4d4;
+						-webkit-border-radius: 4px;
+						-moz-border-radius: 4px;
+						border-radius: 4px;
+						-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						-moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						color: #618454; !important;
+						text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255,
+						0.125);
+						font-weight: bold !important;
+						}
+
+						div#copyright {
+						margin-top:10px;
+						height: 35px;
+						background-color: #fafafa;
+						background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff),
+						to(#f2f2f2));
+						background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+						background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+						background-repeat: repeat-x;
+						border-top: 1px solid #d4d4d4;
+						-webkit-border-radius: 4px;
+						-moz-border-radius: 4px;
+						border-radius: 4px;
+						-webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						-moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+						}
+
+						div#copyright p {
+						margin: 15px 0 0 10px;
+						font-size: 0.8em;
+						}
+					</style>
+    </head>
+    <body vLink="#ff9900" aLink="#E65A1D" link="#E65A1D">
+        <div id="navbar">
+            <h1>untitled
+		summary
+	</h1>
+        </div>
+        <div id="container">
+            <table cellpadding="1">
+                <tr>
+                    <td valign="top" nowrap>
+				Classpath
+			
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>/home/dc/Documents/Software Engineering/Project/ezshop/target/classes (ezshop)
+							
+                        <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+				Granularity
+			
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>
+						"Detail" - includes inner classes, methods and fields
+					</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+				Externals
+			
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>
+						"Hide" - referenced items are not included
+					</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+				Excludes
+			
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>
+						None
+					</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+				Transformations
+			
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>
+						None
+					</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+								Notes and tips
+							
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>
+										On
+									</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap>
+								Created
+							
+				:
+				&nbsp;&nbsp;&nbsp;</td><td>June 2, 2021&nbsp;8:45 AM
+								by
+								<a href="fx_https://structure101.com/products/studio">Structure101 Studio 5</a></td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>This summary has been generated with "Show notes and tips"
+								enabled - these are shown
+								with a yellow background, like this one.
+								You can switch them off via the drop-down menu in the Overview
+								perspective (or with the
+								-notips switch from the command line).</li>
+                                <li>The Collaboration perspective is great for tracking down your
+								dependency on third party libraries.
+								Set "Show externals" in the project properties and then select the
+								library item in the right-hand
+								tree - anything that doesn't use it will be grayed out in the
+								left-hand tree.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Size</h2>
+            <table>
+                <tr>
+                    <td valign="top">
+                        <table cellpadding="1">
+                            <tr>
+                                <td>
+								Jars (and/or classpath directories):
+								&nbsp;&nbsp;&nbsp;</td><td align="right">1</td>
+                            </tr>
+                            <tr>
+                                <td>Packages (that contain classes):</td><td align="right">5</td>
+                            </tr>
+                            <tr>
+                                <td>Classes (outer):</td><td align="right">40</td>
+                            </tr>
+                            <tr>
+                                <td>Classes (all):</td><td align="right">41</td>
+                            </tr>
+                            <tr>
+                                <td>Classes (external):</td><td align="right">0</td>
+                            </tr>
+                        </table>
+                    </td><td width="30">&nbsp;</td><td valign="top">
+                        <table cellpadding="1">
+                            <tr>
+                                <td>NI (Number of bytecode Instructions): </td><td align="right">8,360</td>
+                            </tr>
+                            <tr>
+                                <td>
+								LOC (Non Comment Non Blank Lines Of Code):
+								&nbsp;&nbsp;&nbsp;</td><td align="right">
+										~
+										3,595</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>Though less commonly used than LOC, NI is an excellent,
+					style-independent, relative measure of code size.</li>
+                                <li>The value for LOC is estimated from the NI.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Key Measures</h2>
+            <table cellpadding="2">
+                <tr>
+                    <td>Total number of problem dependencies: </td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>- Spec dependency violations: </td><td align="right">0</td><td></td>
+                </tr>
+                <tr>
+                    <td>- Package feedback dependencies:</td><td align="right">0</td><td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Spec coverage: </td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>Spec item violations: </td><td align="right">0</td><td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Tangled packages:</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>Fat packages:</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>Fat classes:</td><td align="right">1</td>
+                </tr>
+                <tr>
+                    <td>Fat methods:</td><td align="right">6</td>
+                </tr>
+                <tr>
+                    <td>Biggest class tangle:</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Architecture diagram violations: </td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                </tr>
+            </table>
+            <h2>Structure Spec</h2>
+            <p>The structure spec for this project is not defined</p>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>
+					The Structure Spec is the cannonical specification of your phyisical code-base structure 
+					(projects/modules and packages), and the allowed items and dependencies.
+				</li>
+                                <li>
+					You add to the Structure Spec piecemeal, top-down - starting from the root project/module scope, 
+					down into the package scopes.
+				</li>
+                                <li>
+					Once a scope has been added to the Structure Spec, you can adjust the layering, 
+					visibility and grouping of projects/modules and packages.
+				</li>
+                                <li>
+					Any dependencies that do not conform to the Structure Spec are counted as "Spec Dependency Violations".
+				</li>
+                                <li>
+					Any items in the code, but not in a specified scope in the Structure Spec are counted as 
+					"Spec Item Violations" (the number of classes in item violations is counted).
+				</li>
+                                <li>
+					Problem dependencies are defined as the sum of ""Spec Dependency Violations"" and "Package Tangle" feedback dependencies.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>
+					Publish this project to a Structure101 Repository, install Structure101 Workspace in your IDE, 
+					and use Workspace settings to point it at this Studio Repository. 
+					This will let you browse your codebase "through" the Structure Spec, right inside your IDE.
+				</li>
+                                <li>
+					If you're planning to use the Structure Spec with Structure101 Workspace, 
+					be sure and create your project from a Workspace settings file.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Architecture Rules</h2>
+            <p>The architecture for this project is not defined</p>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>
+					The architecture is defined in the form of a number of architecture
+					diagrams that define layering and
+					composition, and map to the currently selected model.
+				</li>
+                                <li>
+					Architecture diagrams are not automatically created - that must be done by
+					users (e.g. you).
+				</li>
+                                <li>
+					The "#Violations" value is the number of class-to-class dependencies
+					if the project
+					granularity is "Overview" (see the top of this report). If the granularity is
+					"Detail" then it is
+					the number of method/field/class dependencies.
+				</li>
+                                <li>
+					The "Violation frequency" is the number of violations as a percentage
+					of all the dependencies
+					in the model.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>
+					You can initialize new diagrams wherever you see the "new
+					architectural diagram"
+					button - in the Composition perspective, the Slice perspective and the
+					rules tab.
+				</li>
+                                <li>
+					Create architecture diagrams from dependency diagrams that most closely
+					reflect the intended architecture.
+				</li>
+                                <li>
+					You can also create architecture diagrams from scratch in the rules
+					tab.
+				</li>
+                                <li>
+					Once you have created architectural diagrams, you can edit them in the
+					rules tab.
+				</li>
+                                <li>
+					If you publish Architecture diagrams to a repository, the
+					Structure101 Studio 5
+					IDE plug-ins will warn
+					developers if they make code changes that are inconsistent with them, plus
+					they will be browsable via the
+					Structure101 Studio 5
+					web application.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Model</h2>
+            <table>
+                <tr>
+                    <td>Model:</td><td>Action list 1</td>
+                </tr>
+                <tr>
+                    <td>%Tangled:</td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>%Fat:</td><td align="right">77%</td>
+                </tr>
+                <tr>
+                    <td>
+						#Sequential actions:
+					</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>
+						#Refactoring actions:
+					</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>#Class mappings:</td><td align="right">0</td>
+                </tr>
+                <tr>
+                    <td>Alignment:</td><td align="right">100%</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The model organizes the classes in your codebase into a
+					compositional hierarchy</li>
+                                <li>You perform actions interactively to organize your classes into
+					the model hierarchy, and to define refactoring actions. The model
+					shows you the effect of these actions.</li>
+                                <li>%Tangled is the percentage of the code that is in a tangled region (in the 
+					currently selected model, with any transformations and actions applied).</li>
+                                <li>%Fat is the percentage of the code that is in a fat region (in the 
+					currently selected model, with any transformations and actions applied).</li>
+                                <li>&ldquo;#sequential actions&rdquo; is a count of the number of separate
+					actions you have performed &ndash; this is indicative of the amount of
+					modelling work you have done so far.</li>
+                                <li>&ldquo;#refactoring actions&rdquo; is the number of implementation-level
+					changes you have made to the model. These are actions that do not
+					relocate classes between containers, but that imply changes to the
+					code contained by classes.</li>
+                                <li>&ldquo;#class mappings&rdquo; is a count of the number of classes that are
+					located in a location that does not correspond to a physical
+					container in the code-base.</li>
+                                <li>You may want the physical code base structure (e.g. packages,
+					jars, Maven projects) to reflect the model structure. The degree to
+					which the physical structure matches the model is called
+					&ldquo;alignment&rdquo;
+					and is given as a percentage above.</li>
+                                <li>Applying all the class mappings to the code-base would result in
+					alignment = 100%.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>You can initialize the model using physical structures (such as
+					packages or jars) from your code-base, or get Structure101 to
+					suggest a start model by finding cohesive clusters of classes
+					(&ldquo;auto-levelize&rdquo; from the context menu).</li>
+                                <li>To align the physical code with the model, select the &ldquo;class
+					map&rdquo;
+					option in the publish wizard. The mappings will appear as actions in
+					the IDE plugin.</li>
+                                <li>If you do not wish to undertake alignment (for now), but have
+					simulated implementation-level changes in the model, you can export
+					these by selecting &ldquo;refactorings&rdquo; in the publish wizard. The list
+					of
+					refactoring actions will appear as actions in the IDE plugin.</li>
+                                <li>If you want to perform both mapping and refactoring actions in
+					the same sequence as you performed them on the model, select
+					&ldquo;Sequential action list&rdquo; in the publish wizard.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Flat Tangles</h2>
+            <table class="inbrowser" width="">
+                <thead>
+                    <th align="
+							left
+						">
+							Level
+						</th><th align="
+			right
+		">
+							#Items
+						</th><th align="
+			right
+		">
+							#Tangles
+						</th><th align="
+			right
+		">
+							#Tangled items
+						</th><th align="
+			right
+		">
+							Biggest
+						</th><th align="
+			right
+		">
+							Degree
+						</th>
+                </thead>
+                <tr>
+                    <td>Leaf package</td><td align="right">3</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>Jar</td><td align="right">1</td><td align="right">n/a</td><td align="right">n/a</td><td align="right">n/a</td><td align="right">n/a</td>
+                </tr>
+                <tr>
+                    <td>Outer class</td><td align="right">41</td><td align="right">0</td><td align="right">0</td><td align="right">0</td><td align="right">0%</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>"Flat" tangles are detected and measured from the flat
+					dependency graphs of all
+					items at a specific level. These are independent of the "Design" levels
+					which are
+					created by the higher-level packaging and are measured and reported in the
+					"Excessive Structural Complexity (XS)" section below.</li>
+                                <li>Tangles at the Jar or Package-level are highly disruptive.</li>
+                                <li>The bigger the tangle, the more problems it is likely to cause.</li>
+                                <li>Larger tangles at the class level are likely to cross package
+					boundaries and so may also
+					indicate a problem.</li>
+                                <li>The degree is calculated so as to give a higher value for larger
+					tangles - that is,
+					one large tangle will give a higher degree than the same number of
+					items involved in
+					several smaller tangles.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The "Leaf package" and "Outer class" tangles can be directly
+					viewed and analyzed in the Slice perspective.</li>
+                                <li>To view and analyze jar-level tangles, select the Jar breakout
+					in Project Properties.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h2>Excessive Structural Complexity (XS)</h2>
+            <table border="0" cellpadding="1">
+                <tr>
+                    <td>Cumulative XS:</td><td>3,704</td>
+                </tr>
+                <tr>
+                    <td>Average XS:</td><td>44%</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The XS Configuration is a set of thresholds for "Fat" and
+					"Tangles" at different levels of composition.</li>
+                                <li>Fat indicates "too much stuff" in one place and is measurable at
+					every level of composition - Design,
+					Package, Class and Method.</li>
+                                <li>Cyclomatic Complexity is used as a measure of Fat at the method
+					level - the number of dependencies
+					in the child dependency graph is used at the other levels.</li>
+                                <li>For the purposes of XS, tangles are only measured at the design
+					level, i.e. cyclic dependencies between packages.</li>
+                                <li>Both Fat and Tangles are measured as the percentage by which the
+					threshold is exceeded. This percentage is
+					multiplied by the size of the item so that the Average XS can be read as a
+					percentage of the code-base.</li>
+                                <li>
+                                    					Read
+					<a href="fx_https://structure101.com/xs">more</a>
+					about the concepts behind XS.
+				
+                                </li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>Use the Measurement perspective to obtain detailed information
+					on the XS in your project.</li>
+                                <li>Change the metrics and thresholds used to calculate XS by
+					putting the XS Configuration
+					into "Edit mode" from the drop down menu, bottom-left, in the
+					Measurement perspective.
+					Save the changes as a new named configuration.</li>
+                                <li>If you have a a very large project and find the metrics
+					calculations too time-consuming, you
+					can exclude this section of the report via the Options menu.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>XS breakout by metric (and scope)</h3>
+            <table class="inbrowser" width="">
+                <thead>
+                    <th align="
+							left
+						">
+							Metric (and scope)
+						</th><th align="
+			right
+		">
+							Threshold
+						</th><th align="
+			right
+		">
+							#Offenders
+						</th><th align="
+			right
+		">
+							Offenses (%)
+						</th><th align="
+			right
+		">
+							XS contribution
+						</th>
+                </thead>
+                <tr>
+                    <td>Tangled
+							(
+							design
+							)
+						</td><td align="right">0</td><td align="right">0
+							of
+							4</td><td align="right">0%</td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>Fat
+							(
+							design
+							)
+						</td><td align="right">120</td><td align="right">0
+							of
+							4</td><td align="right">0%</td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>Fat
+							(
+							leaf package
+							)
+						</td><td align="right">120</td><td align="right">0
+							of
+							3</td><td align="right">0%</td><td align="right">0%</td>
+                </tr>
+                <tr>
+                    <td>Fat
+							(
+							class
+							)
+						</td><td align="right">120</td><td align="right">1
+							of
+							41</td><td align="right">2%</td><td align="right">95%</td>
+                </tr>
+                <tr>
+                    <td>Fat
+							(
+							method
+							)
+						</td><td align="right">15</td><td align="right">6
+							of
+							421</td><td align="right">1%</td><td align="right">5%</td>
+                </tr>
+                <tr>
+                    <td><b>Total</b></td><td colspan="3">&nbsp;</td><td align="right"><b>100%</b></td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The Metric (and scope) column contains all the metrics that are
+					enabled in the selected XS Configuration
+					(named in the previous section).</li>
+                                <li>The "Threshold" is taken from the selected XS Configuration</li>
+                                <li>The "#Offenders" indicates the number of items that exceed the
+					threshold.</li>
+                                <li>The "Offenders (%)" indicates the number of items that exceed
+					the threshold as a percentage of
+					the total number of items at that level.</li>
+                                <li>The "XS contribution" indicates the degree to which design
+					tangles and fat at each level contribute to
+					the total amount of XS in the project.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>Use the Measurement perspective to obtain detailed information
+					on the XS in your project.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>Tangled
+					(
+					design
+					)
+				</h3>
+            <p>
+					No items exceed the threshold for
+					Tangled
+					at the
+					design
+					level.
+				</p>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The "design" level items are high-level packages (i.e.
+							packages that contain sub-packages).
+							Tangles are only measured at this level.</li>
+                                <li>The value is calculated as the number of dependencies that go
+							bottom-up as a percentage of
+							all the dependencies on the child graph for the item.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>To view and analyze these tangles, drill down to the item in
+							the Composition perspective
+							with the Package hierarchy selected from the Model menu.</li>
+                                <li>
+					The complete list is available in the Measurement perspective. Make
+					sure you are at the root of the
+					"Drill-down" in the top-left, and then select the
+					Tangled
+					(
+					design
+					)
+					slice of the pie. The "Items with XS"
+					will contain all the items that exceed the threshold at this level.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>Fat
+					(
+					design
+					)
+				</h3>
+            <p>
+					No items exceed the threshold for
+					Fat
+					at the
+					design
+					level.
+				</p>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The "design" level items are high-level packages (i.e.
+							packages that contain sub-packages).</li>
+                                <li>The value is calculated as the number of dependencies in the
+							child graph for the item, i.e.
+							the dependency graph of the sub-packages of the measured package.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>To view and analyze these Fat items, drill down to the item in
+							the Composition perspective with
+							the Package hierarchy selected from the Model menu.</li>
+                                <li>Use the "Auto-partition" button on the Dependency Graph to
+							help make sense of big graphs.</li>
+                                <li>
+					The complete list is available in the Measurement perspective. Make
+					sure you are at the root of the
+					"Drill-down" in the top-left, and then select the
+					Fat
+					(
+					design
+					)
+					slice of the pie. The "Items with XS"
+					will contain all the items that exceed the threshold at this level.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>Fat
+					(
+					leaf package
+					)
+				</h3>
+            <p>
+					No items exceed the threshold for
+					Fat
+					at the
+					leaf package
+					level.
+				</p>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The "leaf package" level items are packages that contain
+							classes.</li>
+                                <li>The value is calculated as the number of dependencies in the
+							child graph for the item,
+							i.e. the dependency graph of the classes in the measured package</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>To view and analyze these Fat items, drill down to the item in
+							the Composition perspective.</li>
+                                <li>Use the "Auto-partition" button on the Dependency Graph to
+							help make sense of big graphs.</li>
+                                <li>
+					The complete list is available in the Measurement perspective. Make
+					sure you are at the root of the
+					"Drill-down" in the top-left, and then select the
+					Fat
+					(
+					leaf package
+					)
+					slice of the pie. The "Items with XS"
+					will contain all the items that exceed the threshold at this level.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>Fat
+					(
+					class
+					):
+					1</h3>
+            <table class="inbrowser" width="">
+                <thead>
+                    <th align="
+									left
+								">
+									Item
+								</th><th align="
+			right
+		">
+									Value
+								</th>
+                </thead>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop</td><td align="right">266</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The value is calculated as the number of dependencies in the
+							child graph for the item,
+							i.e. the dependency graph of the methods and fields in the class.</li>
+                                <li>This is not available if the Granularity for the project is
+							"Overview".</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>To view and analyze these Fat items, drill down to the item in
+							the Composition perspective.</li>
+                                <li>Use the "Auto-partition" button on the Dependency Graph to
+							help make sense of big graphs.</li>
+                                <li>
+					The complete list is available in the Measurement perspective. Make
+					sure you are at the root of the
+					"Drill-down" in the top-left, and then select the
+					Fat
+					(
+					class
+					)
+					slice of the pie. The "Items with XS"
+					will contain all the items that exceed the threshold at this level.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>Fat
+					(
+					method
+					):
+					
+							Top
+							5
+							(of
+							6
+							)
+						</h3>
+            <table class="inbrowser" width="">
+                <thead>
+                    <th align="
+									left
+								">
+									Item
+								</th><th align="
+			right
+		">
+									Value
+								</th>
+                </thead>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop.deleteReturnTransaction(java.lang.Integer):boolean</td><td align="right">21</td>
+                </tr>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop.deleteProductFromSale(java.lang.Integer, java.lang.String, int):boolean</td><td align="right">17</td>
+                </tr>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop.recordOrderArrival(java.lang.Integer):boolean</td><td align="right">17</td>
+                </tr>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop.endReturnTransaction(java.lang.Integer, boolean):boolean</td><td align="right">17</td>
+                </tr>
+                <tr>
+                    <td>ezshop.it.polito.ezshop.data.EZShop.addProductToSale(java.lang.Integer, java.lang.String, int):boolean</td><td align="right">17</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The value is calculated as the Cyclomatic Complexity (McCabe's
+							metric) of the method.</li>
+                                <li>The value is calculated from the bytecode and so may differ
+							from the value that would
+							be calculated from the corresponding source code in some (rare)
+							cases.</li>
+                                <li>This is not available if the Granularity for the project is
+							"Overview".</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>To view and analyze these Fat items, drill down to the class
+							that contains the method
+							in any perspective.</li>
+                                <li>Click on the "Show source" button on the main toolbar to view
+							the source.</li>
+                                <li>
+					The complete list is available in the Measurement perspective. Make
+					sure you are at the root of the
+					"Drill-down" in the top-left, and then select the
+					Fat
+					(
+					method
+					)
+					slice of the pie. The "Items with XS"
+					will contain all the items that exceed the threshold at this level.
+				</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+            <h3>
+					Items with highest XS:
+					7</h3>
+            <table class="inbrowser" width="">
+                <thead>
+                    <th align="
+								left
+							">
+								Item
+							</th><th align="
+									left
+								">
+									Type
+								</th><th align="
+			right
+		">
+								Tangled
+							</th><th align="
+			right
+		">
+								Fat
+							</th><th align="
+			right
+		">
+								Size
+							</th><th align="
+			right
+		">
+								XS
+							</th>
+                </thead>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop</td><td>class</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">266</font></td><td style="padding-left: 5" align="right">6,406</td><td style="padding-left: 5" align="right">3,516</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.deleteReturnTransaction(java.lang.Integer):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">21</font></td><td style="padding-left: 5" align="right">285</td><td style="padding-left: 5" align="right">81</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.endReturnTransaction(java.lang.Integer, boolean):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">17</font></td><td style="padding-left: 5" align="right">280</td><td style="padding-left: 5" align="right">32</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.addProductToSale(java.lang.Integer, java.lang.String, int):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">17</font></td><td style="padding-left: 5" align="right">199</td><td style="padding-left: 5" align="right">23</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.recordOrderArrival(java.lang.Integer):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">17</font></td><td style="padding-left: 5" align="right">195</td><td style="padding-left: 5" align="right">22</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.deleteProductFromSale(java.lang.Integer, java.lang.String, int):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">17</font></td><td style="padding-left: 5" align="right">172</td><td style="padding-left: 5" align="right">20</td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5">ezshop.it.polito.ezshop.data.EZShop.modifyCustomer(java.lang.Integer, java.lang.String, java.lang.String):boolean</td><td>method</td><td style="padding-left: 5" align="right">&nbsp;</td><td align="right">&nbsp;<font color="red">16</font></td><td style="padding-left: 5" align="right">165</td><td style="padding-left: 5" align="right">10</td>
+                </tr>
+            </table>
+            <br>
+            <table class="inbrowser" width="
+						800
+					">
+                <tr bgcolor="#FFFFE8">
+                    <td>&nbsp;</td><td>&nbsp;</td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Note
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>XS is related to the value and the size of the item so that
+					bigger items (usually higher in the hierarchy)
+					score higher. Since excessive structural complexity on bigger items
+					(e.g. packages) will tend to disrupt
+					development activities more than on smaller items (e.g. methods), you should
+					consider fixing these first.</li>
+                                <li>Values in red exceed threshold.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+                <tr bgcolor="#FFFFE8">
+                    <td valign="top" nowrap><small><b>Tip
+							:
+						</b></small></td><td valign="top"><small>
+                            <ul>
+                                <li>The complete list is available in the Measurement perspective -
+					make sure you are at the root of the
+					"Drill-down" in the top-left, and do not select any items in the pie.</li>
+                                <li>You can integrate the generation of this summary into your build
+					process. See help for details.</li>
+                            </ul>
+                        </small></td>
+                </tr>
+            </table>
+        </div>
+        <div id="copyright">
+            <p>
+                <small>
+							Created by
+							<a href="fx_https://structure101.com/products/studio">Structure101 Studio 5</a>
+							(Build no.
+							15458
+							)
+						</small>
+            </p>
+        </div>
+    </body>
+</html>
