@@ -63,6 +63,8 @@ with all elements explosed, all dependencies, NO tangles; and report it here as 
 ```
 <img src="../Structure101/Levellized structure map.png"/>
 <img src="../Structure101/StructuralOverComplexityChart.png"/>
+<img src="../Structure101/DependencyGraph.png"/>
+
 # Summary analysis
 ```
 <Discuss here main differences of the current structure of your project vs the design delivered on April 30>
@@ -72,9 +74,11 @@ We have decided to remove the follwing 3 classes:
 - CreditCardSystem = It was not needed anymore, since interfacing with a file .txt is actually quite simple.
 - Position = since we do not need to track a list of positions from ezshop, it was superfluos.
 - LoyaltyCard = similar to position, we had not the necessity of track each LoyaltyCard by itself, since they actually only exist if associated to a customer.
+
 We have also added the following adapters:
 - SaleTransactionAdapter = needed in order to be able to extend both BalanceOperation and implement the SaleTransactionInterface.
 - OrderAdapter = needed in order to be able to extend both BalanceOperation and implement the OrderInterface.
+
 We have added 3 public methods in ezshop to support existing functionalities and to support persistency.
 - Integer assignId(in Set Integer ids)
 - boolean writejArrayToFile(in String filepath, in JSONArray jArr)
