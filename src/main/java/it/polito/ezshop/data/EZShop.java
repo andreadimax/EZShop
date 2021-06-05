@@ -896,6 +896,11 @@ public class EZShop implements EZShopInterface {
     }
 
     @Override
+    public boolean recordOrderArrivalRFID(Integer orderId, String RFIDfrom) throws InvalidOrderIdException, UnauthorizedException, 
+InvalidLocationException, InvalidRFIDException {
+        return false;
+    }
+    @Override
     public List<Order> getAllOrders() throws UnauthorizedException {
         //exception
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
@@ -1236,6 +1241,11 @@ public class EZShop implements EZShopInterface {
     }
 
     @Override
+    public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
+        return false;
+    }
+    
+    @Override
     public boolean deleteProductFromSale(Integer transactionId, String productCode, int amount) throws InvalidTransactionIdException, InvalidProductCodeException, InvalidQuantityException, UnauthorizedException {
         //exceptions
         if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
@@ -1275,6 +1285,11 @@ public class EZShop implements EZShopInterface {
         //Updating JSON File
         writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
         return true;
+    }
+
+    @Override
+    public boolean deleteProductFromSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
+        return false;
     }
 
     @Override
@@ -1549,6 +1564,13 @@ public class EZShop implements EZShopInterface {
 
         return true;
     }
+
+    @Override
+    public boolean returnProductRFID(Integer returnId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, UnauthorizedException 
+    {
+        return false;
+    }
+
 
     @Override
     public boolean endReturnTransaction(Integer returnId, boolean commit) throws InvalidTransactionIdException, UnauthorizedException {
