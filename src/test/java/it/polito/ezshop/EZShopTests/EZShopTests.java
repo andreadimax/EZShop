@@ -18,8 +18,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 import static java.lang.Math.abs;
 import static org.junit.Assert.*;
@@ -117,13 +115,8 @@ public class EZShopTests {
         //Reading data
         try {
             jArray = (JSONArray) parser.parse(new FileReader("./test.json"));
-        }
-        catch (FileNotFoundException f){
+        } catch (IOException | ParseException f){
             f.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
         //Checking...
@@ -267,86 +260,182 @@ public class EZShopTests {
 
     @ Test
     public void testRFIDsAPIs(){
-        /**
-         * recordOrderArrivalRFID()
-         * This method records the arrival of an order with given <orderId>. This method changes the quantity of available product.
-         * This method records each product received, with its RFID. RFIDs are recorded starting from RFIDfrom, in increments of 1
-         * ex recordOrderArrivalRFID(10, "000000001000")  where order 10 ordered 10 quantities of an item, this method records
-         * products with RFID 1000, 1001, 1002, 1003 etc until 1009
-         * The product type affected must have a location registered. The order should be either in the PAYED state (in this
-         * case the state will change to the COMPLETED one and the quantity of product type will be updated) or in the
-         * COMPLETED one (in this case this method will have no effect at all).
-         * It can be invoked only after a user with role "Administrator" or "ShopManager" is logged in.
-         *
-         * @param orderId the id of the order that has arrived
-         *
-         * @return  true if the operation was successful
-         *          false if the order does not exist or if it was not in an ORDERED/COMPLETED state
-         *
-         * @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
-         * @throws InvalidLocationException if the ordered product type has not an assigned location.
-         * @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
-         * @throws InvalidRFIDException if the RFID has invalid format or is not unique
+
+        try {
+            ez.login("daniele", "789");
+        }catch(Exception e){
+            fail(e + "");
+        }
+        // storing 1 product
+        int pid= 0;
+        try{
+            pid = ez.createProductType("description", "789657485759", 10, "note");
+            ez.updateQuantity(pid, 1000);
+            ez.updatePosition(pid, "673-fhsa-538");
+        }
+        catch(Exception e){
+            fail(e + "");
+        }
+
+        /*
+         * public boolean recordOrderArrivalRFID(Integer orderId, String RFIDfrom) throws InvalidOrderIdException, UnauthorizedException, InvalidLocationException, InvalidRFIDException)
          */
+        Integer oid=0;
+        Integer oid1=0;
+        ProductType p=null;
+        ProductType p1=null;
+
+        try{
+            oid = ez.issueOrder("789657485759",9,10);
+            ez.recordBalanceUpdate(100);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            // @return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
+            assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000"));
+            ez.recordOrderArrivalRFID(50, "0000000000");
+
+            assertTrue(ez.payOrder(oid));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            // @throws InvalidLocationException if the ordered product type has not an assigned location.
+            ez.updatePosition(pid, "");
+            assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000"));
+            ez.updatePosition(pid, "673-fhsa-538");
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            ez.logout();
+            Integer finalOid = oid;
+            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid, "0000000000"));
+            ez.login("marina blue", "abc");
+            Integer finalOid1 = oid;
+            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid1, "0000000000"));
+            // later i will test that with shopmanager and director it does not throw anything
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+            // @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(-1, "0000000000"));
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(null, "0000000000"));
+
+        try{
+            // @throws InvalidRFIDException if the RFID has invalid format
+            ez.login("damiana diamond", "abc");
+            Integer finalOid2 = oid;
+            assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid2, "000000a000"));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try{
+            // @return  true if the operation was successful, verifies also that shopmanager is authorized
+            assertTrue(ez.recordOrderArrivalRFID(oid, "0000000000"));
+
+            // verify that quantity of product has changed
+            p = ez.getProductTypeByBarCode("789657485750");
+            assertEquals( (Integer) 9, p.getQuantity());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        try{
+            // making a second order
+            ez.login("daniele", "789");
+            ez.recordBalanceUpdate(100);
+            oid1 = ez.payOrderFor("789657485750",9,10);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
 
-        /**
-         * public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException;
-         * This method adds a product to a sale transaction receiving  its RFID, decreasing the temporary amount of product available on the
-         * shelves for other customers.
-         * It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
-         *
-         * @param transactionId the id of the Sale transaction
-         * @param RFID the RFID of the product to be added
-         * @return  true if the operation is successful
-         *          false   if the RFID does not exist,
-         *                  if the transaction id does not identify a started and open transaction.
-         *
-         * @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
-         * @throws InvalidRFIDException if the RFID code is empty, null or invalid
-         * @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+            // @throws InvalidRFIDException if the RFIDis not unique
+        Integer finalOid3 = oid1;
+        assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid3, "0000000008"));
+
+
+        try{
+            // @return  true if the operation was successful, verifies also that director is authorized
+            assertTrue(ez.recordOrderArrivalRFID(oid1, "0000000000"));
+
+            // verify that quantity of product has changed
+            p1 = ez.getProductTypeByBarCode("789657485750");
+            assertEquals( (Integer) 9, p1.getQuantity());
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        /*
+         * public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException)
          */
+        Integer sid=null;
+        try{
+              sid = ez.startSaleTransaction();
+              ez.addProductToSale(sid, "789657485759", 5);
+              ez.endSaleTransaction(sid);
+              ez.receiveCashPayment(sid,500);
+              // @param transactionId the id of the Sale transaction
+              // @param RFID the RFID of the product to be added
+              // @return  true if the operation is successful
+              // @return  false   if the RFID does not exist,
+              // @return  false   if the transaction id does not identify a started and open transaction.
+              // @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
+              // @throws InvalidRFIDException if the RFID code is empty, null or invalid
+              // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }
+        catch(Exception e){
+              fail(e + "");
+        }
 
-
-        /**
+        /*
          * public boolean deleteProductFromSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException;
-         * This method deletes a product from a sale transaction , receiving its RFID, increasing the temporary amount of product available on the
-         * shelves for other customers.
-         * It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
-         *
-         * @param transactionId the id of the Sale transaction
-         * @param RFID the RFID of the product to be deleted
-         *
-         * @return  true if the operation is successful
-         *          false   if the product code does not exist,
-         *                  if the transaction id does not identify a started and open transaction.
-         *
-         * @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
-         * @throws InvalidRFIDException if the RFID is empty, null or invalid
-         * @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
          */
+        try{
+            // @return  true if the operation is successful
+            // @return  false   if the product code does not exist,
+            // @return  if the transaction id does not identify a started and open transaction.
+            // @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
+            // @throws InvalidRFIDException if the RFID is empty, null or invalid
+            // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        }
+        catch(Exception e){
+            fail(e + "");
+        }
 
-        /**
-         * public boolean returnProductRFID(Integer returnId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, UnauthorizedException;
-         *
-         * This method adds a product to the return transaction, starting from its RFID
-         * This method DOES NOT update the product quantity
-         * It can be invoked only after a user with role "Administrator", "ShopManager" or "Cashier" is logged in.
-         *
-         * @param returnId the id of the return transaction
-         * @param RFID the RFID of the product to be returned
-         *
-         * @return  true if the operation is successful
-         *          false   if the the product to be returned does not exists,
-         *                  if it was not in the transaction,
-         *                  if the transaction does not exist
-         *
-         * @throws InvalidTransactionIdException if the return id is less ther or equal to 0 or if it is null
-         * @throws InvalidRFIDException if the RFID is empty, null or invalid
-         * @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
+        /*
+         * public boolean returnProductRFID(Integer returnId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, UnauthorizedException)
          */
-
-
+        try{
+            Integer rid = ez.startReturnTransaction(sid);
+            ez.returnCashPayment(rid);
+            ez.endReturnTransaction(rid, true);
+            ez.returnProductRFID(2,"dfjfkls");
+            // this method should not update the product quantity
+            // @return  true if the operation is successful
+            // @return  false if the the product to be returned does not exists,
+            // @return  false if it was not in the transaction,
+            // @return  false if the transaction does not exist
+            // @throws InvalidTransactionIdException if the return id is less ther or equal to 0 or if it is null
+            // @throws InvalidRFIDException if the RFID is empty, null or invalid
+            // @throws UnauthorizedException if there is no logged user, for any other logged user it works
+        }
+        catch(Exception e){
+            fail(e + "");
+        }
     }
     @Test
     public void testOrderAPIs(){
