@@ -293,11 +293,11 @@ public class EZShopTests {
             e.printStackTrace();
         }
         try{
-            // @return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
-            assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000"));
-            ez.recordOrderArrivalRFID(50, "0000000000");
-
             assertTrue(ez.payOrder(oid));
+            // @return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
+            assertTrue(ez.recordOrderArrivalRFID(oid, "0000000000"));
+            assertFalse(ez.recordOrderArrivalRFID(50, "0000000000"));
+
         }
         catch(Exception e){
             e.printStackTrace();
@@ -355,7 +355,7 @@ public class EZShopTests {
             // making a second order
             ez.login("daniele", "789");
             ez.recordBalanceUpdate(100);
-            oid1 = ez.payOrderFor("789657485750",9,10);
+            oid1 = ez.payOrderFor("789657485759",9,10);
         }
         catch(Exception e){
             e.printStackTrace();

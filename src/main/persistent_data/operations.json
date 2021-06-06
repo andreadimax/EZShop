@@ -1,1 +1,1 @@
-[]
+[{"date":"2021-06-06","productCode":"789657485759","quantity":"9","money":"-90.0","description":"Order","balanceId":"1","pricePerUnit":"10.0","status":"COMPLETED"},{"date":"2021-06-06","money":"100.0","description":"Credit","balanceId":"2"},{"date":"2021-06-06","money":"100.0","description":"Credit","balanceId":"3"},{"date":"2021-06-06","productCode":"789657485759","quantity":"9","money":"-90.0","description":"Order","balanceId":"4","pricePerUnit":"10.0","status":"PAYED"}]

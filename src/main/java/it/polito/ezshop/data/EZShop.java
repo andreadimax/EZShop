@@ -35,6 +35,10 @@ public class EZShop implements EZShopInterface {
     private HashMap<Integer, ProductType> productMap;
     private JSONArray jArrayProduct;
     private FileReader productsFile;
+    //rfids
+    private HashMap<String,Integer> rfidMap;
+    private JSONArray jArrayRfid;
+    //accountbook (balance operations and subclasses)
     private AccountBook accountBook;
     //Customers
     private HashMap<Integer, Customer>  customersMap;
@@ -67,12 +71,13 @@ public class EZShop implements EZShopInterface {
         this.accountBook = new AccountBook();                                   //Account book object
         this.users_data = new HashMap<>();                         //Users
         this.customersMap = new HashMap<>();                   //Customers
+        this.rfidMap = new HashMap<>();                     //rfid to productId associations
 
 
         jArrayProduct=initializeMap(new Init("src/main/persistent_data/productTypes.json", productMap, "product"));
         jArrayUsers=initializeMap(new Init("src/main/persistent_data/users.json", users_data,"user"));
         jArrayCustomers=initializeMap(new Init("src/main/persistent_data/customers.json", customersMap,"customer"));
-
+        jArrayRfid=initializeMap(new Init("src/main/persistent_data/productRfids.json",rfidMap,"rfid"));
 
     }
 //-------------------------Start of our custom FUNCTIONS-------------------
@@ -269,6 +274,17 @@ public class EZShop implements EZShopInterface {
                 System.out.println(customersMap.size());
                 break;
             }
+            case "rfid": {
+
+                //Get RFID string of the product instance
+                String rfid = (String) obj.get("rfid");
+
+                //Get ProductID
+                Integer id = Integer.parseInt((String) obj.get("id"));
+
+                this.rfidMap.put(rfid,id);
+                break;
+            }
         }
 
 
@@ -339,6 +355,10 @@ public class EZShop implements EZShopInterface {
         this.users_data.clear();
         this.jArrayUsers.clear();
         writejArrayToFile("src/main/persistent_data/users.json",jArrayUsers);
+        //clearing all the rfids
+        this.rfidMap.clear();
+        this.jArrayRfid.clear();
+        writejArrayToFile("src/main/persistent_data/productRfids.json",jArrayRfid);
     }
 
     @Override
@@ -898,7 +918,58 @@ public class EZShop implements EZShopInterface {
     @Override
     public boolean recordOrderArrivalRFID(Integer orderId, String RFIDfrom) throws InvalidOrderIdException, UnauthorizedException, 
 InvalidLocationException, InvalidRFIDException {
-        return false;
+        //exceptions and false returns
+        if(orderId == null || orderId <= 0){ throw new InvalidOrderIdException();}
+        if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
+        ){throw new UnauthorizedException();}
+
+        if(RFIDfrom.length() != 10 || !RFIDfrom.matches("[0-9]{10}")){ throw new InvalidRFIDException();}
+
+        //making sure the order exists, has an existing location assigned and is in
+        if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
+        OrderImpl order = (OrderImpl) accountBook.getOperation(orderId);
+        if(order == null){
+            System.out.println("RETRIEVED ORDER IS NULL");
+            return false;
+        }
+
+        //verify rfids are not already present in the database.
+        String rfidString;
+        Long rfid = Long.parseLong(RFIDfrom);
+        for(int i=0; i<order.getQuantity(); i++){
+            rfidString = String.format("%010d",rfid + i);
+            if(rfidMap.containsKey(rfidString)){
+                System.out.println("RFID "+rfidString+" already present in Database!!");
+                throw new InvalidRFIDException();
+            }
+        }
+
+        ProductType product = productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(order.getProductCode())).findFirst().get();
+        if(product.getLocation() == null || product.getLocation().equals("")){ throw new InvalidLocationException(); }
+
+        //returning false if order was not in a ORDERED (ISSUED) / COMPLETED state
+        if(!order.getStatus().equals("ORDERED") && !order.getStatus().equals("ISSUED") && !order.getStatus().equals("COMPLETED") && !order.getStatus().equals("PAYED") ){
+            return false;
+        }
+
+        //CALL TO recordOrderArrival API method
+        if(!recordOrderArrival(orderId)){ return false; }
+
+        //Adding the RFIDS to the Database (json array and map)
+        JSONObject tmp;
+        Integer pID = product.getId();
+        for(int i=0; i<order.getQuantity(); i++){
+            rfidString = String.format("%010d",rfid + i);
+            rfidMap.put(rfidString,pID);
+            tmp = new JSONObject();
+            tmp.put("rfid",rfidString);
+            tmp.put("id",pID.toString());
+            jArrayRfid.add(tmp);
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productRfids.json", jArrayRfid);
+
+        return true;
     }
     @Override
     public List<Order> getAllOrders() throws UnauthorizedException {
