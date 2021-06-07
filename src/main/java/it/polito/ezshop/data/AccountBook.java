@@ -111,8 +111,18 @@ public class AccountBook {
             List<TicketEntry> entries = new ArrayList<>();
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
+            //JSON array to iterate over RFIDS of sold products "rfids"
+            JSONArray jRfids = (JSONArray) x.get("rfids");
+            if(jRfids==null){
+                jRfids = new JSONArray();
+                jRfids.clear();
+            }
+            //loading RIFDS list of the sale transaction
+            ArrayList<ProductRfid> rfids = new ArrayList<>();
+            jRfids.forEach(e -> addRfid(rfids, (JSONObject) e));
+
             //building saleTransaction with the full constructor
-            SaleTransactionImplementation sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries);
+            SaleTransactionImplementation sale = new SaleTransactionImplementation(balanceId,description,money,date,discountRate,status,entries,rfids);
             //adding the sale transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId, sale);
@@ -164,6 +174,17 @@ public class AccountBook {
     }
 
     /**
+     * used to simplify rfids load of sale and return transactions,
+     * parses the ProductRfid fields and adds it to the list of rfids
+     */
+    private void addRfid( ArrayList<ProductRfid> rfids, JSONObject rfid){
+        //parsing the productRfids fields and building it
+        String RFID = (String) rfid.get("rfid");
+        Integer pId = Integer.parseInt((String) rfid.get("pId"));
+        ProductRfid pRFID = new ProductRfid(RFID,pId);
+        rfids.add(pRFID);
+    }
+    /**
      *  this method also updates the Json array but not the file!
      * @param NewOp The balanceOperation object to add to the map of operations
      * @return false if operation was already present, true if it's added.
@@ -211,6 +232,20 @@ public class AccountBook {
                 jEntries.add(jEntry);
             }
             joperation.put("entries",jEntries);
+            //section to load the JSONArray rfids
+            JSONArray jRfids = new JSONArray();
+            JSONObject jRfid;
+            if(sale.rfids != null) {
+                for (int i = 0; i < sale.rfids.size(); i++) {
+                    jRfid = new JSONObject();
+                    String rfid = sale.rfids.get(i).RFID;
+                    Integer pId = sale.rfids.get(i).productId;
+                    jRfid.put("rfid",rfid);
+                    jRfid.put("pId",pId.toString());
+                    jRfids.add(jRfid);
+                }
+            }
+            joperation.put("rfids",jRfids);
         }
         else if(NewOp instanceof ReturnTransaction){
             ReturnTransaction retTrans = (ReturnTransaction) NewOp;
