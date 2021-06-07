@@ -269,10 +269,13 @@ public class EZShopTests {
         }
         // storing 1 product
         int pid= 0;
+        int pid1=0;
         try{
-            pid = ez.createProductType("description", "789657485759", 10, "note");
-            ez.updateQuantity(pid, 1000);
+            pid = ez.createProductType("description", "1234324534531", 10, "note");
+            //ez.updateQuantity(pid, 1000);
+            pid1 = ez.createProductType("description", "2837948739840", 10, "note");
             ez.updatePosition(pid, "673-fhsa-538");
+            ez.updatePosition(pid1, "673-fhba-538");
         }
         catch(Exception e){
             e.printStackTrace();
@@ -288,7 +291,7 @@ public class EZShopTests {
         ProductType p1=null;
 
         try{
-            oid = ez.issueOrder("789657485759",9,10);
+            oid = ez.issueOrder("1234324534531",9,10);
             ez.recordBalanceUpdate(100);
         }
         catch(Exception e){
@@ -296,10 +299,10 @@ public class EZShopTests {
             fail("test failed");
         }
         try{
-            assertTrue(ez.payOrder(oid));
             // @return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
-            assertTrue(ez.recordOrderArrivalRFID(oid, "0000000000"));
-            assertFalse(ez.recordOrderArrivalRFID(50, "0000000000"));
+            //assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000")); // oid is not yet ordered or completed
+            assertTrue(ez.payOrder(oid)); // now it is payed
+            assertFalse(ez.recordOrderArrivalRFID(50, "0000000000")); // order 50 doesn't exist
 
         }
         catch(Exception e){
@@ -308,9 +311,10 @@ public class EZShopTests {
         }
         try{
             // @throws InvalidLocationException if the ordered product type has not an assigned location.
-            ez.updatePosition(pid, "");
-            assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000"));
-            ez.updatePosition(pid, "673-fhsa-538");
+            ez.updatePosition(pid, ""); // set position to null
+            Integer finalOid4 = oid;
+            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrivalRFID(finalOid4, "0000000000"));
+            ez.updatePosition(pid, "673-fhsa-538"); // reinsert the correct position
         }
         catch(Exception e){
             e.printStackTrace();
@@ -352,7 +356,7 @@ public class EZShopTests {
             assertTrue(ez.recordOrderArrivalRFID(oid, "0000000000"));
 
             // verify that quantity of product has changed
-            p = ez.getProductTypeByBarCode("789657485750");
+            p = ez.getProductTypeByBarCode("1234324534531");
             assertEquals( (Integer) 9, p.getQuantity());
         }
         catch(Exception e){
@@ -363,7 +367,7 @@ public class EZShopTests {
             // making a second order
             ez.login("daniele", "789");
             ez.recordBalanceUpdate(100);
-            oid1 = ez.payOrderFor("789657485759",9,10);
+            oid1 = ez.payOrderFor("2837948739840",9,10);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -378,10 +382,10 @@ public class EZShopTests {
 
         try{
             // @return  true if the operation was successful, verifies also that director is authorized
-            assertTrue(ez.recordOrderArrivalRFID(oid1, "0000000000"));
+            assertTrue(ez.recordOrderArrivalRFID(oid1, "0000000009"));
 
             // verify that quantity of product has changed
-            p1 = ez.getProductTypeByBarCode("789657485750");
+            p1 = ez.getProductTypeByBarCode("2837948739840");
             assertEquals( (Integer) 9, p1.getQuantity());
         }
         catch(Exception e){
@@ -393,6 +397,9 @@ public class EZShopTests {
         /*
          * public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException)
          */
+        // SITUATION:
+        // we have 2 products in inventory, p and p1, both have quantity 9
+        // p goes from 0 to 8 in RFID, p1 is in range [..009, ...0017]
         Integer sid=null;
         Integer sid1=null;
         try{
