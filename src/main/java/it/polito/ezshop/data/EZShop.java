@@ -1313,7 +1313,19 @@ InvalidLocationException, InvalidRFIDException {
 
     @Override
     public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
-        return false;
+        if(transactionId==null || transactionId<=0)throw new InvalidTransactionIdException();
+        if(RFID == null || "".equals(RFID) || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(userLogged == null )throw new UnauthorizedException();
+
+        // return false if the rfid does not exist
+        /* needs to be implemented */
+
+        // return false if the transaction id does not identify an open transaction and started transaction
+        SaleTransactionImplementation s = null;
+        SaleTransaction st = getSaleTransaction(transactionId);
+        if(st instanceof SaleTransactionImplementation) s=(SaleTransactionImplementation) st;
+        else return false;
+        return !"CLOSED".equals(s.getStatus());
     }
     
     @Override
