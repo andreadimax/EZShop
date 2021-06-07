@@ -401,19 +401,17 @@ public class EZShopTests {
         // we have 2 products in inventory, p and p1, both have quantity 9
         // p goes from 0 to 8 in RFID, p1 is in range [..009, ...0017]
         Integer sid=null;
-        Integer sid1=null;
+        Integer sid1 = null;
         try{
-              sid1 = ez.startSaleTransaction();
+                p = ez.getProductTypeByBarCode("1234324534531");
+                p1 = ez.getProductTypeByBarCode("2837948739840");
               sid = ez.startSaleTransaction();
             // @return  true if the operation is successful
               assertTrue(ez.addProductToSaleRFID(sid, "0000000008")); // 8 is the last RFID value for p, the operation is successful
 
             // checking that the quantity of p1 has decreased
-            assert p1 != null;
-            assertEquals((Integer)8,p1.getQuantity());
+            assertEquals((Integer)8,p.getQuantity());
 
-              // verify that if an rfid is already in an ongoing transaction, cannot be added to another one
-              assertFalse(ez.addProductToSaleRFID(sid1, "0000000008")); // 8 has already been given to sid, it cannot be given to sid1 at the same time
 
 
               // @return  false   if the RFID does not exist,
@@ -423,9 +421,9 @@ public class EZShopTests {
             // @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
             assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(0, "0000000016"));
             assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(-1, "0000000016"));
-            assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(1, "0000000016"));
+            assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(null, "0000000016"));
             // @throws InvalidRFIDException if the RFID code is empty, null or invalid
-            Integer finalSid = sid1;
+            Integer finalSid = sid;
             assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, ""));
             assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, null));
             assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, "00000a0000"));
@@ -436,7 +434,7 @@ public class EZShopTests {
             assertTrue(ez.addProductToSaleRFID(finalSid, "0000000017")); // this should be the last product to which we added the rfid
 
             // checking that the quantity of p1 has decreased
-            assertEquals((Integer)8,p.getQuantity());
+            assertEquals((Integer)8,p1.getQuantity());
 
             ez.login("damiana diamond", "abc");
             assertTrue(ez.addProductToSaleRFID(finalSid, "0000000016"));
@@ -475,6 +473,8 @@ public class EZShopTests {
         // sid1 is open with product RFIDs 17,16,15
         // in this test we remove the 3 products from sid1 using the 3 user roles
         try{
+
+            sid1 = ez.startSaleTransaction();
             // here we use sid1, which comes from the previous test
 
             // @return  false   if the "product code" does not exist(they mean RFID here)
@@ -491,8 +491,8 @@ public class EZShopTests {
             // @throws InvalidRFIDException if the RFID is empty, null or invalid
             Integer finalSid1 = sid1;
             assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, ""));
-            assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, null));
-            assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "0a00000016"));
+            assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, null));
+            assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "0a00000016"));
 
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
             ez.logout();

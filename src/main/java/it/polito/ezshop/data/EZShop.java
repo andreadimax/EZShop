@@ -671,7 +671,7 @@ public class EZShop implements EZShopInterface {
         }
         if(!barcodeIsValid(barCode)) throw new InvalidProductCodeException();
         try{
-            return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().map( p -> (ProductType)new ProductTypeImplementation(p)).get();
+            return productMap.values().stream().filter(p -> p.getProductDescription()!=null && p.getBarCode().equals(barCode)).findFirst().get();
         }catch(Exception e){
             return null;
         }
@@ -1314,18 +1314,55 @@ InvalidLocationException, InvalidRFIDException {
     @Override
     public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
         if(transactionId==null || transactionId<=0)throw new InvalidTransactionIdException();
-        if(RFID == null || "".equals(RFID) || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
         if(userLogged == null )throw new UnauthorizedException();
 
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
         // return false if the rfid does not exist
-        /* needs to be implemented */
+        if(!this.rfidMap.containsKey(RFID)){
+            System.out.println("RFID: " + RFID + " non present in the system");
+            return false;
+        }
 
         // return false if the transaction id does not identify an open transaction and started transaction
-        SaleTransactionImplementation s = null;
-        SaleTransaction st = getSaleTransaction(transactionId);
-        if(st instanceof SaleTransactionImplementation) s=(SaleTransactionImplementation) st;
-        else return false;
-        return !"CLOSED".equals(s.getStatus());
+        if(this.ongoingSale == null || transactionId != this.ongoingSale.getBalanceId()){return false;}
+
+        //if product already in sale, update quantity, otherwise, create the new Ticket Entry
+        ProductType product = (productMap.get(rfidMap.get(RFID)));
+        String productCode = product.getBarCode();
+        TicketEntry entry;
+        if(ongoingSale.getEntries().stream().anyMatch( e -> e.getBarCode().equals(productCode))){
+            entry = ongoingSale.getEntries().stream()
+                    .filter( e-> e.getBarCode().equals(productCode))
+                    .findFirst().get();
+            entry.setAmount( entry.getAmount()+1);
+            System.out.println("Adding 1 item of product: " + productCode +" to already existing entry");
+        }
+        else{
+            entry = new TicketEntryImpl(product.getBarCode(),product.getProductDescription(),1,product.getPricePerUnit(),0.0);
+            ongoingSale.entries.add(entry);
+            System.out.println("Generated a new entry");
+        }
+
+        //updating the quantity available of the product on the shelves
+        product.setQuantity(product.getQuantity() - 1);
+        //Updating JSON Object in the ProductType JSON Array
+        JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("barCode")).equals(productCode) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
+
+        return true;
+
     }
     
     @Override
@@ -1372,7 +1409,42 @@ InvalidLocationException, InvalidRFIDException {
 
     @Override
     public boolean deleteProductFromSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
-        return false;
+        //exceptions
+        if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(!this.rfidMap.containsKey(RFID)){
+            System.out.println("RFID: " + RFID + " non present in the system");
+            return false;
+        }
+        ProductType product = (productMap.get(rfidMap.get(RFID)));
+        String productCode = product.getBarCode();
+        if(userLogged == null){throw new UnauthorizedException();}
+
+        //false returns
+        if(transactionId != this.ongoingSale.getBalanceId()){return false;}
+        //false for non existent product code
+        if(productMap.values().stream().noneMatch(p -> p.getBarCode().equals(productCode))){return false;}
+
+        TicketEntry entry = ongoingSale.getEntries().stream().filter(e -> e.getBarCode().equals(productCode)).findFirst().get();
+        //updating the product quantity of the relative entry
+        entry.setAmount(entry.getAmount() + 1);
+
+        //updating the quantity available of the product on the shelves
+        product.setQuantity(product.getQuantity() + 1);
+        //Updating JSON Object in the ProductType JSON Array
+        JSONObject tmp;
+        if (this.jArrayProduct != null) {
+            for (int i=0;i<this.jArrayProduct.size();i++){
+                tmp = (JSONObject) this.jArrayProduct.get(i);
+                if( ((String)tmp.get("barCode")).equals(productCode) ){
+                    tmp.put("availableQty",product.getQuantity().toString());
+                }
+            }
+        }
+        //Updating JSON File
+        writejArrayToFile("src/main/persistent_data/productTypes.json", jArrayProduct);
+        return true;
+
     }
 
     @Override
