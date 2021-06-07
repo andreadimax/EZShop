@@ -264,7 +264,8 @@ public class EZShopTests {
         try {
             ez.login("daniele", "789");
         }catch(Exception e){
-            fail(e + "");
+            e.printStackTrace();
+            fail("test failed");
         }
         // storing 1 product
         int pid= 0;
@@ -274,7 +275,8 @@ public class EZShopTests {
             ez.updatePosition(pid, "673-fhsa-538");
         }
         catch(Exception e){
-            fail(e + "");
+            e.printStackTrace();
+            fail("test failed");
         }
 
         /*
@@ -291,6 +293,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
         try{
             assertTrue(ez.payOrder(oid));
@@ -301,6 +304,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
         try{
             // @throws InvalidLocationException if the ordered product type has not an assigned location.
@@ -310,6 +314,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
         try{
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
@@ -323,6 +328,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
 
             // @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
@@ -338,6 +344,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
 
         try{
@@ -350,6 +357,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
         try{
             // making a second order
@@ -359,6 +367,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
 
 
@@ -377,6 +386,7 @@ public class EZShopTests {
         }
         catch(Exception e){
             e.printStackTrace();
+            fail("test failed");
         }
 
 
@@ -446,7 +456,8 @@ public class EZShopTests {
             ez.receiveCashPayment(sid,500);
         }
         catch(Exception e){
-              fail(e + "");
+            e.printStackTrace();
+            fail("test failed");
         }
 
         /*
@@ -497,7 +508,8 @@ public class EZShopTests {
 
         }
         catch(Exception e){
-            fail(e + "");
+            e.printStackTrace();
+            fail("test failed");
         }
 
         /*
@@ -549,7 +561,8 @@ public class EZShopTests {
 
         }
         catch(Exception e){
-            fail(e + "");
+            e.printStackTrace();
+            fail("test failed");
         }
     }
     @Test
