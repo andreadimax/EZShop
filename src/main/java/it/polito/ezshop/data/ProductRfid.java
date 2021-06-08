@@ -1,8 +1,8 @@
 package it.polito.ezshop.data;
 
 public class ProductRfid {
-    String RFID;
-    Integer productId;
+    public String RFID;
+    public Integer productId;
 
     public ProductRfid(String RFID, Integer productId){
         this.productId = productId;

@@ -28,7 +28,8 @@ Architectural pattern: 3 tier layer with Model View Controller
 
 # Low level design
 
-<img src="../pictures/low_level_design.jpg">
+
+<img src="../pictures/UpdatedDesignAfterRfid.png">
 
 
 # Verification traceability matrix
