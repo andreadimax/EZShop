@@ -132,16 +132,18 @@ stimpl --> teimpl
 
    
 
-| Classes                                                      | JUnit test cases                                             |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| UserImplementation + EZShop                                  | EZShopTests/EZShopTests - testUserAPIs                       |
-| ProductTypeImpl + EZShop                                     | EZShopTests/EZShopTests - testProductTypeAPIs                |
-| CustomerImplementation + EZShop                              | EZShopTests/EZShopTests - testCustomerAPIs                   |
-| SaleTransactionImplementation + SaleTransactionAdapter + EZShop | EZShopTests/EZShopTests - testSaleTransactionAPIs            |
-| OrderImpl + OrderAdapter + EZShop                            | EZShopTests/EZShopTests - testOrderAPIs                      |
-| EZShop                                                       | EZShopTests/EZShopTests - testResetAPI<br />EZShopTests/EZShopTests - testAssignId<br />EZShopTests/EZShopTests - testBarcodeIsValid<br />EZShopTests/EZShopTests - testWriteJarrayToFIle<br />EZShopTests/EZShopTests - testValidateCard |
-| EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs             |
-| EZShop + receiveCreditCardPayment, receiveCashPayment, returnCreditCardPayment, returnCashPayment | EZShopTests/EZShopTests - testPaymentAPIs                    |
+| Classes                                                                                              | JUnit test cases                                                                                                                                                                                                                          |
+| ------------------------------------------------------------                                         | ------------------------------------------------------------                                                                                                                                                                              |
+| UserImplementation + EZShop                                                                          | EZShopTests/EZShopTests - testUserAPIs                                                                                                                                                                                                    |
+| ProductTypeImpl + EZShop                                                                             | EZShopTests/EZShopTests - testProductTypeAPIs                                                                                                                                                                                             |
+| CustomerImplementation + EZShop                                                                      | EZShopTests/EZShopTests - testCustomerAPIs                                                                                                                                                                                                |
+| SaleTransactionImplementation + SaleTransactionAdapter + EZShop                                      | EZShopTests/EZShopTests - testSaleTransactionAPIs                                                                                                                                                                                         |
+| OrderImpl + OrderAdapter + EZShop                                                                    | EZShopTests/EZShopTests - testOrderAPIs                                                                                                                                                                                                   |
+| EZShop                                                                                               | EZShopTests/EZShopTests - testResetAPI<br />EZShopTests/EZShopTests - testAssignId<br />EZShopTests/EZShopTests - testBarcodeIsValid<br />EZShopTests/EZShopTests - testWriteJarrayToFIle<br />EZShopTests/EZShopTests - testValidateCard |
+| EZShop + Accountbook + OrderAdapter + Order + SaleTransactionAdapter + SaleTransaction + ticketEntry | EZShopTests/EZShopTests - testBalanceRelatedAPIs                                                                                                                                                                                          |
+| EZShop + receiveCreditCardPayment, receiveCashPayment, returnCreditCardPayment, returnCashPayment    | EZShopTests/EZShopTests - testPaymentAPIs                                                                                                                                                                                                 |
+|  EZShop + returnTransaction + SaleTransactionImplementation + ProductRfid + ProductType + BalanceOperation + TicketEntry + Order + Accountbook | EZShopTests/EZShopTests - testRFIDsAPIs                                                                                                                                                                                                   |
+
 
 
 # Scenarios
@@ -149,17 +151,67 @@ stimpl --> teimpl
 <If needed, define here additional scenarios for the application. Scenarios should be named
  referring the UC in the OfficialRequirements that they detail>
 
-## Scenario UCx.y
+## Scenario 3.4 UC 3
 
-| Scenario       | name            |
-| -------------  | :-------------: |
-| Precondition   |                 |
-| Post condition |                 |
-| Step#          | Description     |
-| 1              | ...             |
-| 2              | ...             |
+|       Scenario | Reception of an order Rfid                                         |
+|  ------------- | :-------------:                                                    |
+|   Precondition | User logged as ShopManager                                         |
+|                | Product X exists                                                   |
+|                | X.location is valid                                                |
+|                | RfidFrom must be in a valid format                                 |
+| Post condition | Products have been recorded in the system along with their Rfid    |
+|                | X.units += O.units                                                 |
+|                | Order is in completed state                                        |
+|          Step# |                                                                    |
+|              1 | O arrives to the shop                                              |
+|              2 | S records O arrival in the system                                  |
+|              3 | The system updates X available quantity                            |
+|              4 | The system Records the Rfids of the products according to RfidFrom |
+|              5 | O is updated in the system in COMPLETED state                      |
 
+## Scenario 6.7 UC 6
 
+|       Scenario | Sale of product X completed                 |
+|  ------------- | :-------------:                                 |
+|   Precondition | Cashier C exists and is logged in               |
+|                | Product type X exists and it's available        |
+| Post condition | Balance += X.unitPrice                          |
+|                | X.quantity -= 1                                 |
+|                | Rfid is not present in the system anymore       |
+|          Step# |                                                 |
+|              1 | C starts a new sale transaction                 |
+|              2 | C reads Rfid of X                               |
+|              3 | C adds 1 unit of X to the sale                  |
+|              4 | X available quantity is decreased by 1          |
+|              5 | C closes the sale transaction                   |
+|              6 | System asks payment type                        |
+|              7 | Manage  payment (see UC7)                       |
+|              8 | Payment successful                              |
+|              9 | C confirms the sale and prints the sale receipt |
+|             10 | Balance is updated                              |
+
+## Scenario 8.3 UC 8
+
+|       Scenario | Return transaction of product X completed, credit card |
+|  ------------- | :-------------:                                        |
+|   Precondition | Cashier C exists and is logged in                      |
+|                | Product Type X exists                                  |
+|                | Transaction T exists and has at least N units of X     |
+|                | Transaction T was paid with credit card                |
+|                | Product X has Rfid R                                   |
+| Post condition | Balance -= T.priceForProductX                          |
+|                | X.quantity += 1                                        |
+|                | Rfid is available again in the system                  |
+|          Step# | Description                                            |
+|              1 | C inserts T.transactionId                              |
+|              2 | Return transaction starts                              |
+|              3 | C reads rfid of X                                      |
+|              4 | C adds 1 unit of X to the return transaction           |
+|              5 | X available quantity is increased by 1                 |
+|              6 | Rfid is not taken anymore                              |
+|              7 | Manage credit card return  (go to UC 10 )              |
+|              8 | Return successful, C closes the return transaction     |
+|              9 | Balance is updated                                     |
 
 # Coverage of Scenarios and FR
 
@@ -180,7 +232,7 @@ Report also for each of the scenarios the (one or more) API JUnit tests that cov
 | 8.1 , 8.2                           | FR6.12 to FR6.15                        | EZShopTests/EZShopTests - testReturnTransactionAPIs |
 | 7.1 to 7.4                          | FR7.1 to FR7.4                          | EZShopTests/EZShopTests - testPaymentAPIs           |
 | 9.1                                 | all FR8 subrequirements                 | EZShopTests/EZShopTests - testBalanceRelatedAPIs    |
-|                                     |                                         |                                                     |
+|                                     |                                         | EZShopTests/EZShopTests - testRFIDsAPIs             |
 |                                     |                                         |                                                     |
 
 # Coverage of Non Functional Requirements
