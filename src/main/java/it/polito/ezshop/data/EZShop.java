@@ -1792,11 +1792,37 @@ InvalidLocationException, InvalidRFIDException {
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
 
-        //all the return false if RFID is not associated to any product id
-        Integer pid = rfidMap.get(RFID);
+
+        //check for the referenced saleTransaction (into the returnTransaction) existence
+        if(accountBook.getOperation(ongoingReturn.getSaleId()) == null){return false;}
+        SaleTransactionImplementation sale = ((SaleTransactionImplementation) accountBook.getOperation(ongoingReturn.getSaleId()));
+        //check if the rfid is present in the saleTransaction referenced from the returnSaleTransaction
+        if(sale.rfids.stream().noneMatch(r -> r.RFID.equals(RFID))){return false;}
+        ProductRfid pRfid = sale.rfids.stream().filter(r -> r.RFID.equals(RFID)).findFirst().get();
+
+        //return false if RFID is not associated to any product id
+        Integer pid = pRfid.productId;
         if(pid== null)return false;
         // return false if the transaction id does not identify an open transaction and started transaction
         if(this.ongoingReturn == null || returnId != this.ongoingReturn.getBalanceId()){return false;}
+        ProductType product = this.productMap.get(pid);
+        if(product == null){return false;} //false is productType does not exist in the system
+        String productCode = product.getBarCode();
+
+        try{
+            if(!returnProduct(returnId,productCode,1)){
+                return false;
+            }
+            else{
+                //if product has been added to sale, add the reference of the rfid in the sale to the return transaction
+                ongoingReturn.rfids.add(pRfid);
+            }
+        } catch(InvalidProductCodeException e){
+            System.out.println("Product Code of identified product is invalid!");
+        } catch(InvalidQuantityException e){
+            System.out.println("specified quantity is an invalid value <= 0!");
+        }
+
         //return false if the product is not present in the returntransaction
         /*
         if(ongoingReturn.rfids.stream().noneMatch( r -> r.RFID.equals(RFID))){return false;}
@@ -1864,6 +1890,29 @@ InvalidLocationException, InvalidRFIDException {
                 }
             }
         }
+
+        ArrayList<ProductRfid> saleRfids = sale.rfids;
+        ArrayList<ProductRfid> returnRfids = ongoingReturn.rfids;
+        if(saleRfids != null && returnRfids != null){
+            JSONObject tmp;
+            for(ProductRfid retRFID : returnRfids){
+                for(ProductRfid saleRFID : saleRfids){
+                    if(retRFID.RFID.equals(saleRFID.RFID)){
+                        saleRfids.remove(saleRFID);
+                        //Adding the RFIDS back to the Database (json array and map)
+                        rfidMap.put(retRFID.RFID,retRFID.productId);
+                        tmp = new JSONObject();
+                        tmp.put("rfid",retRFID.RFID);
+                        tmp.put("id",retRFID.productId);
+                        jArrayRfid.add(tmp);
+                    }
+                }
+            }
+            //Updating JSON File
+            writejArrayToFile("src/main/persistent_data/productRfids.json", jArrayRfid);
+
+        }
+
 
         //computing the money of the transaction
         Double totalMoney = saleEntries.stream()

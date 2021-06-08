@@ -139,8 +139,18 @@ public class AccountBook {
             List<TicketEntry> entries = new ArrayList<>();
             jEntries.forEach(e -> addEntry(entries, (JSONObject) e));
 
+            //JSON array to iterate over RFIDS of sold products "rfids"
+            JSONArray jRfids = (JSONArray) x.get("rfids");
+            if(jRfids==null){
+                jRfids = new JSONArray();
+                jRfids.clear();
+            }
+            //loading RIFDS list of the sale transaction
+            ArrayList<ProductRfid> rfids = new ArrayList<>();
+            jRfids.forEach(e -> addRfid(rfids, (JSONObject) e));
+
             //building returnTransaction with the full constructor
-            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries,saleDiscount);
+            ReturnTransaction retTrans = new ReturnTransaction(balanceId,description,money,date,saleId,status,entries,saleDiscount,rfids);
             //adding the Return Transaction back into the operationsMap checking for duplicates
             if(!this.operationsMap.containsKey(balanceId)){
                 this.operationsMap.put(balanceId,retTrans);
@@ -266,6 +276,20 @@ public class AccountBook {
                 jEntries.add(jEntry);
             }
             joperation.put("entries",jEntries);
+            //section to load the JSONArray rfids
+            JSONArray jRfids = new JSONArray();
+            JSONObject jRfid;
+            if(retTrans.rfids != null) {
+                for (int i = 0; i < retTrans.rfids.size(); i++) {
+                    jRfid = new JSONObject();
+                    String rfid = retTrans.rfids.get(i).RFID;
+                    Integer pId = retTrans.rfids.get(i).productId;
+                    jRfid.put("rfid",rfid);
+                    jRfid.put("pId",pId.toString());
+                    jRfids.add(jRfid);
+                }
+            }
+            joperation.put("rfids",jRfids);
         }
         else {
             //case where it's either a simple Debit or Credit operation
