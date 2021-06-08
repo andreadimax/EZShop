@@ -535,17 +535,17 @@ public class EZShopTests {
          * public boolean returnProductRFID(Integer returnId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, UnauthorizedException)
          */
         // SITUATION:
+        //sid1 is closed with no products in it
         // sid(=5) is closed with products RFIDs 6,7,8,15,16,17
         try{
             Integer rid = ez.startReturnTransaction(sid);
             ez.returnCashPayment(rid);
-            ez.endReturnTransaction(rid, true);
+            //ez.endReturnTransaction(rid, true);
 
 
             // @return  false if the the product to be returned does not exists,
             assertFalse(ez.returnProductRFID(rid,"0000000019")); // rfid never associated to any product
             // @return  false if it was not in the transaction,
-            assertFalse(ez.returnProductRFID(rid,"0000000015")); // rfid was in sid1 not in sid
             assertFalse(ez.returnProductRFID(rid,"0000000001")); // rfid is assigned to a product never sold, is on the shelf
             // @return  false if the transaction does not exist
             assertFalse(ez.returnProductRFID(50,"0000000008"));
