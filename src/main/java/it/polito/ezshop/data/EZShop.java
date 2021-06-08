@@ -1785,7 +1785,37 @@ InvalidLocationException, InvalidRFIDException {
     @Override
     public boolean returnProductRFID(Integer returnId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, UnauthorizedException 
     {
-        return false;
+        // Throwing all exceptions
+        if(returnId==null || returnId<=0 ) throw new InvalidTransactionIdException();
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(userLogged == null )throw new UnauthorizedException();
+        String role = userLogged.getRole();
+        if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}
+
+        //all the return false if RFID is not associated to any product id
+        Integer pid = rfidMap.get(RFID);
+        if(pid== null)return false;
+        // return false if the transaction id does not identify an open transaction and started transaction
+        if(this.ongoingReturn == null || returnId != this.ongoingReturn.getBalanceId()){return false;}
+        //return false if the product is not present in the returntransaction
+        /*
+        if(ongoingReturn.rfids.stream().noneMatch( r -> r.RFID.equals(RFID))){return false;}
+        Integer productId = ongoingReturn.rfids.stream()
+                .filter(r -> r.RFID.equals(RFID))
+                .map(r->r.productId).findFirst().get();
+
+        ProductType product = (productMap.get(productId));
+        String productCode = product.getBarCode();
+
+        try{
+            returnProduct(returnId,productCode,1);
+            updateQuantity(productId,-1); // we remove the returned item from the inventory
+        }
+        catch(Exception e){
+            return false; // not really sure if this is the right way to handle it
+        }
+        */
+        return true;
     }
 
 

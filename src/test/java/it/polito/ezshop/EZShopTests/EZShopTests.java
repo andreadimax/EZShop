@@ -563,7 +563,7 @@ public class EZShopTests {
 
             ez.login("marina blue", "abc");
             // @return  true if the operation is successful
-            assertTrue(ez.returnProductRFID(rid,"000000006")); // product we bought before in sid
+            assertTrue(ez.returnProductRFID(rid,"0000000006")); // product we bought before in sid
             // this method should not update the product quantity
             assertEquals((Integer)6,p.getQuantity());
 
