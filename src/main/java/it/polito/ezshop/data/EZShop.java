@@ -18,8 +18,6 @@ import java.math.*;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.nio.file.Files;
@@ -29,20 +27,19 @@ import java.nio.file.Paths;
 public class EZShop implements EZShopInterface {
     //users
     private User userLogged = null;
-    private HashMap<Integer, User> users_data;
-    private JSONArray jArrayUsers;
+    private final HashMap<Integer, User> users_data;
+    private final JSONArray jArrayUsers;
     //products
-    private HashMap<Integer, ProductType> productMap;
-    private JSONArray jArrayProduct;
-    private FileReader productsFile;
+    private final HashMap<Integer, ProductType> productMap;
+    private final JSONArray jArrayProduct;
     //rfids
-    private HashMap<String,Integer> rfidMap;
-    private JSONArray jArrayRfid;
+    private final HashMap<String,Integer> rfidMap;
+    private final JSONArray jArrayRfid;
     //accountbook (balance operations and subclasses)
-    private AccountBook accountBook;
+    private final AccountBook accountBook;
     //Customers
-    private HashMap<Integer, Customer>  customersMap;
-    private JSONArray jArrayCustomers;
+    private final HashMap<Integer, Customer>  customersMap;
+    private final JSONArray jArrayCustomers;
 
     //Opened sale transaction
     private SaleTransactionImplementation ongoingSale;
@@ -52,7 +49,7 @@ public class EZShop implements EZShopInterface {
 
 
     //Inner Class
-    private class Init{
+    private static class Init{
         String filename;
         HashMap map;
         FileReader file;
@@ -95,7 +92,7 @@ public class EZShop implements EZShopInterface {
      * checks barcode validity according to the algorithm specified
      * at: https://www.gs1.org/services/how-calculate-check-digit-manually
      * @param barcode the barcode to check, must be 12, 13 or 14 char
-     * @return
+     * @return true if barcode is valid, false if it is not
      */
     public static boolean barcodeIsValid(String barcode){
         if(barcode == null || barcode.isEmpty() || !barcode.matches("-?\\d+")){return false;}
@@ -157,11 +154,10 @@ public class EZShop implements EZShopInterface {
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         String strLine;
-        ArrayList<String> lines = new ArrayList<String>();
+        ArrayList<String> lines = new ArrayList<>();
         try {
             while ((strLine = reader.readLine()) != null) {
-                String lastWord = strLine;//.substring(strLine.lastIndexOf(" ") + 1);
-                lines.add(lastWord);
+                lines.add(strLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -424,7 +420,7 @@ public class EZShop implements EZShopInterface {
         //Checking if user exists...
         if(users_data.get(id) != null){
             //Deleting from JSON Array...
-            JSONObject user_obj = null;
+            JSONObject user_obj;
             for(int i = 0; i< jArrayUsers.size(); i++){
                 user_obj  = (JSONObject) jArrayUsers.get(i);
                 if(user_obj.get("id").equals(id.toString())){
@@ -434,12 +430,11 @@ public class EZShop implements EZShopInterface {
             //Deleting from map
             users_data.remove(id);
             //Updating JSON File
-            if(!writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers))return false;
+            return writejArrayToFile("src/main/persistent_data/users.json", jArrayUsers);
         }
         else {
             return false;
         }
-        return true;
     }
 
     @Override
