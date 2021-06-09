@@ -923,7 +923,7 @@ InvalidLocationException, InvalidRFIDException {
         if( this.userLogged == null || (!this.userLogged.getRole().equals("Administrator") && !this.userLogged.getRole().equals("ShopManager"))
         ){throw new UnauthorizedException();}
 
-        if(RFIDfrom.length() != 10 || !RFIDfrom.matches("[0-9]{10}")){ throw new InvalidRFIDException();}
+        if(RFIDfrom.length() != 12 || !RFIDfrom.matches("[0-9]{12}")){ throw new InvalidRFIDException();}
 
         //making sure the order exists, has an existing location assigned and is in
         if( !(accountBook.getOperation(orderId) instanceof OrderImpl) ){ return false; }
@@ -937,7 +937,7 @@ InvalidLocationException, InvalidRFIDException {
         String rfidString;
         Long rfid = Long.parseLong(RFIDfrom);
         for(int i=0; i<order.getQuantity(); i++){
-            rfidString = String.format("%010d",rfid + i);
+            rfidString = String.format("%012d",rfid + i);
             if(rfidMap.containsKey(rfidString)){
                 System.out.println("RFID "+rfidString+" already present in Database!!");
                 throw new InvalidRFIDException();
@@ -959,7 +959,7 @@ InvalidLocationException, InvalidRFIDException {
         JSONObject tmp;
         Integer pID = product.getId();
         for(int i=0; i<order.getQuantity(); i++){
-            rfidString = String.format("%010d",rfid + i);
+            rfidString = String.format("%012d",rfid + i);
             rfidMap.put(rfidString,pID);
             tmp = new JSONObject();
             tmp.put("rfid",rfidString);
@@ -1314,7 +1314,7 @@ InvalidLocationException, InvalidRFIDException {
     @Override
     public boolean addProductToSaleRFID(Integer transactionId, String RFID) throws InvalidTransactionIdException, InvalidRFIDException, InvalidQuantityException, UnauthorizedException{
         if(transactionId==null || transactionId<=0)throw new InvalidTransactionIdException();
-        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{12}")) throw new InvalidRFIDException();
         if(userLogged == null )throw new UnauthorizedException();
 
         String role = userLogged.getRole();
@@ -1436,7 +1436,7 @@ InvalidLocationException, InvalidRFIDException {
         //exceptions
         if(userLogged == null){throw new UnauthorizedException();}
         if(transactionId == null || transactionId <= 0){throw  new InvalidTransactionIdException();}
-        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{12}")) throw new InvalidRFIDException();
         /*NB: in effetti non dovrebbe essere presente nel sistema essendo stato tolto e aggiunto alla ongoingSale
               quindi non va fatto questo check
         if(!this.rfidMap.containsKey(RFID)){
@@ -1787,7 +1787,7 @@ InvalidLocationException, InvalidRFIDException {
     {
         // Throwing all exceptions
         if(returnId==null || returnId<=0 ) throw new InvalidTransactionIdException();
-        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{10}")) throw new InvalidRFIDException();
+        if(RFID == null || RFID.equals("") || !RFID.matches("[0-9]{12}")) throw new InvalidRFIDException();
         if(userLogged == null )throw new UnauthorizedException();
         String role = userLogged.getRole();
         if(role == null || (!role.equals("Administrator") && !role.equals("ShopManager") && !role.equals("Cashier"))){throw new UnauthorizedException();}

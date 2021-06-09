@@ -302,7 +302,7 @@ public class EZShopTests {
             // @return  false if the order does not exist or if it was not in an ORDERED/COMPLETED state
             //assertFalse(ez.recordOrderArrivalRFID(oid, "0000000000")); // oid is not yet ordered or completed
             assertTrue(ez.payOrder(oid)); // now it is payed
-            assertFalse(ez.recordOrderArrivalRFID(50, "0000000000")); // order 50 doesn't exist
+            assertFalse(ez.recordOrderArrivalRFID(50, "000000000000")); // order 50 doesn't exist
 
         }
         catch(Exception e){
@@ -313,7 +313,7 @@ public class EZShopTests {
             // @throws InvalidLocationException if the ordered product type has not an assigned location.
             ez.updatePosition(pid, ""); // set position to null
             Integer finalOid4 = oid;
-            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrivalRFID(finalOid4, "0000000000"));
+            assertThrows(InvalidLocationException.class, ()-> ez.recordOrderArrivalRFID(finalOid4, "000000000000"));
             ez.updatePosition(pid, "673-fhsa-538"); // reinsert the correct position
         }
         catch(Exception e){
@@ -324,10 +324,10 @@ public class EZShopTests {
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
             ez.logout();
             Integer finalOid = oid;
-            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid, "0000000000"));
+            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid, "000000000000"));
             ez.login("marina blue", "abc");
             Integer finalOid1 = oid;
-            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid1, "0000000000"));
+            assertThrows(UnauthorizedException.class, ()->ez.recordOrderArrivalRFID(finalOid1, "000000000000"));
             // later i will test that with shopmanager and director it does not throw anything
         }
         catch(Exception e){
@@ -336,15 +336,15 @@ public class EZShopTests {
         }
 
             // @throws InvalidOrderIdException if the order id is less than or equal to 0 or if it is null.
-        assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(0, "0000000000"));
-            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(-1, "0000000000"));
-            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(null, "0000000000"));
+        assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(0, "000000000000"));
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(-1, "000000000000"));
+            assertThrows(InvalidOrderIdException.class, ()-> ez.recordOrderArrivalRFID(null, "000000000000"));
 
         try{
             // @throws InvalidRFIDException if the RFID has invalid format
             ez.login("damiana diamond", "abc");
             Integer finalOid2 = oid;
-            assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid2, "000000a000"));
+            assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid2, "00000000a000"));
         }
         catch(Exception e){
             e.printStackTrace();
@@ -353,7 +353,7 @@ public class EZShopTests {
 
         try{
             // @return  true if the operation was successful, verifies also that shopmanager is authorized
-            assertTrue(ez.recordOrderArrivalRFID(oid, "0000000000"));
+            assertTrue(ez.recordOrderArrivalRFID(oid, "000000000000"));
 
             // verify that quantity of product has changed
             p = ez.getProductTypeByBarCode("1234324534531");
@@ -377,12 +377,12 @@ public class EZShopTests {
 
             // @throws InvalidRFIDException if the RFIDis not unique
         Integer finalOid3 = oid1;
-        assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid3, "0000000008"));
+        assertThrows(InvalidRFIDException.class, ()->ez.recordOrderArrivalRFID(finalOid3, "000000000008"));
 
 
         try{
             // @return  true if the operation was successful, verifies also that director is authorized
-            assertTrue(ez.recordOrderArrivalRFID(oid1, "0000000009"));
+            assertTrue(ez.recordOrderArrivalRFID(oid1, "000000000009"));
 
             // verify that quantity of product has changed
             p1 = ez.getProductTypeByBarCode("2837948739840");
@@ -407,7 +407,7 @@ public class EZShopTests {
                 p1 = ez.getProductTypeByBarCode("2837948739840");
               sid = ez.startSaleTransaction();
             // @return  true if the operation is successful
-              assertTrue(ez.addProductToSaleRFID(sid, "0000000008")); // 8 is the last RFID value for p, the operation is successful
+              assertTrue(ez.addProductToSaleRFID(sid, "000000000008")); // 8 is the last RFID value for p, the operation is successful
 
             // checking that the quantity of p1 has decreased
             assertEquals((Integer)8,p.getQuantity());
@@ -415,9 +415,9 @@ public class EZShopTests {
 
 
               // @return  false   if the RFID does not exist,
-            assertFalse(ez.addProductToSaleRFID(sid, "0000000018")); // 18 should be the first RFID which is not assigned
+            assertFalse(ez.addProductToSaleRFID(sid, "000000000018")); // 18 should be the first RFID which is not assigned
               // @return  false   if the transaction id does not identify a started and open transaction.
-            assertFalse(ez.addProductToSaleRFID(50, "0000000016"));
+            assertFalse(ez.addProductToSaleRFID(50, "000000000016"));
             // @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
             assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(0, "0000000016"));
             assertThrows(InvalidTransactionIdException.class, ()-> ez.addProductToSaleRFID(-1, "0000000016"));
@@ -426,34 +426,34 @@ public class EZShopTests {
             Integer finalSid = sid;
             assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, ""));
             assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, null));
-            assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, "00000a0000"));
+            assertThrows(InvalidRFIDException.class, ()-> ez.addProductToSaleRFID(finalSid, "0000000a0000"));
               // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
             ez.logout();
-            assertThrows(UnauthorizedException.class, ()-> ez.addProductToSaleRFID(finalSid, "0000000016"));
+            assertThrows(UnauthorizedException.class, ()-> ez.addProductToSaleRFID(finalSid, "000000000016"));
             ez.login("marina blue", "abc");
-            assertTrue(ez.addProductToSaleRFID(finalSid, "0000000017")); // this should be the last product to which we added the rfid
+            assertTrue(ez.addProductToSaleRFID(finalSid, "000000000017")); // this should be the last product to which we added the rfid
 
             // checking that the quantity of p1 has decreased
             assertEquals((Integer)8,p1.getQuantity());
 
             ez.login("damiana diamond", "abc");
-            assertTrue(ez.addProductToSaleRFID(finalSid, "0000000016"));
+            assertTrue(ez.addProductToSaleRFID(finalSid, "000000000016"));
 
             // checking that the quantity of p1 has decreased
             assertEquals((Integer)7,p1.getQuantity());
 
             ez.login("daniele", "789");
-            assertTrue(ez.addProductToSaleRFID(finalSid, "0000000015"));
+            assertTrue(ez.addProductToSaleRFID(finalSid, "000000000015"));
 
             // checking that the quantity of p1 has decreased
             assertEquals((Integer)6,p1.getQuantity());
 
             // concluding transaction sid while adding products to it, it will be used later for the return
-            assertTrue(ez.addProductToSaleRFID(sid, "0000000007"));
+            assertTrue(ez.addProductToSaleRFID(sid, "000000000007"));
             // checking that the quantity of p has decreased
             assertEquals((Integer)7,p.getQuantity());
 
-            assertTrue(ez.addProductToSaleRFID(sid, "0000000006"));
+            assertTrue(ez.addProductToSaleRFID(sid, "000000000006"));
             // checking that the quantity of p1 has decreased
             assertEquals((Integer)6,p.getQuantity());
 
@@ -479,10 +479,10 @@ public class EZShopTests {
             // here we use sid1, which comes from the previous test
 
             // @return  false   if the "product code" does not exist(they mean RFID here)
-            assertFalse(ez.deleteProductFromSaleRFID(sid1, "0000000018")); // i use one RFID I have never associated to anything before
+            assertFalse(ez.deleteProductFromSaleRFID(sid1, "000000000018")); // i use one RFID I have never associated to anything before
 
             // @return false if the transaction id does not identify a started and open transaction.
-            assertFalse(ez.deleteProductFromSaleRFID(sid, "0000000016")); //sid is already closed
+            assertFalse(ez.deleteProductFromSaleRFID(sid, "000000000016")); //sid is already closed
 
             // @throws InvalidTransactionIdException if the transaction id less than or equal to 0 or if it is null
             assertThrows(InvalidTransactionIdException.class, ()->ez.deleteProductFromSaleRFID(0, "0000000014"));
@@ -493,31 +493,31 @@ public class EZShopTests {
             Integer finalSid1 = sid1;
             assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, ""));
             assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, null));
-            assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "0a00000014"));
+            assertThrows(InvalidRFIDException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "000a00000014"));
 
             // @throws UnauthorizedException if there is no logged user or if it has not the rights to perform the operation
             ez.logout();
-            assertThrows(UnauthorizedException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "0000000014")); // no user logged
+            assertThrows(UnauthorizedException.class, ()->ez.deleteProductFromSaleRFID(finalSid1, "000000000014")); // no user logged
 
             // verifying permissions for the other user types
             //CASHIER
             ez.login("marina blue", "abc");
-            ez.addProductToSaleRFID(finalSid1,"0000000014");
-            ez.addProductToSaleRFID(finalSid1,"0000000013");
-            ez.addProductToSaleRFID(finalSid1,"0000000012");
-            assertTrue(ez.deleteProductFromSaleRFID(finalSid1, "0000000014"));
+            ez.addProductToSaleRFID(finalSid1,"000000000014");
+            ez.addProductToSaleRFID(finalSid1,"000000000013");
+            ez.addProductToSaleRFID(finalSid1,"000000000012");
+            assertTrue(ez.deleteProductFromSaleRFID(finalSid1, "000000000014"));
             // checking that the quantity of p1 has increased
             assertEquals((Integer)4,p1.getQuantity());
 
             // SHOPMANAGER
             ez.login("damiana diamond", "abc");
-            assertTrue(ez.deleteProductFromSaleRFID(finalSid1, "0000000013"));
+            assertTrue(ez.deleteProductFromSaleRFID(finalSid1, "000000000013"));
             // checking that the quantity of p1 has increased
             assertEquals((Integer)5,p1.getQuantity());
 
             // ADMINISTRATOR
             // @return  true if the operation is successful, in this case, the shopmanager has the rights to do the operation
-            assertTrue(ez.deleteProductFromSaleRFID(sid1, "0000000012")); // i use one of the previous values rfids added to the sale
+            assertTrue(ez.deleteProductFromSaleRFID(sid1, "000000000012")); // i use one of the previous values rfids added to the sale
             // checking that the quantity of p1 has increased
             assertEquals((Integer)6,p1.getQuantity());
 
@@ -544,38 +544,38 @@ public class EZShopTests {
 
 
             // @return  false if the the product to be returned does not exists,
-            assertFalse(ez.returnProductRFID(rid,"0000000019")); // rfid never associated to any product
+            assertFalse(ez.returnProductRFID(rid,"000000000019")); // rfid never associated to any product
             // @return  false if it was not in the transaction,
-            assertFalse(ez.returnProductRFID(rid,"0000000001")); // rfid is assigned to a product never sold, is on the shelf
+            assertFalse(ez.returnProductRFID(rid,"000000000001")); // rfid is assigned to a product never sold, is on the shelf
             // @return  false if the transaction does not exist
-            assertFalse(ez.returnProductRFID(50,"0000000008"));
+            assertFalse(ez.returnProductRFID(50,"000000000008"));
             // @throws InvalidTransactionIdException if the return id is less ther or equal to 0 or if it is null
-            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(-1,"0000000008"));
-            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(0,"0000000008"));
-            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(null,"0000000008"));
+            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(-1,"000000000008"));
+            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(0,"000000000008"));
+            assertThrows(InvalidTransactionIdException.class, ()-> ez.returnProductRFID(null,"000000000008"));
             // @throws InvalidRFIDException if the RFID is empty, null or invalid
             assertThrows(InvalidRFIDException.class, ()-> ez.returnProductRFID(rid,""));
             assertThrows(InvalidRFIDException.class, ()-> ez.returnProductRFID(rid,null));
-            assertThrows(InvalidRFIDException.class, ()-> ez.returnProductRFID(rid,"0700000sa0"));
+            assertThrows(InvalidRFIDException.class, ()-> ez.returnProductRFID(rid,"000700000sa0"));
             // @throws UnauthorizedException if there is no logged user, for any other logged user it works
             ez.logout();
-            assertThrows(UnauthorizedException.class, ()->ez.returnProductRFID(rid,"0000000008"));
+            assertThrows(UnauthorizedException.class, ()->ez.returnProductRFID(rid,"000000000008"));
 
             ez.login("marina blue", "abc");
             // @return  true if the operation is successful
-            assertTrue(ez.returnProductRFID(rid,"0000000006")); // product we bought before in sid
+            assertTrue(ez.returnProductRFID(rid,"000000000006")); // product we bought before in sid
             // this method should not update the product quantity
             assertEquals((Integer)6,p.getQuantity());
 
             ez.login("damiana diamond", "abc");
             // @return  true if the operation is successful
-            assertTrue(ez.returnProductRFID(rid,"0000000008")); // product we bought before in sid
+            assertTrue(ez.returnProductRFID(rid,"000000000008")); // product we bought before in sid
             // this method should not update the product quantity
             assertEquals((Integer)6,p.getQuantity());
 
             ez.login("daniele", "789");
             // @return  true if the operation is successful
-            assertTrue(ez.returnProductRFID(rid,"0000000007")); // product we bought before in sid
+            assertTrue(ez.returnProductRFID(rid,"000000000007")); // product we bought before in sid
             // this method should not update the product quantity
             assertEquals((Integer)6,p.getQuantity());
 
