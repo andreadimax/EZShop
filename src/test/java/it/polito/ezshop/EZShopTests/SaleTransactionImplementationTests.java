@@ -19,7 +19,7 @@ public class SaleTransactionImplementationTests {
         tList.add(t2);
         tList.add(t3);
 
-        SaleTransactionImplementation st = new SaleTransactionImplementation(-1, "prova", 2.0, LocalDate.parse("2021-05-22"), 0.5, "provaStatus", null);
+        SaleTransactionImplementation st = new SaleTransactionImplementation(-1, "prova", 2.0, LocalDate.parse("2021-05-22"), 0.5, "provaStatus", null, null);
         SaleTransactionImplementation st1 = new SaleTransactionImplementation();
 
         st.setBalanceId(5);

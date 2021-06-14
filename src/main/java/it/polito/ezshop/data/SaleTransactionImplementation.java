@@ -8,6 +8,7 @@ public class SaleTransactionImplementation extends BalanceOperationImpl {
     double discountRate;
     String status;
     List<TicketEntry> entries;
+    ArrayList<ProductRfid> rfids;
     /* how we waned to mange it instead of using the TicketEntry list:
     ArrayList <Integer> quantity;
     ArrayList <ProductType> ptArrayList;
@@ -17,11 +18,12 @@ public class SaleTransactionImplementation extends BalanceOperationImpl {
      * Constructor with all parameters useful for loading phase from persistent data
      */
     public SaleTransactionImplementation(int balanceId, String description, double money, LocalDate date,
-                                         double discountRate, String status,List<TicketEntry> entries){
+                                         double discountRate, String status,List<TicketEntry> entries, ArrayList<ProductRfid> rfids){
         super(balanceId, description, money, date);
         this.discountRate = discountRate;
         this.status = status;
         this.entries = entries;
+        this.rfids = rfids;
     }
 
     /**
@@ -33,6 +35,7 @@ public class SaleTransactionImplementation extends BalanceOperationImpl {
         this.discountRate = 0.0;
         this.status = "OPEN";
         this.entries = new ArrayList<>();
+        this.rfids = new ArrayList<>();
     }
 
     @Override

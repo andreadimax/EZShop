@@ -20,7 +20,7 @@ public class ReturnTransactionTests {
         tList.add(t3);
 
         ReturnTransaction rt = new ReturnTransaction(6, tList);
-        ReturnTransaction rt2 = new ReturnTransaction(5, "descr", 2.0, LocalDate.parse("2021-05-22"), 1, "PAYED",tList, 0.0 );
+        ReturnTransaction rt2 = new ReturnTransaction(5, "descr", 2.0, LocalDate.parse("2021-05-22"), 1, "PAYED",tList, 0.0, null);
         ReturnTransaction rt3 = new ReturnTransaction(7);
 
         rt2.setStatus("ISSUED");

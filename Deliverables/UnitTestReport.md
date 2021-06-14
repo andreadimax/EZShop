@@ -17,6 +17,7 @@ ___________________________
   - [TicketEntry](#ticketentry)
   - [EZShop](#ezshop)
   - [AccountBook](#accountbook)
+  - [ProductRfid](#productrfid)
 - [White box unit tests](#white-box-unit-tests)
 
 
@@ -660,6 +661,28 @@ No boundaries, we consider one single equivalent class for any of the input argu
 | money = null | Valid           | BalanceOperationImpl op4 = new BalanceOperation(null);<br/><br />>check if op4.getType() is equal to "Credit" | testCreditDebit() |
 
 
+## ProductRfid
+
+### **Class *ProductRfid* - method *ProductRfid(String RFID, Integer productId)***
+
+**Criteria for method *ProductRfid(String RFID, Integer productId)***:
+
+**Predicates for method *ProductRfid(String RFID, Integer productId)*:**
+
+| Criteria | Predicate |
+| -------- | --------- |
+
+**Boundaries**:
+
+| Criteria | Boundary values |
+| -------- | --------------- |
+
+**Combination of predicates**:
+
+
+| Criteria 1 | Valid / Invalid | Description of the test case                                                               | JUnit test case      |
+| ---------- | --------------- | ------------------------------------------------------------                               | -------------------- |
+| *          | Valid           | Object ProductRfid is instantiated value is checked directly through its public attributes | testProductRfid()    |
 
 
 

@@ -9,6 +9,7 @@ public class ReturnTransaction extends BalanceOperationImpl {
     private List<TicketEntry> returnEntries;
     private String status = "OPEN";
     private double saleDiscount;
+    ArrayList<ProductRfid> rfids;
 
     /**
      * constructor with all parameters useful for Loading Phase from persistent data
@@ -16,12 +17,13 @@ public class ReturnTransaction extends BalanceOperationImpl {
      * @param returnEntries list of product returned and their returned quantity
      */
     public ReturnTransaction(int balanceId, String description, double money, LocalDate date,
-                            Integer saleId, String status,List<TicketEntry> returnEntries, double saleDiscount){
+                            Integer saleId, String status,List<TicketEntry> returnEntries, double saleDiscount, ArrayList<ProductRfid> rfids){
         super(balanceId, description, money, date);
         this.saleId = saleId;
         this.status = status;
         this.returnEntries = returnEntries;
         this.saleDiscount = saleDiscount;
+        this.rfids = rfids;
     }
 
 
@@ -29,6 +31,7 @@ public class ReturnTransaction extends BalanceOperationImpl {
         super("ReturnTransaction");
         this.saleId = saleId;
         this.returnEntries = returnEntries;
+        this.rfids = new ArrayList<>();
     }
 
     /**
@@ -39,6 +42,7 @@ public class ReturnTransaction extends BalanceOperationImpl {
         //setting the reference to the sale transaction
         this.saleId = saleId;
         this.returnEntries = new ArrayList<>();
+        this.rfids = new ArrayList<>();
     }
 
     public List<TicketEntry> getReturnEntries() {
